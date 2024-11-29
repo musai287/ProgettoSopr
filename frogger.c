@@ -40,7 +40,7 @@ int main(){
 	endwin();
 	return 0;
 }
-	
+//ciao come va
 
 
 
