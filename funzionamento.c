@@ -8,7 +8,8 @@
 
 #include "struct.h"
 #include "funzionamento.h"
-
+#include "frog.h"
+#include "croco.h"
 
 void funzionamento_gioco (int pipe_fd){
 	MesPos message                         ;
@@ -28,7 +29,7 @@ void funzionamento_gioco (int pipe_fd){
             attron(COLOR_PAIR(1))            ;
 			mvprintw(rana.x, rana.y, "#")  ; //simbolo usato per rappresentare il personaggio
 		    attron(COLOR_PAIR(2))            ;
-            mvprintw(croco.x, croco.y, "$"); //simbolo usato per rappresentare il personaggio
+            mvprintw(croco.x, croco.y, "$$$$"); //simbolo usato per rappresentare il personaggio
 			refresh();
 
 			if (rana.x == croco.x && rana.y == croco.y){

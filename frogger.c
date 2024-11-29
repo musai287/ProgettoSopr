@@ -23,7 +23,7 @@ int main(){
     init_pair(1, COLOR_BLACK, COLOR_GREEN);
     init_pair(2, COLOR_YELLOW, COLOR_BLUE);  
     keypad(stdscr, TRUE);
-	  // Array per la pipe
+	
 
      creaPipe(pipe_fd);  // Crea la pipe
     
@@ -40,23 +40,7 @@ int main(){
 	endwin();
 	return 0;
 }
-	//MesPos rana, croco;
-	//pid_t pid_rana, pid_croco;
-	//int pipe_fd[2];
-	//pipe(pipe_fd);
-	//pidd(pipe_fd,pid_rana, pid_croco);
-
-/*
-    while(1){
-        int input = getch();
-	    if(input == 'q'){
-            kill(pid_rana,1);
-            kill(pid_croco,1);
-            endwin();
-            exit(0);
-	    }
-    }
-*/
+	
 
 
 
