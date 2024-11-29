@@ -25,7 +25,7 @@ void creaRano(int pipe_fd[2], pid_t *pid_rana) {
     if (*pid_rana == 0) {  // Processo figlio (rana)
         close(pipe_fd[0]);  // Chiudi il lato di lettura della pipe
         // Esegui altre operazioni nel processo figlio 'rana'
-        write(pipe_fd[1], "Rana", 4);  // Esempio di scrittura nella pipe
+        rano(pipe_fd[1], "Rana", 4);  // Esempio di scrittura nella pipe
         close(pipe_fd[1]);  // Chiudi il lato di scrittura della pipe
         _exit(0);  // Esci dal processo figlio
     }
@@ -41,7 +41,7 @@ void creaCroco(int pipe_fd[2], pid_t *pid_croco) {
     if (*pid_croco == 0) {  // Processo figlio (coccodrillo)
         close(pipe_fd[0]);  // Chiudi il lato di lettura della pipe
         // Esegui altre operazioni nel processo figlio 'coccodrillo'
-        write(pipe_fd[1], "Croco", 5);  // Esempio di scrittura nella pipe
+        cocco(pipe_fd[1], "Croco", 5);  // Esempio di scrittura nella pipe
         close(pipe_fd[1]);  // Chiudi il lato di scrittura della pipe
         _exit(0);  // Esci dal processo figlio
     }
