@@ -1,6 +1,7 @@
 {
     "makefile.configureOnOpen": false,
     "files.associations": {
-        "wait.h": "c"
+        "wait.h": "c",
+        "curses.h": "c"
     }
 }
