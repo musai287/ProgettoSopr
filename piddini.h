@@ -8,6 +8,7 @@
 #include <signal.h>
 
 
+
 //void pidd(int pi[],pid_t a, pid_t b);
 //void creaPipe(int pipe_fd[2]) ;
 //void creaRano(int pipe_fd[2]) ; 

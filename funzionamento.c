@@ -1,15 +1,15 @@
-#include <ncurses.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <time.h>
-#include <sys/wait.h>
+#include   <ncurses.h>
+#include 	<unistd.h>
+#include 	<stdlib.h>
+#include 	  <time.h>
+#include  <sys/wait.h>
 #include <sys/types.h>
-#include <signal.h>
+#include 	<signal.h>
 
-#include "struct.h"
+#include 		"struct.h"
 #include "funzionamento.h"
-#include "frog.h"
-#include "croco.h"
+#include 		  "frog.h"
+#include 		 "croco.h"
 
 void funzionamento_gioco (int pipe_fd){
 	MesPos message                         ;

@@ -8,6 +8,8 @@
 
 #include "piddini.h"
 
+
+
 void creaPipe(int pipe_fd[2]) {
     if (pipe(pipe_fd) == -1) {
         perror("Errore nella creazione della pipe");
