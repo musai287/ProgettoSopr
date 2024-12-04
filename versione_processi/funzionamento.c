@@ -10,17 +10,7 @@
 #include "funzionamento.h"
 #include "frog.h"
 #include "croco.h"
-
-void gestisci_vite(int vite, time_t start_time) {
-    werase(vita); // Cancella il contenuto della finestra vita
-    box(vita, 0, 0); // Crea il bordo della finestra vita
-    mvwprintw(vita, 1, 1, "Vite: ");
-    mvwprintw(vita, 1, COLS / 2, "Tempo: %d", (int)(time(NULL) - start_time));
-    for (int i = 0; i < vite; i++) {
-        mvwprintw(vita, 1, i + 6, "*");
-        wrefresh(vita); // Aggiorna la finestra vita
-    }
-}
+WINDOW *vita, *gioco;
 
 void finestre(Fin *fin1, Fin *fin2) {
     refresh();
@@ -34,13 +24,23 @@ void finestre(Fin *fin1, Fin *fin2) {
     wrefresh(gioco); // Aggiorna la finestra gioco
 }
 
+void gestisci_vite(int vite, time_t start_time) {
+    werase(vita); // Cancella il contenuto della finestra vita
+    box(vita, 0, 0); // Crea il bordo della finestra vita
+    mvwprintw(vita, 1, 1, "Vite: ");
+    mvwprintw(vita, 1, COLS / 2, "Tempo: %d", (int)(time(NULL) - start_time));
+    for (int i = 0; i < vite; i++) {
+        mvwprintw(vita, 1, i + 6, "*");
+        wrefresh(vita); // Aggiorna la finestra vita
+    }
+}
 void funzionamento_gioco (int pipe_fd){
 	MesPos message;
-	MesPos rana={0, LINES -1, COLS -1};
-	MesPos croco={1,0,0};
+	MesPos rana={0, LINES -6, COLS -2};
+	MesPos croco={1,1,1};
 	int vite = 3;
     time_t start_time = time(NULL);
-    time_t last_trap_update_time = time(NULL);
+	//time_t last_trap_update_time = time(NULL);
 	while(1){
 		if (read(pipe_fd, &message, sizeof(MesPos)) > 0) {
 			if (message.tipo == 0) {
@@ -54,9 +54,9 @@ void funzionamento_gioco (int pipe_fd){
 			//questo controllo if  else if serve per capire chi sta usando il buffer
 			werase(gioco);
             box(gioco,0,0);
-			//attron(COLOR_PAIR(1));
+			attron(A_REVERSE);
 			mvwprintw(gioco,rana.x, rana.y, "#"); //simbolo usato per rappresentare il personaggio
-		    //attron(COLOR_PAIR(2));
+		    attron(A_REVERSE);
             mvwprintw(gioco,croco.x, croco.y, "$$$$"); //simbolo usato per rappresentare il personaggio
 			wrefresh(gioco);
 			gestisci_vite(vite, start_time); 

@@ -23,8 +23,8 @@ int main(){
     start_color();
     init_pair(1, COLOR_BLACK, COLOR_GREEN);
     init_pair(2, COLOR_YELLOW, COLOR_BLUE);  
-    init_pair(3, COLOR_RED, COLOR_YELLOW);
-    init_pair(4, COLOR_WHITE, COLOR_GREEN);
+    init_pair(3, COLOR_BLACK, COLOR_YELLOW);
+    init_pair(4, COLOR_BLACK, COLOR_GREEN);
     creaPipe(pipe_fd);  // Crea la pipe
     Fin fin1 = {3, COLS, 0, 0};
     Fin fin2 = {LINES-3, COLS, 3, 0};
@@ -43,7 +43,7 @@ int main(){
 	endwin();
 	return 0;
 }
-//ciao come va
+
 
 
 
