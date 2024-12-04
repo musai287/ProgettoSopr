@@ -22,16 +22,16 @@ void rano(int pipe_fd){
 
 	switch (input) {
 		case KEY_UP:
-		rana.x = (rana.x > 0) ? rana.x -1: rana.x;
+		rana.x = (rana.x > 1) ? rana.x -1: rana.x;
 		break;
 		case KEY_DOWN:
-		rana.x = (rana.x < LINES-1) ? rana.x +1 : rana.x ;
+		rana.x = (rana.x < LINES-5) ? rana.x +1 : rana.x ;
 		break;
 		case KEY_LEFT:
-		rana.y = (rana.y > 0 ) ? rana.y -1: rana.y;
+		rana.y = (rana.y > 1 ) ? rana.y -1: rana.y;
 		break;
 		case KEY_RIGHT:
-		rana.y = (rana.y < COLS -1 ) ? rana.y +1 : rana.y;
+		rana.y = (rana.y < COLS -2 ) ? rana.y +1 : rana.y;
 		break;
 		}
 
