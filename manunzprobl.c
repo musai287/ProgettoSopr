@@ -37,10 +37,8 @@ int main ()
    
     Fin fin1 = {3, COLS-1, 3, 0};
     Fin fin2 = {LINES-3, COLS-1, 3, 0};
-    void finestre(Fin *fin1, Fin *fin2)
-    
-    
-
+    finestre(&fin1, &fin2);
+    getmaxyx(winGame, max_y, max_x);
 
     pipe(pipe_gioco);
     pid_t pid_giocatore = fork();
@@ -87,8 +85,8 @@ void finestre(Fin *fin1, Fin *fin2) {
     winScore = newwin(fin1->height, fin1->width, fin1->starty, fin1->startx);
     winGame  = newwin(fin2->height, fin2->width, fin2->starty, fin2->startx);
     // Imposta il colore di sfondo della finestra gioco
-    box(vita, 0, 0);    // Bordo della finestra vita
-    box(gioco, 0, 0); // Bordo della finestra gioco
+    box(winScore, 0, 0);    // Bordo della finestra vita
+    box(winGame, 0, 0); // Bordo della finestra gioco
     wrefresh(winScore);  // Aggiorna la finestra vita
     wrefresh(winGame); // Aggiorna la finestra gioco
 }
@@ -134,7 +132,7 @@ void nemicoVert(int *posizione, int pipe)
 void gioco()
 {
     //troppe variabili che non ho voglia di ripulire
-    
+    getmaxyx(winGame, max_y, max_x);
 
     int giocatore_pos[2] = {max_x / 2, max_y /2};
     int nemicoOrizz_pos[2] = {2, rand() % (max_y -1) + 1}; //prima coordinata x, seconda y
@@ -179,21 +177,23 @@ void gioco()
         mvwprintw(winGame, nemicoVert_pos[1], nemicoVert_pos[0], "x");
         mvwprintw(winGame, ballon_pos[1], ballon_pos[0], "o");
         mvwprintw(winGame, giocatore_pos[1], giocatore_pos[0], "#");
-        werase(winGame);
-        box(winGame, 0, 0); 
+        wrefresh(winGame);
+        
 
         werase(winScore);
         box(winScore, 0, 0); 
         mvwprintw(winScore, 1, 1, "Scudi: %d", scudi);
         mvwprintw(winScore, 1, COLS / 2, "Tempo: %d", (int)(time(NULL) - start_time)); 
+        wrefresh(winScore);
 
-        time_t current_time = time(NULL); 
+
+
+        time_t current_time = time(NULL);
         if ((current_time - ballon_time) >= 10) {
             ballon_pos[0] = rand() % (max_x -1) +1;
             ballon_pos[1] = rand() % (max_y -1) + 1;
             ballon_time = current_time;
         }
-
         if (giocatore_pos[0] == ballon_pos[0] && giocatore_pos[1] == ballon_pos[1]) {
                 if (scudi <= 6) {
                     scudi++;
@@ -202,7 +202,6 @@ void gioco()
                 ballon_pos[0] = rand() % (max_x -1) +1;
                 ballon_pos[1] = rand() % (max_y - 1) + 1;
             }
-        
         if (toccato == 1 && (current_time - toccato_time) >= 4) {
             toccato = 0;
         }
@@ -215,7 +214,6 @@ void gioco()
                 giocatore_pos[0] = max_x / 2;
                 giocatore_pos[1] = max_y / 2;
                 sleep(1);
-
                 if (scudi == 0) 
                 {
                     mvwprintw(winGame, max_y / 2, (max_x / 2) - 4, "GAME OVER");
@@ -225,10 +223,5 @@ void gioco()
                 }
             }
         }
-       
-
     }
-    
-
-
 }  
