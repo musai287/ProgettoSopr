@@ -19,13 +19,16 @@ int main(){
 	initscr();
 	noecho();
 	curs_set(FALSE);
+    keypad(stdscr, TRUE);
     start_color();
     init_pair(1, COLOR_BLACK, COLOR_GREEN);
     init_pair(2, COLOR_YELLOW, COLOR_BLUE);  
-    keypad(stdscr, TRUE);
-	
-
-     creaPipe(pipe_fd);  // Crea la pipe
+    init_pair(3, COLOR_BLACK, COLOR_YELLOW);
+    init_pair(4, COLOR_BLACK, COLOR_GREEN);
+    creaPipe(pipe_fd);  // Crea la pipe
+    Fin fin1 = {3, COLS, 0, 0};
+    Fin fin2 = {LINES-3, COLS, 3, 0};
+    finestre(&fin1, &fin2); // Creazione delle finestre
     
     // Crea il primo e il secondo processo
     creaRano(pipe_fd, &pid_rana);
@@ -40,7 +43,7 @@ int main(){
 	endwin();
 	return 0;
 }
-//ciao come va
+
 
 
 

@@ -4,7 +4,7 @@ CFLAGS = -Wall -Wextra -g
 LDFLAGS = -lncurses
 
 # File sorgenti e oggetti
-SRC = frogger.c croco.c frog.c funzionamento.c piddini.c
+SRC = main.c croco.c frog.c funzionamento.c piddini.c
 OBJ = $(SRC:.c=.o)
 
 # Nome del file eseguibile
