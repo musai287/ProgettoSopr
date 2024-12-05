@@ -33,8 +33,7 @@ void rano(int pipe_fd){
 		case KEY_RIGHT:
 		rana.y = (rana.y < COLS -2 ) ? rana.y +1 : rana.y;
 		break;
-		}
-
+		}//frecce direzionali per muovere
 		write(pipe_fd, &rana, sizeof(MesPos));
-		}  //frecce direzionali per muovere
+	}  
 }

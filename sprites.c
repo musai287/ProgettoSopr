@@ -23,7 +23,7 @@ int main() {
 
 
 void froge(){
-    char frog[2][3] = {
+    char frog[2][4] = {
         "___",
         "|_|"
         };
@@ -34,15 +34,13 @@ void froge(){
     int ch;
     while (1) {
     clear();  // Clear the screen before drawing the frog
-    for (int i = 0; i < 2; i++) {
-        for (int j = 0; j < 3; j++) {
-            if (frog[i][j] != ' ') {  // Only print non-space characters
-                attron(COLOR_PAIR(1));
-                mvprintw(start_row + i, start_col + j, "%c", frog[i][j]);
-                attroff(COLOR_PAIR(1));
-            }
-        } 
-    }
+    
+        attron(COLOR_PAIR(1));
+        mvaddstr(start_row, start_col, frog[0]);  // Stampa la prima riga
+        mvaddstr(start_row+1, start_col, frog[1]);  // Stampa la seconda riga
+        attroff(COLOR_PAIR(1));
+         
+    
 
     refresh();  // Ensure the changes are displayed
     ch = getch(); // Ottieni l'input dell'utente

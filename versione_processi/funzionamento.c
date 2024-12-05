@@ -54,10 +54,14 @@ void funzionamento_gioco (int pipe_fd){
 			//questo controllo if  else if serve per capire chi sta usando il buffer
 			werase(gioco);
             box(gioco,0,0);
+            mvwprintw(gioco,croco.x,   croco.y, "_______");
+			mvwprintw(gioco,croco.x+1, croco.y, "|     |");
+			mvwprintw(gioco,croco.x+2, croco.y, "|     |");
+			mvwprintw(gioco,croco.x+3, croco.y, "|_____|"); //simbolo usato per rappresentare il personaggio
 			attron(A_REVERSE);
-			mvwprintw(gioco,rana.x, rana.y, "#"); //simbolo usato per rappresentare il personaggio
+			mvwprintw(gioco,rana.x-1, rana.y, "___");
+			mvwprintw(gioco,rana.x, rana.y,   "|_|"); //simbolo usato per rappresentare il personaggio
 		    attron(A_REVERSE);
-            mvwprintw(gioco,croco.x, croco.y, "$$$$"); //simbolo usato per rappresentare il personaggio
 			wrefresh(gioco);
 			gestisci_vite(vite, start_time); 
 
