@@ -10,7 +10,7 @@
 #include "funzionamento.h"
 #include "frog.h"
 #include "croco.h"
-WINDOW *vita, *gioco;
+
 
 void finestre(Fin *fin1, Fin *fin2) {
     refresh();
@@ -36,8 +36,8 @@ void gestisci_vite(int vite, time_t start_time) {
 }
 void funzionamento_gioco (int pipe_fd){
 	MesPos message;
-	MesPos rana={0, LINES -6, COLS -2};
-	MesPos croco={1,1,1};
+	initSRana();
+	initSCroco();
 	int vite = 3;
     time_t start_time = time(NULL);
 	//time_t last_trap_update_time = time(NULL);
@@ -54,10 +54,14 @@ void funzionamento_gioco (int pipe_fd){
 			//questo controllo if  else if serve per capire chi sta usando il buffer
 			werase(gioco);
             box(gioco,0,0);
+            mvwprintw(gioco,croco.x,   croco.y, "_______");
+			mvwprintw(gioco,croco.x+1, croco.y, "|     |");
+			mvwprintw(gioco,croco.x+2, croco.y, "|     |");
+			mvwprintw(gioco,croco.x+3, croco.y, "|_____|"); //simbolo usato per rappresentare il personaggio
 			attron(A_REVERSE);
-			mvwprintw(gioco,rana.x, rana.y, "#"); //simbolo usato per rappresentare il personaggio
+			mvwprintw(gioco,rana.x-1, rana.y, "___");
+			mvwprintw(gioco,rana.x, rana.y,   "|_|"); //simbolo usato per rappresentare il personaggio
 		    attron(A_REVERSE);
-            mvwprintw(gioco,croco.x, croco.y, "$$$$"); //simbolo usato per rappresentare il personaggio
 			wrefresh(gioco);
 			gestisci_vite(vite, start_time); 
 

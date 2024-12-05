@@ -12,3 +12,12 @@ typedef struct MesPos{
     int tipo;
 	int x, y;
 } MesPos;  //la struttura serve sia per la posizione dei "personaggi" e per la comunicazione nella pipe
+extern WINDOW *vita, *gioco;
+extern Fin fin1; 
+extern Fin fin2;
+extern MesPos croco;
+extern MesPos rana;
+
+void initFin();
+void initSCroco();
+void initSRana();

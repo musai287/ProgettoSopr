@@ -10,7 +10,7 @@
 #include "frog.h"
 
 void rano(int pipe_fd){
-	MesPos rana = {0,LINES - 6, COLS - 2}; //Posizione iniziale della rana (in basso a destra)
+	initSRana();
 	while(1) {
 
 	int input = getch();
@@ -33,8 +33,7 @@ void rano(int pipe_fd){
 		case KEY_RIGHT:
 		rana.y = (rana.y < COLS -2 ) ? rana.y +1 : rana.y;
 		break;
-		}
-
+		}//frecce direzionali per muovere
 		write(pipe_fd, &rana, sizeof(MesPos));
-		}  //frecce direzionali per muovere
+	}  
 }
