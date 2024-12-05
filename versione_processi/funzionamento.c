@@ -36,8 +36,8 @@ void gestisci_vite(int vite, time_t start_time) {
 }
 void funzionamento_gioco (int pipe_fd){
 	MesPos message;
-	MesPos rana={0, LINES -6, COLS -2};
-	MesPos croco={1,1,1};
+	initSRana();
+	initSCroco();
 	int vite = 3;
     time_t start_time = time(NULL);
 	//time_t last_trap_update_time = time(NULL);

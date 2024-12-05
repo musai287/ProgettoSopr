@@ -27,7 +27,7 @@ int main(){
     init_pair(4, COLOR_BLACK, COLOR_GREEN);
     creaPipe(pipe_fd);  // Crea la pipe
     
-    init_fin();
+    initFin();
     finestre(&fin1, &fin2); // Creazione delle finestre
     
     // Crea il primo e il secondo processo

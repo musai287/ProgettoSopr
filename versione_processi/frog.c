@@ -10,7 +10,7 @@
 #include "frog.h"
 
 void rano(int pipe_fd){
-	MesPos rana = {0,LINES - 6, COLS - 2}; //Posizione iniziale della rana (in basso a destra)
+	initSRana();
 	while(1) {
 
 	int input = getch();

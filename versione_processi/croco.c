@@ -10,7 +10,7 @@
 #include "croco.h"
 
 void cocco(int pipe_fd) {
-    MesPos croco = {1, 1, 1};  // Inizia in alto a sinistra
+    initSCroco();  // Inizia in alto a sinistra
     while (1) {
         usleep(DELAY);
         
