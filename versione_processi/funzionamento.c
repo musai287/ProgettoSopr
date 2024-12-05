@@ -10,7 +10,7 @@
 #include "funzionamento.h"
 #include "frog.h"
 #include "croco.h"
-WINDOW *vita, *gioco;
+
 
 void finestre(Fin *fin1, Fin *fin2) {
     refresh();

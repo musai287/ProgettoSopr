@@ -26,8 +26,9 @@ int main(){
     init_pair(3, COLOR_BLACK, COLOR_YELLOW);
     init_pair(4, COLOR_BLACK, COLOR_GREEN);
     creaPipe(pipe_fd);  // Crea la pipe
-    Fin fin1 = {3, COLS, 0, 0};
-    Fin fin2 = {LINES-3, COLS, 3, 0};
+    //Fin fin1 = {3, COLS, 0, 0};
+    //Fin fin2 = {LINES-3, COLS, 3, 0};
+    init_fin();
     finestre(&fin1, &fin2); // Creazione delle finestre
     
     // Crea il primo e il secondo processo
