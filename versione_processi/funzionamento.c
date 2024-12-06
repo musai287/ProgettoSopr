@@ -54,7 +54,7 @@ void funzionamento_gioco (int pipe_fd){
 			//questo controllo if  else if serve per capire chi sta usando il buffer
 			werase(gioco);
             box(gioco,0,0);
-      mvwprintw(gioco,croco.x,   croco.y, "_______");
+      		mvwprintw(gioco,croco.x,   croco.y, "_______");
 			mvwprintw(gioco,croco.x+1, croco.y, "|     |");
 			mvwprintw(gioco,croco.x+2, croco.y, "|     |");
 			mvwprintw(gioco,croco.x+3, croco.y, "|_____|"); //simbolo usato per rappresentare il personaggio
