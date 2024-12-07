@@ -15,7 +15,7 @@ void crocodile_process(int nC, int pipe_fd, int y) {
     struct Message msg;
 
     srand(time(NULL) + nC); // Random seed unico per ogni processo
-
+    sleep(rand() % 3 + 1);
     while (1) {
         x++;
         if (x >= COLS) {
@@ -50,8 +50,9 @@ void padre (int num_crocodiles, int pipe_fd, int positions[]) {
 
             // Disegna lo schermo
             clear();
+                
             for (int i = 0; i < num_crocodiles; i++) {
-                mvprintw(i + 1, positions[i], " [====]");
+                mvprintw(i + 1, positions[i], " [====]");    
             }
             refresh();
         }
