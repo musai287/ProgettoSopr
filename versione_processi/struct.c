@@ -14,9 +14,9 @@ void initFin() {
 }
 void initSCroco(){
     // Inizializza le variabili globali per croco   
-    croco = (MesPos){1, 1, 1};
+    croco = (MesPos){1, 1};
 }
 void initSRana(){
     // Inizializza le variabili globali per rana
-    rana = (MesPos){0, LINES - 6, COLS - 2};
+    rana = (MesPos){LINES - 6, COLS - 2};
 }

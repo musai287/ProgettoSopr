@@ -9,22 +9,28 @@
 #include "struct.h"
 #include "croco.h"
 
-void cocco(int pipe_fd) {
+void cocco(int nC,int pipeCroco, int y) {
     initSCroco();  // Inizia in alto a sinistra
+    int x = 0;
+    Message msg;
+    srand(time(NULL) + nC); // Random seed unico per ogni processo
+    sleep(rand() % 3 + 1);
     while (1) {
-        usleep(DELAY);
-        
-        // Simuliamo un movimento verticale
-        int dx = 2;
-
-        // Calcolo del nuovo valore di y con effetto Pacman
-        croco.y = (croco.y + dx) % COLS;
-
-        // Se y diventa negativa (es. quando dy è negativo), riportiamola sul lato opposto
-        if (croco.y < 0) {
-            croco.y += COLS;
+        x++;
+        if (x >= COLS) {
+            // Scrivi un messaggio di uscita e resetta la posizione
+            msg.id = nC;
+            msg.event = 1; // Evento: uscito dallo schermo
+            write(pipeCroco, &msg, sizeof(msg));
+            x = 0;
+            sleep(rand() % 3 + 1); // Pausa randomica
         }
 
-        write(pipe_fd, &croco, sizeof(MesPos));
+        // Invia la posizione corrente al padre
+        msg.id = nC;
+        msg.event = x; // Usa "event" per comunicare la posizione
+        write(pipeCroco, &msg, sizeof(msg));
+
+        usleep(200000); // Velocità del movimento
     }
 }

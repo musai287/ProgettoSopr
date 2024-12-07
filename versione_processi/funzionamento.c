@@ -5,6 +5,7 @@
 #include <sys/wait.h>
 #include <sys/types.h>
 #include <signal.h>
+#include <string.h>
 
 #include "struct.h"
 #include "funzionamento.h"
@@ -34,44 +35,52 @@ void gestisci_vite(int vite, time_t start_time) {
         wrefresh(vita); // Aggiorna la finestra vita
     }
 }
-void funzionamento_gioco (int pipe_fd){
-	MesPos message;
+void funzionamento_gioco (int numCroco,int pipeRana, int pipeCroco){
+	Message msg;
 	initSRana();
 	initSCroco();
 	int vite = 3;
+	int positions[numCroco]; // Posizioni dei coccodrilli
+    memset(positions, 0, sizeof(positions));
     time_t start_time = time(NULL);
 	//time_t last_trap_update_time = time(NULL);
 	while(1){
-		if (read(pipe_fd, &message, sizeof(MesPos)) > 0) {
-			if (message.tipo == 0) {
-                rana = message;
-			}
-            else if (message.tipo == 1){
-                croco = message;
-            }
-			werase(gioco);  // Cancella il contenuto della finestra gioco
-            box(gioco, 0, 0); // Crea il bordo della finestra gioco
-			//questo controllo if  else if serve per capire chi sta usando il buffer
-			werase(gioco);
-            box(gioco,0,0);
-      		mvwprintw(gioco,croco.x,   croco.y, "_______");
-			mvwprintw(gioco,croco.x+1, croco.y, "|     |");
-			mvwprintw(gioco,croco.x+2, croco.y, "|     |");
-			mvwprintw(gioco,croco.x+3, croco.y, "|_____|"); //simbolo usato per rappresentare il personaggio
-			attron(A_REVERSE);
-			mvwprintw(gioco,rana.x-1, rana.y, "___");
-			mvwprintw(gioco,rana.x, rana.y,   "|_|"); //simbolo usato per rappresentare il personaggio
-		    attron(A_REVERSE);
-			wrefresh(gioco);
-			gestisci_vite(vite, start_time); 
+		if (read(pipeRana, &rana, sizeof(MesPos)) > 0) {
+			if (read(pipeCroco, &msg, sizeof(MesPos)) > 0) {
+                    if (msg.event == 1) {
+                // Evento: uscito dallo schermo (gestione facoltativa)
+            			} 
+					else {
+                // Aggiorna posizione
+                		positions[msg.id] = msg.event;
+            		}
 
-			if (rana.x == croco.x && rana.y == croco.y){
-				mvprintw(LINES / 2, COLS / 2 -5, "preso");
-				refresh();
-				usleep(DELAYCLOSED);
-				endwin();
-				exit(0);
-			} //win condition
+				werase(gioco);  // Cancella il contenuto della finestra gioco
+            	box(gioco, 0, 0); // Crea il bordo della finestra gioco
+				//questo controllo if  else if serve per capire chi sta usando il buffer
+				werase(gioco);
+            	box(gioco,0,0);
+      			for (int i = 0; i < numCroco; i++) {
+                mvprintw(i + 1, positions[i], " [====]");    
+            	}
+				//mvwprintw(gioco,croco.x+1, croco.y, "|     |");
+				//mvwprintw(gioco,croco.x+2, croco.y, "|     |");
+				//mvwprintw(gioco,croco.x+3, croco.y, "|_____|"); //simbolo usato per rappresentare il personaggio
+				attron(A_REVERSE);
+				mvwprintw(gioco,rana.x-1, rana.y, "___");
+				mvwprintw(gioco,rana.x, rana.y,   "|_|"); //simbolo usato per rappresentare il personaggio
+		    	attron(A_REVERSE);
+				wrefresh(gioco);
+				gestisci_vite(vite, start_time); 
+
+				if (rana.x == croco.x && rana.y == croco.y){
+					mvprintw(LINES / 2, COLS / 2 -5, "preso");
+					refresh();
+					usleep(DELAYCLOSED);
+					endwin();
+					exit(0);
+				} //win condition
+			}
 		}
 	}
 }

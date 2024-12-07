@@ -3,6 +3,8 @@
     "files.associations": {
         "wait.h": "c",
         "curses.h": "c",
-        "types.h": "c"
+        "types.h": "c",
+        "piddini.h": "c",
+        "string.h": "c"
     }
 }

@@ -5,6 +5,7 @@
 #include <sys/wait.h>
 #include <sys/types.h>
 #include <signal.h>
+#include <string.h>
 
 #include "struct.h"
 #include "frog.h"
@@ -13,9 +14,10 @@
 #include "piddini.h"
 
 int main(){
-	pid_t pid_rana, pid_croco;
-    int pipe_fd[2]; 
-
+    int numCroco = 24;
+	pid_t pid_rana;
+    pid_t pid_croco[numCroco];
+    int pipeRana[2], pipeCroco[2]; 
 	initscr();
 	noecho();
 	curs_set(FALSE);
@@ -25,21 +27,24 @@ int main(){
     init_pair(2, COLOR_YELLOW, COLOR_BLUE);  
     init_pair(3, COLOR_BLACK, COLOR_YELLOW);
     init_pair(4, COLOR_BLACK, COLOR_GREEN);
-    creaPipe(pipe_fd);  // Crea la pipe
-    
+    creaPipe(pipeRana);  
+    creaPipe(pipeCroco); 
     initFin();
     finestre(&fin1, &fin2); // Creazione delle finestre
     
     // Crea il primo e il secondo processo
-    creaRano(pipe_fd, &pid_rana);
-    creaCroco(pipe_fd, &pid_croco);
+    creaRano(pipeRana, &pid_rana);
+    creaCroco(numCroco,pipeCroco, pid_croco);
     
-    close(pipe_fd[1]); 
-			
-	funzionamento_gioco(pipe_fd[0]); //richiamo la funzione padre 
+    close(pipeRana[1]); 		
+    close(pipeCroco[1]);
+
+	funzionamento_gioco(numCroco, pipeRana[0],pipeCroco[0]); //richiamo la funzione padre 
 	
 	kill(pid_rana,1);
-	kill(pid_croco,1);
+    for (int i = 0; i < numCroco; i++) {
+    kill(pid_croco[i], SIGKILL);  // Uccidi ogni processo
+}
 	endwin();
 	return 0;
 }
