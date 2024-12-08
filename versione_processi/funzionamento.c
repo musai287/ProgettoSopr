@@ -12,7 +12,10 @@
 #include "funzionamento.h"
 #include "frog.h"
 #include "croco.h"
-
+/*Magica funzione per rendere non
+ *bloccante le pipe nella comunicazione tra di loro 
+ *(bisogna aggiungerla nel main richiando le pipe)
+ */
 void setNonBlocking(int pipe_fd) {
     int flags = fcntl(pipe_fd, F_GETFL, 0);
     if (flags == -1) {
