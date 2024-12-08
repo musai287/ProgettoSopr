@@ -22,6 +22,7 @@ int main(){
 	noecho();
 	curs_set(FALSE);
     keypad(stdscr, TRUE);
+    nodelay(stdscr, TRUE);
     start_color();
     init_pair(1, COLOR_BLACK, COLOR_GREEN);
     init_pair(2, COLOR_YELLOW, COLOR_BLUE);  
@@ -29,6 +30,8 @@ int main(){
     init_pair(4, COLOR_BLACK, COLOR_GREEN);
     creaPipe(pipeRana);  
     creaPipe(pipeCroco); 
+    setNonBlocking(pipeRana[0]);
+    setNonBlocking(pipeCroco[0]);
     initFin();
     finestre(&fin1, &fin2); // Creazione delle finestre
     
@@ -38,8 +41,9 @@ int main(){
     
     close(pipeRana[1]); 		
     close(pipeCroco[1]);
-
-	funzionamento_gioco(numCroco, pipeRana[0],pipeCroco[0]); //richiamo la funzione padre 
+    int positions[numCroco]; // Posizioni dei coccodrilli
+    memset(positions, 0, sizeof(positions));
+	funzionamento_gioco(numCroco, pipeRana[0],pipeCroco[0],positions); //richiamo la funzione padre 
 	
 	kill(pid_rana,1);
     for (int i = 0; i < numCroco; i++) {

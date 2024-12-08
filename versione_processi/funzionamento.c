@@ -6,12 +6,25 @@
 #include <sys/types.h>
 #include <signal.h>
 #include <string.h>
+#include <fcntl.h>
 
 #include "struct.h"
 #include "funzionamento.h"
 #include "frog.h"
 #include "croco.h"
 
+void setNonBlocking(int pipe_fd) {
+    int flags = fcntl(pipe_fd, F_GETFL, 0);
+    if (flags == -1) {
+        perror("fcntl F_GETFL");
+        exit(EXIT_FAILURE);
+    }
+
+    if (fcntl(pipe_fd, F_SETFL, flags | O_NONBLOCK) == -1) {
+        perror("fcntl F_SETFL");
+        exit(EXIT_FAILURE);
+    }
+}
 
 void finestre(Fin *fin1, Fin *fin2) {
     refresh();
@@ -35,13 +48,12 @@ void gestisci_vite(int vite, time_t start_time) {
         wrefresh(vita); // Aggiorna la finestra vita
     }
 }
-void funzionamento_gioco (int numCroco,int pipeRana, int pipeCroco){
+void funzionamento_gioco (int numCroco,int pipeRana, int pipeCroco,int positions[]) {
 	Message msg;
 	initSRana();
 	initSCroco();
 	int vite = 3;
-	int positions[numCroco]; // Posizioni dei coccodrilli
-    memset(positions, 0, sizeof(positions));
+	
     time_t start_time = time(NULL);
 	//time_t last_trap_update_time = time(NULL);
 	while(1){
@@ -61,7 +73,7 @@ void funzionamento_gioco (int numCroco,int pipeRana, int pipeCroco){
 				werase(gioco);
             	box(gioco,0,0);
       			for (int i = 0; i < numCroco; i++) {
-                mvprintw(i + 1, positions[i], " [====]");    
+                mvwprintw(gioco, i + 1, positions[i], " [====]");    
             	}
 				//mvwprintw(gioco,croco.x+1, croco.y, "|     |");
 				//mvwprintw(gioco,croco.x+2, croco.y, "|     |");
@@ -71,6 +83,7 @@ void funzionamento_gioco (int numCroco,int pipeRana, int pipeCroco){
 				mvwprintw(gioco,rana.x, rana.y,   "|_|"); //simbolo usato per rappresentare il personaggio
 		    	attron(A_REVERSE);
 				wrefresh(gioco);
+				
 				gestisci_vite(vite, start_time); 
 
 				if (rana.x == croco.x && rana.y == croco.y){
