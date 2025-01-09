@@ -14,7 +14,7 @@
 #include "croco.h"
 /*Magica funzione per rendere non
  *bloccante le pipe nella comunicazione tra di loro 
- *(bisogna aggiungerla nel main richiando le pipe)
+ *(bisogna aggiungerla nel main richiamando le pipe)
  */
 void setNonBlocking(int pipe_fd) {
     int flags = fcntl(pipe_fd, F_GETFL, 0);
@@ -76,7 +76,7 @@ void funzionamento_gioco (int numCroco,int pipeRana, int pipeCroco,int positions
 				werase(gioco);
             	box(gioco,0,0);
       			for (int i = 0; i < numCroco; i++) {
-                mvwprintw(gioco, i + 1, positions[i], " [====]");    
+                mvwprintw(gioco, i + 1, positions[i], " [====]=");    
             	}
 				//mvwprintw(gioco,croco.x+1, croco.y, "|     |");
 				//mvwprintw(gioco,croco.x+2, croco.y, "|     |");
