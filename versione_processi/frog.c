@@ -18,7 +18,7 @@ void rano(int pipe_fd){
 	//endwin();
 	//exit(0);
 	//}
-//ho dubbi su questa implementazione,non funziona ma penso sia dovuto al fatto che la pipe sia condivisa.
+	//ho dubbi su questa implementazione,non funziona ma penso sia dovuto al fatto che la pipe sia condivisa.
 
 	switch (input) {
 		case KEY_UP:

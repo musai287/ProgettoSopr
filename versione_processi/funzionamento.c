@@ -75,12 +75,16 @@ void funzionamento_gioco (int numCroco,int pipeRana, int pipeCroco,int positions
 				//questo controllo if  else if serve per capire chi sta usando il buffer
 				werase(gioco);
             	box(gioco,0,0);
-      			for (int i = 0; i < numCroco; i++) {
-                mvwprintw(gioco, i + 1, positions[i], " [====]=");    
-            	}
-				//mvwprintw(gioco,croco.x+1, croco.y, "|     |");
-				//mvwprintw(gioco,croco.x+2, croco.y, "|     |");
-				//mvwprintw(gioco,croco.x+3, croco.y, "|_____|"); //simbolo usato per rappresentare il personaggio
+				for (int i = 0; i < numCroco; i++) {
+					int row = i / 3 + 1;
+					int col;
+					if (row % 2 == 1) {
+						col = (i % 3) * 10;
+					} else {
+						col = COLS - (i % 3) * 10 - 10;
+					}
+					mvwprintw(gioco, row, col + positions[i], " [====]=");
+				}
 				attron(A_REVERSE);
 				mvwprintw(gioco,rana.x-1, rana.y, "___");
 				mvwprintw(gioco,rana.x, rana.y,   "|_|"); //simbolo usato per rappresentare il personaggio
