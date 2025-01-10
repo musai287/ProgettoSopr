@@ -6,3 +6,4 @@
 #define DELAYCLOSED 2000000 //2 secondi
 
 void rano(int pipe_fd);
+void stampRana(int pipeRana);

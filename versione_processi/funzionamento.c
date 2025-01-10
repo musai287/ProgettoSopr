@@ -76,6 +76,7 @@ void funzionamento_gioco (int numCroco,int pipeRana, int pipeCroco,int positions
 				//werase(gioco);
             	//box(gioco,0,0);
 				stampCocco(numCroco,pipeCroco,positions);
+				stampRana(pipeRana);
 				/*
 				for (int i = 0; i < numCroco; i++) {
 					int row = i / 3 + 1;
@@ -89,9 +90,11 @@ void funzionamento_gioco (int numCroco,int pipeRana, int pipeCroco,int positions
 				}
 				attron(A_REVERSE);
 				*/
+			/*
 				mvwprintw(gioco,rana.x-1, rana.y, "___");
 				mvwprintw(gioco,rana.x, rana.y,   "|_|"); //simbolo usato per rappresentare il personaggio
 		    	attron(A_REVERSE);
+			*/
 				wrefresh(gioco);
 				
 				gestisci_vite(vite, start_time); 
