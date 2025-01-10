@@ -37,7 +37,7 @@ void rano(int pipe_fd){
 		write(pipe_fd, &rana, sizeof(MesPos));
 	}  
 }
-void stampRana(int pipeRana){
+void stampRana(int pipefd){
 	mvwprintw(gioco,rana.x-1, rana.y, "___");
 	mvwprintw(gioco,rana.x, rana.y,   "|_|"); //simbolo usato per rappresentare il personaggio
   	attron(A_REVERSE);

@@ -9,7 +9,7 @@
 #include "struct.h"
 #include "croco.h"
 
-void cocco(int nC,int pipeCroco, int y) {
+void cocco(int nC,int pipefd, int y) {
     initSCroco();  // Inizia in alto a sinistra
     int x = 0;
     Message msg;
@@ -21,7 +21,7 @@ void cocco(int nC,int pipeCroco, int y) {
             // Scrivi un messaggio di uscita e resetta la posizione
             msg.id = nC;
             msg.event = 1; // Evento: uscito dallo schermo
-            write(pipeCroco, &msg, sizeof(msg));
+            write(pipefd, &msg, sizeof(msg));
             x = 0;
             sleep(rand() % 3 + 1); // Pausa randomica
         }
@@ -29,12 +29,12 @@ void cocco(int nC,int pipeCroco, int y) {
         // Invia la posizione corrente al padre
         msg.id = nC;
         msg.event = x; // Usa "event" per comunicare la posizione
-        write(pipeCroco, &msg, sizeof(msg));
+        write(pipefd, &msg, sizeof(msg));
 
         usleep(200000); // Velocità del movimento
     }
 }
-void stampCocco(int numCroco,int pipeCroco,int positions[]) {
+void stampCocco(int numCroco,int pipefd,int positions[]) {
 for (int i = 0; i < numCroco; i++) {
 					int row = i / 3 + 1;
 					int col;

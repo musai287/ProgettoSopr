@@ -16,14 +16,14 @@
  *bloccante le pipe nella comunicazione tra di loro 
  *(bisogna aggiungerla nel main richiamando le pipe)
  */
-void setNonBlocking(int pipe_fd) {
-    int flags = fcntl(pipe_fd, F_GETFL, 0);
+void setNonBlocking(int pipefd) {
+    int flags = fcntl(pipefd, F_GETFL, 0);
     if (flags == -1) {
         perror("fcntl F_GETFL");
         exit(EXIT_FAILURE);
     }
 
-    if (fcntl(pipe_fd, F_SETFL, flags | O_NONBLOCK) == -1) {
+    if (fcntl(pipefd, F_SETFL, flags | O_NONBLOCK) == -1) {
         perror("fcntl F_SETFL");
         exit(EXIT_FAILURE);
     }
@@ -51,8 +51,8 @@ void gestisci_vite(int vite, time_t start_time) {
         wrefresh(vita); // Aggiorna la finestra vita
     }
 }
-void funzionamento_gioco (int numCroco,int pipeRana, int pipeCroco,int positions[]) {
-	Message msg;
+void funzionamento_gioco (int numCroco,int pipefd,int positions[]) {
+	 MesPos msg;
 	initSRana();
 	initSCroco();
 	int vite = 3;
@@ -60,23 +60,21 @@ void funzionamento_gioco (int numCroco,int pipeRana, int pipeCroco,int positions
     time_t start_time = time(NULL);
 	//time_t last_trap_update_time = time(NULL);
 	while(1){
-		if (read(pipeRana, &rana, sizeof(MesPos)) > 0) {
-			if (read(pipeCroco, &msg, sizeof(MesPos)) > 0) {
-                    if (msg.event == 1) {
-                // Evento: uscito dallo schermo (gestione facoltativa)
-            			} 
-					else {
-                // Aggiorna posizione
-                		positions[msg.id] = msg.event;
-            		}
+		if (read(pipefd, &msg, sizeof(MesPos)) > 0) {
+			if (msg.event == 0) {
+                rana = msg;
+			}
+            else if (msg.event == 1){
+                croco = msg;
+            }
 				//questo controllo if  else if serve per capire chi sta usando il buffer
 
 				werase(gioco);  // Cancella il contenuto della finestra gioco
             	box(gioco, 0, 0); // Crea il bordo della finestra gioco
 				//werase(gioco);
             	//box(gioco,0,0);
-				stampCocco(numCroco,pipeCroco,positions);
-				stampRana(pipeRana);
+				stampCocco(numCroco,pipefd,positions);
+				stampRana(pipefd);
 				/*
 				for (int i = 0; i < numCroco; i++) {
 					int row = i / 3 + 1;
@@ -109,4 +107,4 @@ void funzionamento_gioco (int numCroco,int pipeRana, int pipeCroco,int positions
 			}
 		}
 	}
-}
+

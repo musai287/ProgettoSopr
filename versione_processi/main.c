@@ -17,7 +17,7 @@ int main(){
     int numCroco = 24;
 	pid_t pid_rana;
     pid_t pid_croco[numCroco];
-    int pipeRana[2], pipeCroco[2]; 
+    int pipefd[2];
 	initscr();
 	noecho();
 	curs_set(FALSE);
@@ -28,22 +28,21 @@ int main(){
     init_pair(2, COLOR_YELLOW, COLOR_BLUE);  
     init_pair(3, COLOR_BLACK, COLOR_YELLOW);
     init_pair(4, COLOR_BLACK, COLOR_GREEN);
-    creaPipe(pipeRana);  
-    creaPipe(pipeCroco); 
-    setNonBlocking(pipeRana[0]);
-    setNonBlocking(pipeCroco[0]);
+    creaPipe(pipefd);  
+    creaPipe(pipefd); 
+    setNonBlocking(pipefd[0]);
+    setNonBlocking(pipefd[0]);
     initFin();
     finestre(&fin1, &fin2); // Creazione delle finestre
     
     // Crea il primo e il secondo processo
-    creaRano(pipeRana, &pid_rana);
-    creaCroco(numCroco,pipeCroco, pid_croco);
+    creaRano(pipefd, &pid_rana);
+    creaCroco(numCroco,pipefd, pid_croco);
     
-    close(pipeRana[1]); 		
-    close(pipeCroco[1]);
+    close(pipefd[1]); 	
     int positions[numCroco]; // Posizioni dei coccodrilli
     memset(positions, 0, sizeof(positions));
-	funzionamento_gioco(numCroco, pipeRana[0],pipeCroco[0],positions); //richiamo la funzione padre 
+	funzionamento_gioco(numCroco, pipefd[0],positions); //richiamo la funzione padre 
 	
 	kill(pid_rana,1);
     for (int i = 0; i < numCroco; i++) {

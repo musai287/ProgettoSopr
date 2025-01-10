@@ -15,5 +15,5 @@
 //void creaCroco(int pipe_fd[2]);
 
 void creaPipe(int pipe_fd[2]);
-void creaRano(int pipeRana[2], pid_t *pid_rana);
-void creaCroco(int numCroco,int pipeCroco[2], pid_t *pid_croco);
+void creaRano(int pipefd[2], pid_t *pid_rana);
+void creaCroco(int numCroco,int pipefd[2], pid_t *pid_croco);

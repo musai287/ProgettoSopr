@@ -6,15 +6,18 @@ typedef struct Message {
     int id;
     int event;
 }Message;
+
+typedef struct MesPos{
+    int event; 
+    int x, y;
+} MesPos;  //la struttura serve sia per la posizione dei "personaggi" e per la comunicazione nella pipe
+
 typedef struct Fin {
     int height;
     int width;
     int starty;
     int startx;
 } Fin;
-typedef struct MesPos{
-int x, y;
-} MesPos;  //la struttura serve sia per la posizione dei "personaggi" e per la comunicazione nella pipe
 extern WINDOW *vita, *gioco;
 extern Fin fin1; 
 extern Fin fin2;

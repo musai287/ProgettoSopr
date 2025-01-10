@@ -12,10 +12,12 @@ void initFin() {
     fin1 = (Fin){3, COLS, 0, 0};
     fin2 = (Fin){LINES - 3, COLS, 3, 0};
 }
+
 void initSCroco(){
     // Inizializza le variabili globali per croco   
     croco = (MesPos){1, 1};
 }
+
 void initSRana(){
     // Inizializza le variabili globali per rana
     rana = (MesPos){LINES - 6, COLS - 2};

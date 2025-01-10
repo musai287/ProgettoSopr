@@ -1,5 +1,5 @@
 #pragma once
 #include <ncurses.h>
 
-void cocco(int nC,int pipeCroco, int y);
-void stampCocco(int numCroco,int pipeCroco,int positions[]);
+void cocco(int nC,int pipefd, int y);
+void stampCocco(int numCroco,int pipefd,int positions[]);
