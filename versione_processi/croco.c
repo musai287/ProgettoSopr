@@ -34,3 +34,16 @@ void cocco(int nC,int pipeCroco, int y) {
         usleep(200000); // Velocità del movimento
     }
 }
+void stampCocco(int numCroco,int pipeCroco,int positions[]) {
+for (int i = 0; i < numCroco; i++) {
+					int row = i / 3 + 1;
+					int col;
+					if (row % 2 == 1) {
+						col = (i % 3) * 10;
+					} else {
+						col = COLS - (i % 3) * 10 - 10;
+					}
+					mvwprintw(gioco, row, col + positions[i], " [====]=");
+				}
+				attron(A_REVERSE);
+				}

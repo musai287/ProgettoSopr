@@ -52,7 +52,7 @@ void padre (int num_crocodiles, int pipe_fd, int positions[]) {
             clear();
                 
             for (int i = 0; i < num_crocodiles; i++) {
-                mvprintw(i + 1, positions[i], " [====]");    
+                mvprintw(i + 1, positions[i], "[====]");    
             }
             refresh();
         }

@@ -69,12 +69,14 @@ void funzionamento_gioco (int numCroco,int pipeRana, int pipeCroco,int positions
                 // Aggiorna posizione
                 		positions[msg.id] = msg.event;
             		}
+				//questo controllo if  else if serve per capire chi sta usando il buffer
 
 				werase(gioco);  // Cancella il contenuto della finestra gioco
             	box(gioco, 0, 0); // Crea il bordo della finestra gioco
-				//questo controllo if  else if serve per capire chi sta usando il buffer
-				werase(gioco);
-            	box(gioco,0,0);
+				//werase(gioco);
+            	//box(gioco,0,0);
+				stampCocco(numCroco,pipeCroco,positions);
+				/*
 				for (int i = 0; i < numCroco; i++) {
 					int row = i / 3 + 1;
 					int col;
@@ -86,6 +88,7 @@ void funzionamento_gioco (int numCroco,int pipeRana, int pipeCroco,int positions
 					mvwprintw(gioco, row, col + positions[i], " [====]=");
 				}
 				attron(A_REVERSE);
+				*/
 				mvwprintw(gioco,rana.x-1, rana.y, "___");
 				mvwprintw(gioco,rana.x, rana.y,   "|_|"); //simbolo usato per rappresentare il personaggio
 		    	attron(A_REVERSE);
