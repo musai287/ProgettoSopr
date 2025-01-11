@@ -60,13 +60,19 @@ void funzionamento_gioco (int numCroco,int pipefd,int positions[]) {
     time_t start_time = time(NULL);
 	//time_t last_trap_update_time = time(NULL);
 	while(1){
-		if (read(pipefd, &msg, sizeof(MesPos)) > 0) {
-			if (msg.event == 0) {
-                rana = msg;
-			}
-            else if (msg.event == 1){
-                croco = msg;
+		while (1) {
+        // Leggi i messaggi dalla pipe
+        while (read(pipefd, &msg, sizeof(MesPos)) > 0) {
+            if (msg.id == 0) {
+                // Messaggio dalla rana
+                rana.x = msg.x;
+                rana.y = msg.y;
+            } else if (msg.id >= 100 && msg.id < 100 + numCroco) {
+                // Messaggio dai coccodrilli (id >= 100)
+                int crocoIndex = msg.id - 100;
+                positions[crocoIndex] = msg.x;
             }
+        }
 				//questo controllo if  else if serve per capire chi sta usando il buffer
 
 				werase(gioco);  // Cancella il contenuto della finestra gioco
@@ -75,24 +81,6 @@ void funzionamento_gioco (int numCroco,int pipefd,int positions[]) {
             	//box(gioco,0,0);
 				stampCocco(numCroco,pipefd,positions);
 				stampRana(pipefd);
-				/*
-				for (int i = 0; i < numCroco; i++) {
-					int row = i / 3 + 1;
-					int col;
-					if (row % 2 == 1) {
-						col = (i % 3) * 10;
-					} else {
-						col = COLS - (i % 3) * 10 - 10;
-					}
-					mvwprintw(gioco, row, col + positions[i], " [====]=");
-				}
-				attron(A_REVERSE);
-				*/
-			/*
-				mvwprintw(gioco,rana.x-1, rana.y, "___");
-				mvwprintw(gioco,rana.x, rana.y,   "|_|"); //simbolo usato per rappresentare il personaggio
-		    	attron(A_REVERSE);
-			*/
 				wrefresh(gioco);
 				
 				gestisci_vite(vite, start_time); 

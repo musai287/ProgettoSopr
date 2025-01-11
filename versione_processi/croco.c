@@ -12,7 +12,7 @@
 void cocco(int nC,int pipefd, int y) {
     initSCroco();  // Inizia in alto a sinistra
     int x = 0;
-    Message msg;
+    MesPos msg;
     srand(time(NULL) + nC); // Random seed unico per ogni processo
     sleep(rand() % 3 + 1);
     while (1) {
