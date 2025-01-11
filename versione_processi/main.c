@@ -40,8 +40,10 @@ int main(){
     creaCroco(numCroco,pipefd, pid_croco);
     
     close(pipefd[1]); 	
+    //int *positions =malloc(numCroco*sizeof(int)); // Posizioni dei coccodrilli
+
     int positions[numCroco]; // Posizioni dei coccodrilli
-    memset(positions, 0, sizeof(positions));
+    memset(positions, 0, sizeof(positions)); //creazione dinamica 
 	funzionamento_gioco(numCroco, pipefd[0],positions); //richiamo la funzione padre 
 	
 	kill(pid_rana,1);

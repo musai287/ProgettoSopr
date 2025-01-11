@@ -69,23 +69,22 @@ void funzionamento_gioco (int numCroco,int pipefd,int positions[]) {
                 rana.y = msg.y;
             } else if (msg.id >= 100 && msg.id < 100 + numCroco) {
                 // Messaggio dai coccodrilli (id >= 100)
-                int crocoIndex = msg.id - 100;
+                int crocoIndex = msg.id - 1;
                 positions[crocoIndex] = msg.x;
             }
         }
-				//questo controllo if  else if serve per capire chi sta usando il buffer
+		//questo controllo if  else if serve per capire chi sta usando il buffer
 
-				werase(gioco);  // Cancella il contenuto della finestra gioco
-            	box(gioco, 0, 0); // Crea il bordo della finestra gioco
-				//werase(gioco);
-            	//box(gioco,0,0);
-				stampCocco(numCroco,pipefd,positions);
-				stampRana(pipefd);
-				wrefresh(gioco);
-				
-				gestisci_vite(vite, start_time); 
-
-				if (rana.x == croco.x && rana.y == croco.y){
+		werase(gioco);  // Cancella il contenuto della finestra gioco
+        box(gioco, 0, 0); // Crea il bordo della finestra gioco
+		//werase(gioco);
+        //box(gioco,0,0);
+		stampCocco(numCroco,pipefd,positions);
+		stampRana(pipefd);
+		wrefresh(gioco);
+		
+		gestisci_vite(vite, start_time); 
+			if (rana.x == croco.x && rana.y == croco.y){
 					mvprintw(LINES / 2, COLS / 2 -5, "preso");
 					refresh();
 					usleep(DELAYCLOSED);
