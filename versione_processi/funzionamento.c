@@ -67,10 +67,8 @@ void funzionamento_gioco (int numCroco,int pipefd,int positions[]) {
                 // Messaggio dalla rana
                 rana.x = msg.x;
                 rana.y = msg.y;
-            } else if (msg.id >= 100 && msg.id < 100 + numCroco) {
-                // Messaggio dai coccodrilli (id >= 100)
-                int crocoIndex = msg.id - 1;
-                positions[crocoIndex] = msg.x;
+            } else {    
+            positions[msg.id] = msg.event;
             }
         }
 		//questo controllo if  else if serve per capire chi sta usando il buffer

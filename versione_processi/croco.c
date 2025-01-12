@@ -17,7 +17,14 @@ void cocco(int nC,int pipefd, int y) {
     sleep(rand() % 3 + 1);
     
     while (1) {
-        croco.x++;
+       
+            if((croco.y) % 2 == 1){
+                croco.x++;
+            }
+            else{    
+                croco.x--;
+            } 
+        
         
         if (croco.x >= COLS) {
             // Scrivi un messaggio di uscita e resetta la posizione
@@ -31,13 +38,10 @@ void cocco(int nC,int pipefd, int y) {
         // Invia la posizione corrente al padre
         msg.id = nC;
         msg.event = croco.x; // Usa "event" per comunicare la posizione
-        if(write(pipefd, &msg, sizeof(msg))){
-            mvwprintw(gioco, 2, 5, "scrivo");
-        }
+        write(pipefd, &msg, sizeof(msg));
 
         usleep(200000); // Velocità del movimento
     }
-    
 }
 void stampCocco(int numCroco,int pipefd,int positions[]) {
 	attron(A_REVERSE);

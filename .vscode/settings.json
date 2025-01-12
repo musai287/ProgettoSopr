@@ -1,10 +1,14 @@
 {
     "makefile.configureOnOpen": false,
     "files.associations": {
+        "*.ndjson": "jsonl",
+        "*.dbclient-js": "javascript",
         "wait.h": "c",
         "curses.h": "c",
         "types.h": "c",
         "piddini.h": "c",
-        "string.h": "c"
+        "string.h": "c",
+        "stdlib.h": "c",
+        "time.h": "c"
     }
 }

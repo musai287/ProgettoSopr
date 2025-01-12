@@ -12,12 +12,16 @@ struct Message {
 };
 void crocodile_process(int nC, int pipe_fd, int y) {
     int x = 0;
+    y;
     struct Message msg;
 
     srand(time(NULL) + nC); // Random seed unico per ogni processo
     sleep(rand() % 3 + 1);
     while (1) {
-        x++;
+        if (y % 2 == 1) {
+            x++;
+        } else {
+        x--;}
         if (x >= COLS) {
             // Scrivi un messaggio di uscita e resetta la posizione
             msg.id = nC;
