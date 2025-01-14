@@ -11,6 +11,8 @@
         "string.h": "c",
         "stdlib.h": "c",
         "time.h": "c",
-        "frog.h": "c"
+        "frog.h": "c",
+        "signal.h": "c",
+        "ncurses.h": "c"
     }
 }

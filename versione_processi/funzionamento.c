@@ -51,24 +51,26 @@ void gestisci_vite(int vite, time_t start_time) {
         wrefresh(vita); // Aggiorna la finestra vita
     }
 }
-void funzionamento_gioco (int numCroco,int pipefd,int positions[]) {
-	 MesPos msg;
-	initSRana();
-	initSCroco();
-	int vite = 3;
+void funzionamento_gioco(Frog frog, Crocodile croco,int numCroco,int pipefd,int positions[]) {
+	Entity msg;
+	//initSRana();
+	//initSCroco();
+	int vite = frog.lives;
 	
     time_t start_time = time(NULL);
 	//time_t last_trap_update_time = time(NULL);
 	while(1){
 		while (1) {
         // Leggi i messaggi dalla pipe
-        while (read(pipefd, &msg, sizeof(MesPos)) > 0) {
+        while (read(pipefd, &msg, sizeof(Entity)) > 0) {
             if (msg.id == 0) {
                 // Messaggio dalla rana
-                rana.x = msg.x;
-                rana.y = msg.y;
-            } else {    
-            positions[msg.id] = msg.event;
+                frog.base.x = msg.x;
+                frog.base.y = msg.y;
+            } else {
+                // Messaggio dal coccodrillo
+                croco.base.x = msg.x;
+                croco.base.y = msg.y;
             }
         }
 		//questo controllo if  else if serve per capire chi sta usando il buffer
@@ -77,18 +79,12 @@ void funzionamento_gioco (int numCroco,int pipefd,int positions[]) {
         box(gioco, 0, 0); // Crea il bordo della finestra gioco
 		//werase(gioco);
         //box(gioco,0,0);
-		stampCocco(numCroco,pipefd,positions);
-		stampRana(pipefd);
+		//stampCocco(numCroco,pipefd,positions);
+		//stampRana(pipefd);
 		wrefresh(gioco);
 		
 		gestisci_vite(vite, start_time); 
-			if (rana.x == croco.x && rana.y == croco.y){
-					mvprintw(LINES / 2, COLS / 2 -5, "preso");
-					refresh();
-					usleep(DELAYCLOSED);
-					endwin();
-					exit(0);
-				} //win condition
+			
 			}
 		}
 	}

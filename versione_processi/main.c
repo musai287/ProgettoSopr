@@ -34,7 +34,8 @@ int main(){
     setNonBlocking(pipefd[0]);
     initFin();
     finestre(&fin1, &fin2); // Creazione delle finestre
-    
+    Frog frog = initFrog(); // Inizializza la rana
+    Crocodile croco = initCrocodile(); // Inizializza il coccodrillo
     // Crea il primo e il secondo processo
     creaRano(pipefd, &pid_rana);
     creaCroco(numCroco,pipefd, pid_croco);
@@ -44,7 +45,7 @@ int main(){
 
     int positions[numCroco]; // Posizioni dei coccodrilli
     memset(positions, 0, sizeof(positions)); //creazione dinamica 
-	funzionamento_gioco(numCroco, pipefd[0],positions); //richiamo la funzione padre 
+	funzionamento_gioco(frog, croco, numCroco, pipefd[0],positions); //richiamo la funzione padre 
 	
 	kill(pid_rana,1);
     for (int i = 0; i < numCroco; i++) {
