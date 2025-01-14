@@ -32,8 +32,8 @@ typedef struct Crocodile{
 
 void entity_move(Entity *self, int x, int y);
 void stampaEntity(WINDOW *win, Entity *entity);
-extern Sprite spriteRana();
-extern Sprite spriteCrocodile();
+extern Sprite spriteRana;
+extern Sprite spriteCrocodile;
 extern Frog initFrog();
 extern Crocodile initCrocodile();
 

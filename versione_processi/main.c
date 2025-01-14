@@ -37,8 +37,8 @@ int main(){
     Frog frog = initFrog(); // Inizializza la rana
     Crocodile croco = initCrocodile(); // Inizializza il coccodrillo
     // Crea il primo e il secondo processo
-    creaRano(pipefd, &pid_rana);
-    creaCroco(numCroco,pipefd, pid_croco);
+    creaRano(frog, pipefd, &pid_rana);
+    creaCroco(croco, numCroco,pipefd, pid_croco);
     
     close(pipefd[1]); 	
     //int *positions =malloc(numCroco*sizeof(int)); // Posizioni dei coccodrilli

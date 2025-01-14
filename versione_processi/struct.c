@@ -15,16 +15,17 @@ void stampaEntity(WINDOW *win, Entity *entity){
         }
     }
 }
-Sprite spriteRana = {
-    .larghezza = 3,
-    .lunghezza = 1,
-    .pixels = {"|","_","|"}
+Sprite spriteRana ={
+    3,
+    1,
+    {"|","_","|"}
 };
 
 Sprite spriteCrocodile = {
-    .larghezza = 6,
-    .lunghezza = 1,
-    .pixels = {"[","=","=","=","]","="}};
+    6,
+    1,
+    {"[","=","=","=","]","="}
+    };
 
 
 Frog initFrog() {

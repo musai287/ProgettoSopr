@@ -18,7 +18,7 @@ void creaPipe(int pipe_fd[2]) {
     }
 }
 
-void creaRano(int pipefd[2], pid_t *pid_rana) {
+void creaRano(Frog frog,int pipefd[2], pid_t *pid_rana) {
     *pid_rana = fork();
     if (*pid_rana == -1) {
         perror("Errore nella creazione della prima fork");
@@ -34,7 +34,7 @@ void creaRano(int pipefd[2], pid_t *pid_rana) {
     }
 }
 
-void creaCroco(int numCroco,int pipefd[2], pid_t *pid_croco) {
+void creaCroco(Crocodile croco, int numCroco,int pipefd[2], pid_t *pid_croco) {
     
     for(int i = 0; i <numCroco; i++) {
         if ((pid_croco[i] = fork()) == 0) {
