@@ -51,7 +51,7 @@ void gestisci_vite(int vite, time_t start_time) {
         wrefresh(vita); // Aggiorna la finestra vita
     }
 }
-void funzionamento_gioco(Frog frog, Crocodile croco,int numCroco,int pipefd,int positions[]) {
+void funzionamento_gioco(Frog frog, Crocodile croco[],int numCroco,int pipefd,int positions[]) {
 	Entity msg;
 	//initSRana();
 	//initSCroco();
@@ -68,23 +68,21 @@ void funzionamento_gioco(Frog frog, Crocodile croco,int numCroco,int pipefd,int 
                 frog.base.x = msg.x;
                 frog.base.y = msg.y;
             } else {
-                // Messaggio dal coccodrillo
-                croco.base.x = msg.x;
-                croco.base.y = msg.y;
+                for (int i = 0; i < numCroco; i++) {
+                    if (croco[i].base.id == msg.id) { // Trova il coccodrillo corretto
+                        croco[i].base.x = msg.x;
+                        croco[i].base.y = msg.y;
+                    
+                }
             }
         }
 		//questo controllo if  else if serve per capire chi sta usando il buffer
 		werase(gioco);  // Cancella il contenuto della finestra gioco
         box(gioco, 0, 0); // Crea il bordo della finestra gioco
-		//werase(gioco);
-        //box(gioco,0,0);
-		//stampCocco(numCroco,pipefd,positions);
-		//stampRana(pipefd);
-        for(int i = 1; i < numCroco+1; i++){
-            if(croco.base.id == i){
-                stampaEntity(gioco, &croco.base);
-                }
-        }
+		
+        aggiornaPosizioni(numCroco, positions, croco);
+        stampCocco(gioco, numCroco, croco);
+        
         
         stampaEntity(gioco, &frog.base);
 		wrefresh(gioco);
@@ -92,4 +90,4 @@ void funzionamento_gioco(Frog frog, Crocodile croco,int numCroco,int pipefd,int 
 			}
 		}
 	}
-
+}

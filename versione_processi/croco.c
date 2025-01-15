@@ -9,39 +9,38 @@
 #include "struct.h"
 #include "croco.h"
 
-void processoCroco(Crocodile croco,int nC,int pipefd, int id) {
-      // Inizia in alto a sinistra
-    
-    srand(time(NULL) + id); // Random seed unico per ogni processo
+void processoCroco(Crocodile *croco,int nC,int pipefd, int id) {
+
+    srand(time(NULL) + croco->base.id); // Random seed unico per ogni processo
     sleep(rand() % 3 + 1);
     
     while (1) {
        
-            if((croco.base.y) % 2 == 1){
-                croco.base.entity_move(&croco.base, -1, 0);
+            if((croco->base.y) % 2 == 1){
+                croco->base.entity_move(&croco->base, -1, 0);
             }
             else{    
-                croco.base.entity_move(&croco.base, 1, 0);
+                croco->base.entity_move(&croco->base, 1, 0);
             } 
         
         
-        if (croco.base.x >= COLS) {
+        if (croco->base.x >= COLS) {
             // Scrivi un messaggio di uscita e resetta la posizione
-            croco.base.x = 0;
-            croco.base.event = 1; // Evento: uscito dallo schermo
-            croco.base.id = id;
-            write(pipefd, &croco.base, sizeof(Entity));
+            croco->base.x = 0;
+            croco->base.event = 1; // Evento: uscito dallo schermo
+            croco->base.id = id;
+            write(pipefd, &croco->base, sizeof(Entity));
             sleep(rand() % 3 + 1); // Pausa randomica
         }else{
-            croco.base.event = 0; // Evento: in movimento
-            croco.base.id = id;
-            write(pipefd, &croco.base, sizeof(Entity));
+            croco->base.event = 0; // Evento: in movimento
+            croco->base.id = id;
+            write(pipefd, &croco->base, sizeof(Entity));
         }
          usleep(200000); // Velocità del movimento
     }
 }
 
-void aggiornaPosizioni(int numCroco, int positions[], Entity entities[]) {
+void aggiornaPosizioni(int numCroco, int positions[], Crocodile croco[]) {
     for (int i = 0; i < numCroco; i++) {
         int row = i / 3 + 1;
         int col;
@@ -52,13 +51,13 @@ void aggiornaPosizioni(int numCroco, int positions[], Entity entities[]) {
             col = COLS - (i % 3) * 10 - 10;
         }
 
-        entities[i].x = col + positions[i];
-        entities[i].y = row;
+        croco[i].base.x = col + positions[i];
+        croco[i].base.y = row;
     }
 }
 
-void stampCocco(WINDOW *gioco, int numCroco, Entity entities[]) {
+void stampCocco(WINDOW *gioco, int numCroco, Crocodile croco[]) {
     for (int i = 0; i < numCroco; i++) {
-        stampaEntity(gioco, &entities[i]);
+        stampaEntity(gioco, &(croco[i].base));
     }
 }

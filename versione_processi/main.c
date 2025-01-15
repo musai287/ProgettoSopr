@@ -32,8 +32,16 @@ int main(){
     setNonBlocking(pipefd[0]);
     initFin();
     finestre(&fin1, &fin2); // Creazione delle finestre
+    
     Frog frog = initFrog(); // Inizializza la rana
-    Crocodile croco = initCrocodile(); // Inizializza il coccodrillo
+    int ciao;
+    Crocodile croco[numCroco]; // Inizializza il coccodrillo
+    for(ciao=0; ciao < numCroco; ciao++){
+        croco[ciao] = initCrocodile();
+        croco[ciao].base.id++; // Inizializza il coccodrillo
+    }
+    
+    
     // Crea il primo e il secondo processo
     creaRano(frog, pipefd, &pid_rana);
     creaCroco(croco, numCroco,pipefd, pid_croco);

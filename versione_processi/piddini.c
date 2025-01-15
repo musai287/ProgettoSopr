@@ -34,12 +34,12 @@ void creaRano(Frog frog,int pipefd[2], pid_t *pid_rana) {
     }
 }
 
-void creaCroco(Crocodile croco, int numCroco,int pipefd[2], pid_t *pid_croco) {
+void creaCroco(Crocodile croco[], int numCroco,int pipefd[2], pid_t *pid_croco) {
     
     for(int i = 1; i <numCroco+1; i++) {
         if ((pid_croco[i] = fork()) == 0) {
             close(pipefd[0]); // Chiudi il lato di lettura per i figli
-            processoCroco(croco, i, pipefd[1], i);
+            processoCroco(&croco[i], i, pipefd[1], i);
             _exit(0);
         }
     }

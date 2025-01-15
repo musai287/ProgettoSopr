@@ -16,4 +16,4 @@
 
 void creaPipe(int pipe_fd[2]);
 void creaRano(Frog frog,int pipefd[2], pid_t *pid_rana);
-void creaCroco(Crocodile croco, int numCroco,int pipefd[2], pid_t *pid_croco);
+void creaCroco(Crocodile croco[], int numCroco,int pipefd[2], pid_t *pid_croco);
