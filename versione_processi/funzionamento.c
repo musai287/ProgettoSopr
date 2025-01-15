@@ -74,17 +74,21 @@ void funzionamento_gioco(Frog frog, Crocodile croco,int numCroco,int pipefd,int 
             }
         }
 		//questo controllo if  else if serve per capire chi sta usando il buffer
-
 		werase(gioco);  // Cancella il contenuto della finestra gioco
         box(gioco, 0, 0); // Crea il bordo della finestra gioco
 		//werase(gioco);
         //box(gioco,0,0);
 		//stampCocco(numCroco,pipefd,positions);
 		//stampRana(pipefd);
+        for(int i = 1; i < numCroco+1; i++){
+            if(croco.base.id == i){
+                stampaEntity(gioco, &croco.base);
+                }
+        }
+        
+        stampaEntity(gioco, &frog.base);
 		wrefresh(gioco);
-		
-		gestisci_vite(vite, start_time); 
-			
+		gestisci_vite(vite, start_time);	
 			}
 		}
 	}

@@ -11,8 +11,8 @@ void entity_move(Entity *self, int x, int y) {
 void stampaEntity(WINDOW *win, Entity *entity){
     for(int i = 0; i < entity->sprite.larghezza; i++){
         for(int j = 0; j < entity->sprite.lunghezza; j++){
-            mvwprintw(win, entity->x + i, entity->y + j, "%c", entity->sprite.pixels[i][j]);
-        }
+            mvwprintw(win, entity->y + j, entity->x + i, "%c", entity->sprite.pixels[i][j]);
+        } 
     }
 }
 Sprite spriteRana ={
@@ -30,10 +30,10 @@ Sprite spriteCrocodile = {
 
 Frog initFrog() {
     Frog frog;
-    frog.base.x = 5;
-    frog.base.y = 5;
+    frog.base.x = 10;
+    frog.base.y = 10;
     frog.base.sprite = spriteRana;
-    frog.base.id = 1;
+    frog.base.id = 0;
     frog.base.entity_move = entity_move;
     frog.lives = 3;
     return frog;
@@ -41,10 +41,10 @@ Frog initFrog() {
 
 Crocodile initCrocodile() {
     Crocodile crocodile;
-    crocodile.base.x = 0;
-    crocodile.base.y = 0;
+    crocodile.base.x = 2;
+    crocodile.base.y = 2;
     crocodile.base.sprite = spriteCrocodile;
-    crocodile.base.id = 2;
+    crocodile.base.id = 1;
     crocodile.base.entity_move = entity_move;
     crocodile.direction;
     return crocodile;

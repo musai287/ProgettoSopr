@@ -14,7 +14,7 @@
 #include "piddini.h"
 
 int main(){
-    int numCroco = 24;
+    int numCroco = 24; // Numero di coccodrilli
 	pid_t pid_rana;
     pid_t pid_croco[numCroco];
     int pipefd[2];
@@ -29,8 +29,6 @@ int main(){
     init_pair(3, COLOR_BLACK, COLOR_YELLOW);
     init_pair(4, COLOR_BLACK, COLOR_GREEN);
     creaPipe(pipefd);  
-    creaPipe(pipefd); 
-    setNonBlocking(pipefd[0]);
     setNonBlocking(pipefd[0]);
     initFin();
     finestre(&fin1, &fin2); // Creazione delle finestre

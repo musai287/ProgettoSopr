@@ -22,16 +22,16 @@ void processoRana(Frog frog,int pipe_fd){
 
 	switch (input) {
         case KEY_UP:
-            frog.base.entity_move(&frog.base, -1, 0);
-            break;
-        case KEY_DOWN:
-            frog.base.entity_move(&frog.base, 1, 0);
-            break;
-        case KEY_LEFT:
             frog.base.entity_move(&frog.base, 0, -1);
             break;
-        case KEY_RIGHT:
+        case KEY_DOWN:
             frog.base.entity_move(&frog.base, 0, 1);
+            break;
+        case KEY_LEFT:
+            frog.base.entity_move(&frog.base, -1, 0);
+            break;
+        case KEY_RIGHT:
+            frog.base.entity_move(&frog.base, 1, 0);    
             break;
 		}
      write(pipe_fd, &frog.base, sizeof(Entity));

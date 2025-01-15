@@ -6,8 +6,8 @@
 /*Nuova versione delle strutture, paradigma OOP*/
 
 typedef struct Sprite{
-    int larghezza;
-    int lunghezza;
+    int larghezza;  // e` la x
+    int lunghezza; // e` la y
     char pixels[10][10];
 }Sprite;
 

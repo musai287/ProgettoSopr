@@ -9,19 +9,19 @@
 #include "struct.h"
 #include "croco.h"
 
-void processoCroco(Crocodile croco,int nC,int pipefd, int y) {
+void processoCroco(Crocodile croco,int nC,int pipefd, int id) {
       // Inizia in alto a sinistra
     
-    srand(time(NULL) + nC); // Random seed unico per ogni processo
+    srand(time(NULL) + id); // Random seed unico per ogni processo
     sleep(rand() % 3 + 1);
     
     while (1) {
        
             if((croco.base.y) % 2 == 1){
-                croco.base.x++;
+                croco.base.entity_move(&croco.base, -1, 0);
             }
             else{    
-                croco.base.x--;
+                croco.base.entity_move(&croco.base, 1, 0);
             } 
         
         
@@ -29,14 +29,36 @@ void processoCroco(Crocodile croco,int nC,int pipefd, int y) {
             // Scrivi un messaggio di uscita e resetta la posizione
             croco.base.x = 0;
             croco.base.event = 1; // Evento: uscito dallo schermo
-            croco.base.id = nC;
+            croco.base.id = id;
             write(pipefd, &croco.base, sizeof(Entity));
             sleep(rand() % 3 + 1); // Pausa randomica
         }else{
             croco.base.event = 0; // Evento: in movimento
-            croco.base.id = nC;
+            croco.base.id = id;
             write(pipefd, &croco.base, sizeof(Entity));
         }
          usleep(200000); // Velocità del movimento
+    }
+}
+
+void aggiornaPosizioni(int numCroco, int positions[], Entity entities[]) {
+    for (int i = 0; i < numCroco; i++) {
+        int row = i / 3 + 1;
+        int col;
+
+        if (row % 2 == 1) {
+            col = (i % 3) * 10;
+        } else {
+            col = COLS - (i % 3) * 10 - 10;
+        }
+
+        entities[i].x = col + positions[i];
+        entities[i].y = row;
+    }
+}
+
+void stampCocco(WINDOW *gioco, int numCroco, Entity entities[]) {
+    for (int i = 0; i < numCroco; i++) {
+        stampaEntity(gioco, &entities[i]);
     }
 }
