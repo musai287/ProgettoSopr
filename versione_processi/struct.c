@@ -1,11 +1,23 @@
 #include <ncurses.h>
 #include "struct.h"
-
+#include <sys/wait.h>
+#include <sys/types.h>
+#include <signal.h>
 /*nuova versione pardigma OOP*/
 
-void entity_move(Entity *self, int x, int y) {
-    self->x += x;
-    self->y += y;
+void entity_move(Entity *self, int dx, int dy) {
+    self->x += dx;
+    self->y += dy;
+}
+
+void antiStampaEntity(WINDOW *win, Entity *entity) {
+    for (int i = 0; i < entity->sprite.larghezza; i++) {
+        for (int j = 0; j < entity->sprite.lunghezza; j++) {
+            // Inversione orizzontale: accedi ai pixel dall'ultimo al primo per ogni riga
+            mvwprintw(win, entity->y + j, entity->x + i, 
+                      "%c", entity->sprite.pixels[i][entity->sprite.lunghezza - 1 - j]);
+        }
+    }
 }
 
 void stampaEntity(WINDOW *win, Entity *entity){
@@ -35,19 +47,22 @@ Frog initFrog() {
     frog.base.sprite = spriteRana;
     frog.base.id = 0;
     frog.base.entity_move = entity_move;
+    frog.base.pid;
     frog.lives = 3;
+
     return frog;
 }
 
 Crocodile initCrocodile() {
-    Crocodile crocodile;
-    crocodile.base.x = 2;
-    crocodile.base.y = 2;
-    crocodile.base.sprite = spriteCrocodile;
-    crocodile.base.id = 1;
-    crocodile.base.entity_move = entity_move;
-    crocodile.direction;
-    return crocodile;
+    Crocodile croco;
+    croco.base.x ;
+    croco.base.y ;
+    croco.base.sprite = spriteCrocodile;
+    croco.base.id = 1;
+    croco.base.entity_move = entity_move;
+    croco.base.pid;
+    croco.direction;
+    return croco;
 }
 WINDOW *vita, *gioco;
 Fin fin1;

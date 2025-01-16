@@ -37,7 +37,7 @@ void finestre(Fin *fin1, Fin *fin2) {
     wbkgd(gioco, COLOR_PAIR(4)); // Imposta il colore di sfondo della finestra gioco
     box(vita, 0, 0);    // Bordo della finestra vita
     box(gioco, 0, 0); // Bordo della finestra gioco
-    wrefresh(vita);  // Aggiorna la finestra vita
+    	wrefresh(vita);  // Aggiorna la finestra vita
     wrefresh(gioco); // Aggiorna la finestra gioco
 }
 
@@ -51,14 +51,12 @@ void gestisci_vite(int vite, time_t start_time) {
         wrefresh(vita); // Aggiorna la finestra vita
     }
 }
-void funzionamento_gioco(Frog frog, Crocodile croco[],int numCroco,int pipefd,int positions[]) {
+void funzionamento_gioco(Frog frog, Crocodile croco[],int numCroco,int pipefd) {
 	Entity msg;
-	//initSRana();
-	//initSCroco();
-	int vite = frog.lives;
 	
     time_t start_time = time(NULL);
 	//time_t last_trap_update_time = time(NULL);
+   // aggiornaPosizioni(numCroco, croco);
 	while(1){
 		while (1) {
         // Leggi i messaggi dalla pipe
@@ -79,14 +77,15 @@ void funzionamento_gioco(Frog frog, Crocodile croco[],int numCroco,int pipefd,in
 		//questo controllo if  else if serve per capire chi sta usando il buffer
 		werase(gioco);  // Cancella il contenuto della finestra gioco
         box(gioco, 0, 0); // Crea il bordo della finestra gioco
+        mvwprintw(gioco, 15, 15, "Letto messaggio: id=%d, x=%d, y=%d\n",
+                                                  msg.id, msg.x, msg.y);
 		
-        aggiornaPosizioni(numCroco, positions, croco);
         stampCocco(gioco, numCroco, croco);
         
         
         stampaEntity(gioco, &frog.base);
 		wrefresh(gioco);
-		gestisci_vite(vite, start_time);	
+		gestisci_vite(frog.lives, start_time);	
 			}
 		}
 	}

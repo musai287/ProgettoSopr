@@ -1,5 +1,7 @@
 #pragma once
-
+#include <sys/wait.h>
+#include <sys/types.h>
+#include <signal.h>
 #define DELAY 1000000 //0.001
 #define DELAYCLOSED 2000000 //2 secondi
 
@@ -17,6 +19,7 @@ typedef struct Entity{
     int id;
     int event;
     void (*entity_move)(struct Entity *self, int x, int y);
+    pid_t pid;
 }Entity;
 
 typedef struct Frog{
@@ -29,7 +32,7 @@ typedef struct Crocodile{
     int direction;
 }Crocodile;
 
-
+void antiStampaEntity(WINDOW *win, Entity *entity);
 void entity_move(Entity *self, int x, int y);
 void stampaEntity(WINDOW *win, Entity *entity);
 extern Sprite spriteRana;
