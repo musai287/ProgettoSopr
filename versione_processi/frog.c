@@ -9,9 +9,9 @@
 #include "struct.h"
 #include "frog.h"
 
-void processoRana(Frog frog,int pipe_fd){
+void processoRana(Frog frog,int pipe_fd,int pipeEvent){
 	
-
+    Entity event;
 	while(1) {
 	int input = getch();
 	//if(input == 'q'){
@@ -20,6 +20,10 @@ void processoRana(Frog frog,int pipe_fd){
 	//}
 	//ho dubbi su questa implementazione,non funziona ma penso sia dovuto al fatto che la pipe sia condivisa.
 
+    read(pipeEvent, &event, sizeof(Entity));
+    frog.base = event;
+    
+    
 	switch (input) {
         case KEY_UP:
             frog.base.entity_move(&frog.base, 0, -1);

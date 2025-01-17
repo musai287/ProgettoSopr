@@ -12,10 +12,10 @@ void entity_move(Entity *self, int dx, int dy) {
 
 void antiStampaEntity(WINDOW *win, Entity *entity) {
     for (int i = 0; i < entity->sprite.larghezza; i++) {
-        for (int j = 0; j < entity->sprite.lunghezza; j++) {
-            // Inversione orizzontale: accedi ai pixel dall'ultimo al primo per ogni riga
+        for (int j = entity->sprite.lunghezza -1; j > 0; j--) {
+            // Accedi ai pixel invertendo l'ordine lungo la dimensione orizzontale
             mvwprintw(win, entity->y + j, entity->x + i, 
-                      "%c", entity->sprite.pixels[i][entity->sprite.lunghezza - 1 - j]);
+                      "%c", entity->sprite.pixels[i][j]);
         }
     }
 }
@@ -46,6 +46,7 @@ Frog initFrog() {
     frog.base.y = 10;
     frog.base.sprite = spriteRana;
     frog.base.id = 0;
+    frog.base.event = 0;
     frog.base.entity_move = entity_move;
     frog.base.pid;
     frog.lives = 3;
@@ -59,6 +60,7 @@ Crocodile initCrocodile() {
     croco.base.y ;
     croco.base.sprite = spriteCrocodile;
     croco.base.id = 1;
+    croco.base.event = 0;
     croco.base.entity_move = entity_move;
     croco.base.pid;
     croco.direction;

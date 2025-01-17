@@ -12,6 +12,7 @@
 #include "funzionamento.h"
 #include "frog.h"
 #include "croco.h"
+#include "collisioni.h"
 /*Magica funzione per rendere non
  *bloccante le pipe nella comunicazione tra di loro 
  *(bisogna aggiungerla nel main richiamando le pipe)
@@ -51,42 +52,38 @@ void gestisci_vite(int vite, time_t start_time) {
         wrefresh(vita); // Aggiorna la finestra vita
     }
 }
-void funzionamento_gioco(Frog frog, Crocodile croco[],int numCroco,int pipefd) {
+void funzionamento_gioco(Frog frog, Crocodile croco[],int numCroco,int pipefd, int pipeEvent) {
 	Entity msg;
 	
     time_t start_time = time(NULL);
-	//time_t last_trap_update_time = time(NULL);
-   // aggiornaPosizioni(numCroco, croco);
+	
 	while(1){
-		while (1) {
         // Leggi i messaggi dalla pipe
-        while (read(pipefd, &msg, sizeof(Entity)) > 0) {
+        read(pipefd, &msg, sizeof(Entity)); 
             if (msg.id == 0) {
                 // Messaggio dalla rana
                 frog.base.x = msg.x;
                 frog.base.y = msg.y;
-            } else {
+            } 
+            else{
                 for (int i = 0; i < numCroco; i++) {
                     if (croco[i].base.id == msg.id) { // Trova il coccodrillo corretto
                         croco[i].base.x = msg.x;
-                        croco[i].base.y = msg.y;
-                    
+                        croco[i].base.y = msg.y;                    
+                    }
                 }
             }
-        }
-		//questo controllo if  else if serve per capire chi sta usando il buffer
-		werase(gioco);  // Cancella il contenuto della finestra gioco
+		write(pipeEvent, &frog.base, sizeof(Entity));
+        ranaSuCroco(&frog, croco, numCroco);
+
+        werase(gioco);  // Cancella il contenuto della finestra gioco
         box(gioco, 0, 0); // Crea il bordo della finestra gioco
-        mvwprintw(gioco, 15, 15, "Letto messaggio: id=%d, x=%d, y=%d\n",
-                                                  msg.id, msg.x, msg.y);
-		
+        mvwprintw(gioco, 15, 15, "Letto messaggio: id=%d, x=%d, y=%d event=%d\n",
+                                                  msg.id, msg.x, msg.y, msg.event);
         stampCocco(gioco, numCroco, croco);
-        
-        
         stampaEntity(gioco, &frog.base);
 		wrefresh(gioco);
 		gestisci_vite(frog.lives, start_time);	
-			}
-		}
-	}
+	}		
 }
+

@@ -16,8 +16,11 @@
 int main(){
     int numCroco = 24; // Numero di coccodrilli
     int pipefd[2];
-    creaPipe(pipefd);  
+    int pipeEvent[2];
+    creaPipe(pipefd); 
+    creaPipe(pipeEvent);
     setNonBlocking(pipefd[0]);
+    setNonBlocking(pipeEvent[1]);
 	initscr();
 	noecho();
 	curs_set(FALSE);
@@ -37,13 +40,14 @@ int main(){
         croco[ciao] = initCrocodile();
         croco[ciao].base.id++; // Inizializza il coccodrillo
     }
-    creaRano(frog, pipefd);
+    creaRano(frog, pipefd, pipeEvent); // Crea il processo rana
     creaCroco(croco, numCroco,pipefd);
     // Crea il primo e il secondo processo
     close(pipefd[1]); 	
+    //close(pipeEvent[0]);
     //int *positions =malloc(numCroco*sizeof(int)); // Posizioni dei coccodrilli
 
-    funzionamento_gioco(frog, croco, numCroco, pipefd[0]); //richiamo la funzione padre 
+    funzionamento_gioco(frog, croco, numCroco, pipefd[0], pipeEvent[1]); //richiamo la funzione padre 
 	
 	kill(frog.base.pid,1);
     for (int i = 0; i < numCroco; i++) {
