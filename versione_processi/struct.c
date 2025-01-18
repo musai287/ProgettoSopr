@@ -70,7 +70,7 @@ Fin fin2;
 void initFin() {
     // Inizializza le variabili globali dopo aver chiamato initscr()
     fin1 = (Fin){3, COLS, 0, 0};
-    fin2 = (Fin){LINES - 3, COLS, 3, 0};
+    fin2 = (Fin){LINES-3, COLS, 3, 0};
 }
 /*vecchia versione*/
 //WINDOW *vita, *gioco;

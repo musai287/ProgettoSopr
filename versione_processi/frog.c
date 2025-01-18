@@ -15,14 +15,44 @@ void processoRana(Frog frog,int pipe_fd,int pipeEvent){
 
     
  while(1){           
+    int input = getch();
+
+        // Calcola la posizione futura della rana
+        int new_x = frog.base.x;
+        int new_y = frog.base.y;
+
+        switch (input) {
+            case KEY_UP:
+                new_y -= 1;
+                break;
+            case KEY_DOWN:
+                new_y += 1;
+                break;
+            case KEY_LEFT:
+                new_x -= 1;
+                break;
+            case KEY_RIGHT:
+                new_x += 1;
+                break;
+        }
+
+        // Verifica che la nuova posizione sia entro i limiti dello schermo
+        if (new_x >= 0 && new_x + frog.base.sprite.larghezza <= COLS &&
+            new_y >= 0 && new_y + frog.base.sprite.lunghezza <= LINES-4) {
+            frog.base.entity_move(&frog.base, new_x - frog.base.x, new_y - frog.base.y);
+        }
+        write(pipe_fd, &frog.base, sizeof(Entity)); 
+
+        
+        if (read(pipeEvent, &evento, sizeof(Event)) <= 0){continue;}
         if (read(pipeEvent, &evento, sizeof(Event)) > 0) {
             if (evento.tipo == 2) {
                 if(evento.data == 1){
-                    frog.base.entity_move(&frog.base, 1, 0);  
+                frog.base.entity_move(&frog.base, 1, 0);  
                     usleep(100);
                 }
                 if(evento.data == 2){
-                    frog.base.entity_move(&frog.base, -1, 0);
+                frog.base.entity_move(&frog.base, -1, 0);
                     usleep(100);
                 }
             } 
@@ -30,22 +60,5 @@ void processoRana(Frog frog,int pipe_fd,int pipeEvent){
 	  
             }
         }
-    int input = getch();
-    
-    	switch (input) {
-            case KEY_UP:
-                frog.base.entity_move(&frog.base, 0, -1);
-                break;
-            case KEY_DOWN:
-                frog.base.entity_move(&frog.base, 0, 1);
-                break;
-            case KEY_LEFT:
-                frog.base.entity_move(&frog.base, -1, 0);
-                break;
-            case KEY_RIGHT:
-                frog.base.entity_move(&frog.base, 1, 0);    
-                break;
-    		}
-        write(pipe_fd, &frog.base, sizeof(Entity)); 
     }  
 }

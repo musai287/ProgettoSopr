@@ -6,8 +6,16 @@
 #define DELAYCLOSED 2000000 //2 secondi
 
 /*Nuova versione delle strutture, paradigma OOP*/
+typedef struct Sprite{
+    short int larghezza;  // e` la x è la riga
+    short int lunghezza; // e` la y è la colonna
+    char pixels[10][10];
+}Sprite;
 
-
+typedef struct map{
+    Sprite sprite;
+    short int x, y;
+}map;
 
 typedef struct Event{
     short int tipo;
@@ -15,11 +23,6 @@ typedef struct Event{
 }Event;
 
 
-typedef struct Sprite{
-    short int larghezza;  // e` la x è la riga
-    short int lunghezza; // e` la y è la colonna
-    char pixels[10][10];
-}Sprite;
 
 typedef struct Entity{
     short int x, y;

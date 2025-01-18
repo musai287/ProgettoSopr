@@ -20,7 +20,7 @@ int main(){
     creaPipe(pipefd); 
     creaPipe(pipeEvent);
     setNonBlocking(pipefd[0]);
-    // setNonBlocking(pipeEvent[1]);
+    setNonBlocking(pipeEvent[1]);
 	initscr();
     resize_term(23, 80);
 	noecho();

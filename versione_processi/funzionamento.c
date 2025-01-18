@@ -14,7 +14,7 @@
 #include "croco.h"
 #include "collisioni.h"
 /*Magica funzione per rendere non
- *bloccante le pipe nella comunicazione tra di loro 
+ *bloccante le pipe nella comunicazione tra di loro
  *(bisogna aggiungerla nel main richiamando le pipe)
  */
 void setNonBlocking(int pipefd) {
@@ -55,9 +55,9 @@ void gestisci_vite(int vite, time_t start_time) {
 void funzionamento_gioco(Frog frog, Crocodile croco[],int numCroco,int pipefd, int pipeEvent) {
 	Entity msg;
     Event evento;
-    
+
     time_t start_time = time(NULL);
-	
+
 	while(1){
         // Leggi i messaggi dalla pipe
         if (read(pipefd, &msg, sizeof(Entity)) > 0) {
@@ -76,30 +76,30 @@ void funzionamento_gioco(Frog frog, Crocodile croco[],int numCroco,int pipefd, i
             }
         }
          int collisionFlag = ranaSuCroco(&frog, croco, numCroco);
-        
+
         if (collisionFlag) {
             evento.tipo = 2;
             evento.data = collisionFlag;  // Evento che dice alla rana di seguire il coccodrillo
             write(pipeEvent, &evento, sizeof(Event));
-           
+
         } else {
             evento.tipo = 0;
-            evento.data = collisionFlag;  // Tipo di evento che dice alla rana di fare un movimento              
+            evento.data = collisionFlag;  // Tipo di evento che dice alla rana di fare un movimento
             write(pipeEvent, &evento, sizeof(Event));
-           
+
         }
 
         werase(gioco);  // Cancella il contenuto della finestra gioco
         box(gioco, 0, 0); // Crea il bordo della finestra gioco
         mvwprintw(gioco, 18, 1, "Letto messaggio: id=%d, x=%d, y=%d \n",
                                                   msg.id, msg.x, msg.y);
-        mvwprintw(gioco, 17, 1, "evento tipo =%d evento data = %d", 
+        mvwprintw(gioco, 17, 1, "evento tipo =%d evento data = %d",
                                         evento.tipo, evento.data);
         stampCocco(gioco, numCroco, croco);
         stampaEntity(gioco, &frog.base);
 		wrefresh(gioco);
 		gestisci_vite(frog.lives, start_time);
-        
-	}		
+
+	}
 }
 
