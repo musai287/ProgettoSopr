@@ -20,8 +20,9 @@ int main(){
     creaPipe(pipefd); 
     creaPipe(pipeEvent);
     setNonBlocking(pipefd[0]);
-    setNonBlocking(pipeEvent[1]);
+    // setNonBlocking(pipeEvent[1]);
 	initscr();
+    resize_term(23, 80);
 	noecho();
 	curs_set(FALSE);
     keypad(stdscr, TRUE);
@@ -33,28 +34,28 @@ int main(){
     init_pair(4, COLOR_BLACK, COLOR_GREEN);
     initFin();
     finestre(&fin1, &fin2); // Creazione delle finestre
-    
+
     Frog frog = initFrog(); // Inizializza la rana
     creaRano(frog, pipefd, pipeEvent); // Crea il processo rana
     Crocodile croco[numCroco]; // Inizializza il coccodrillo
+    
     for(int ciao=0; ciao < numCroco; ciao++){
         croco[ciao] = initCrocodile();
         croco[ciao].base.id++; // Inizializza il coccodrillo
     }
     creaCroco(croco, numCroco,pipefd);
-    // Crea il primo e il secondo processo
+    
     close(pipefd[1]); 	
     close(pipeEvent[0]);
     
+    funzionamento_gioco(frog, croco, numCroco, pipefd[0], pipeEvent[1]);
 
-    funzionamento_gioco(frog, croco, numCroco, pipefd[0], pipeEvent[1]); //richiamo la funzione padre 
-	
 	kill(frog.base.pid,1);
     for (int i = 0; i < numCroco; i++) {
-    kill(croco[i].base.pid, SIGKILL);  // Uccidi ogni processo
-}
-	endwin();
-	return 0;
+        kill(croco[i].base.pid, SIGKILL);  // Uccidi ogni processo
+    }
+    endwin();
+    return 0;
 }
 
 

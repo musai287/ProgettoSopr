@@ -27,10 +27,10 @@ void creaRano(Frog frog,int pipefd[2], int pipeEvent[2]) {
 
     if (frog.base.pid == 0) {  // Processo figlio (rana)
         close(pipefd[0]);  // Chiudi il lato di lettura della pipe
-        close(pipeEvent[1]);  // Chiudi il lato di scrittura della pipe
         // Esegui altre operazioni nel processo figlio 'rana'
         processoRana(frog, pipefd[1], pipeEvent[0]);  // Esempio di scrittura nella pipe
-         close(pipefd[1]);
+        close(pipeEvent[1]);  // Chiudi il lato di scrittura della pipe
+        close(pipefd[1]);
         _exit(0);  // Esci dal processo figlio
     }
 }
@@ -44,9 +44,11 @@ void creaCroco(Crocodile croco[], int numCroco,int pipefd[2]) {
 
         if (riga % 2 == 1) {
             col = (i % 3) * 10;
+            croco[i].direction = 1;
+
         } else {
             col = COLS - (i % 3) * 10 - 10;
-            croco[i].direction = 1;
+            croco[i].direction = 2;
 
         }
         croco[i].base.x = col;
@@ -56,7 +58,7 @@ void creaCroco(Crocodile croco[], int numCroco,int pipefd[2]) {
 
         if ((croco[i].base.pid = fork())) {
             close(pipefd[0]); // Chiudi il lato di lettura per i figli
-            processoCroco(&croco[i], numCroco, pipefd[1], i);
+            processoCroco(&croco[i], pipefd[1]);
             _exit(0);
         }
     }

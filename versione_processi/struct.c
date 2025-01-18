@@ -5,7 +5,7 @@
 #include <signal.h>
 /*nuova versione pardigma OOP*/
 
-void entity_move(Entity *self, int dx, int dy) {
+void entity_move(Entity *self, short int dx, short int dy) {
     self->x += dx;
     self->y += dy;
 }
@@ -14,7 +14,7 @@ void antiStampaEntity(WINDOW *win, Entity *entity) {
     for (int i = 0; i < entity->sprite.larghezza; i++) {
         for (int j = entity->sprite.lunghezza -1; j > 0; j--) {
             // Accedi ai pixel invertendo l'ordine lungo la dimensione orizzontale
-            mvwprintw(win, entity->y + j, entity->x + i, 
+            mvwprintw(win, entity->y + j, entity->x + i,
                       "%c", entity->sprite.pixels[i][j]);
         }
     }
@@ -24,7 +24,7 @@ void stampaEntity(WINDOW *win, Entity *entity){
     for(int i = 0; i < entity->sprite.larghezza; i++){
         for(int j = 0; j < entity->sprite.lunghezza; j++){
             mvwprintw(win, entity->y + j, entity->x + i, "%c", entity->sprite.pixels[i][j]);
-        } 
+        }
     }
 }
 Sprite spriteRana ={
@@ -42,12 +42,12 @@ Sprite spriteCrocodile = {
 
 Frog initFrog() {
     Frog frog;
-    frog.base.x = 10;
+    frog.base.x = (COLS /2) - 3;
     frog.base.y = 10;
     frog.base.sprite = spriteRana;
     frog.base.id = 0;
     frog.base.entity_move = entity_move;
-    frog.base.pid;
+    // frog.base.pid;
     frog.lives = 3;
 
     return frog;
@@ -55,13 +55,13 @@ Frog initFrog() {
 
 Crocodile initCrocodile() {
     Crocodile croco;
-    croco.base.x ;
-    croco.base.y ;
+    // croco.base.x ;
+    // croco.base.y ;
     croco.base.sprite = spriteCrocodile;
     croco.base.id = 1;
     croco.base.entity_move = entity_move;
-    croco.base.pid;
-    croco.direction;
+    // croco.base.pid;
+    // croco.direction;
     return croco;
 }
 WINDOW *vita, *gioco;
@@ -86,7 +86,7 @@ void initFin() {
 //}
 //
 //void initSCroco(){
-//    // Inizializza le variabili globali per croco   
+//    // Inizializza le variabili globali per croco
 //    croco = (MesPos){1, 0, 1, 1};
 //}
 //

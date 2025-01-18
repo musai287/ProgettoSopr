@@ -75,23 +75,26 @@ void funzionamento_gioco(Frog frog, Crocodile croco[],int numCroco,int pipefd, i
                 }
             }
         }
-         int pipolo = ranaSuCroco(&frog, croco, numCroco, pipeEvent);
+         int collisionFlag = ranaSuCroco(&frog, croco, numCroco);
         
-        if (pipolo) {
-            evento.tipo = 2;  // Evento che dice alla rana di seguire il coccodrillo
-            evento.data = 2 ;  // Passa la posizione X del coccodrillo
+        if (collisionFlag) {
+            evento.tipo = 2;
+            evento.data = collisionFlag;  // Evento che dice alla rana di seguire il coccodrillo
             write(pipeEvent, &evento, sizeof(Event));
+           
         } else {
-            evento.tipo = 0;  // Tipo di evento che dice alla rana di fare un movimento
-            evento.data;  // Spostamento di default
+            evento.tipo = 0;
+            evento.data = collisionFlag;  // Tipo di evento che dice alla rana di fare un movimento              
             write(pipeEvent, &evento, sizeof(Event));
+           
         }
 
         werase(gioco);  // Cancella il contenuto della finestra gioco
         box(gioco, 0, 0); // Crea il bordo della finestra gioco
-        if(pipolo){ mvwprintw(gioco, 15, 15, "sborrapipolo\n");}
-        mvwprintw(gioco, 18, 18, "Letto messaggio: id=%d, x=%d, y=%d \n",
+        mvwprintw(gioco, 18, 1, "Letto messaggio: id=%d, x=%d, y=%d \n",
                                                   msg.id, msg.x, msg.y);
+        mvwprintw(gioco, 17, 1, "evento tipo =%d evento data = %d", 
+                                        evento.tipo, evento.data);
         stampCocco(gioco, numCroco, croco);
         stampaEntity(gioco, &frog.base);
 		wrefresh(gioco);

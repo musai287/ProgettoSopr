@@ -6,41 +6,42 @@
 #define DELAYCLOSED 2000000 //2 secondi
 
 /*Nuova versione delle strutture, paradigma OOP*/
+
+
+
 typedef struct Event{
-    int tipo;
-    int data;
+    short int tipo;
+    short int data;
 }Event;
 
 
-
-
 typedef struct Sprite{
-    int larghezza;  // e` la x è la riga
-    int lunghezza; // e` la y è la colonna
+    short int larghezza;  // e` la x è la riga
+    short int lunghezza; // e` la y è la colonna
     char pixels[10][10];
 }Sprite;
 
 typedef struct Entity{
-    int x, y;
+    short int x, y;
     Sprite sprite;
-    int id;
+    short int id;
     
-    void (*entity_move)(struct Entity *self, int x, int y);
+    void (*entity_move)(struct Entity *self, short int x, short int y);
     pid_t pid;
 }Entity;
 
 typedef struct Frog{
     Entity base;
-    int lives;
+    short int lives;
 }Frog;
 
 typedef struct Crocodile{
     Entity base;
-    int direction;
+    short int direction;
 }Crocodile;
 
 void antiStampaEntity(WINDOW *win, Entity *entity);
-void entity_move(Entity *self, int x, int y);
+void entity_move(Entity *self, short int x, short int y);
 void stampaEntity(WINDOW *win, Entity *entity);
 extern Sprite spriteRana;
 extern Sprite spriteCrocodile;
@@ -49,10 +50,10 @@ extern Crocodile initCrocodile();
 
 
 typedef struct Fin {
-    int height;
-    int width;
-    int starty;
-    int startx;
+    short int height;
+    short int width;
+    short int starty;
+    short int startx;
 } Fin;
 
 extern WINDOW *vita, *gioco;
@@ -64,16 +65,16 @@ void initFin();
 /*vecchia versione*/
 
 //typedef struct MesPos{
-//    int id;
-//    int event; 
-//    int x, y;
+//    short int id;
+//    short int event; 
+//    short int x, y;
 //} MesPos;  //la struttura serve sia per la posizione dei "personaggi" e per la comunicazione nella pipe
 //
 //typedef struct Fin {
-//    int height;
-//    int width;
-//    int starty;
-//    int startx;
+//    short int height;
+//    short int width;
+//    short int starty;
+//    short int startx;
 //} Fin;
 //
 //extern WINDOW *vita, *gioco;
