@@ -11,17 +11,32 @@
 
 void processoRana(Frog frog,int pipe_fd,int pipeEvent){
 	
-    Entity event;
+    Event evento;
+
+    
+            
 	while(1) {
+        
+        if (read(pipeEvent, &evento, sizeof(Event)) > 0) {
+            if (evento.tipo == 2) {
+                // La rana è sopra un coccodrillo e deve seguirlo
+                // In questo caso, non sappiamo direttamente la posizione del coccodrillo, 
+                // ma possiamo impostare una logica per spostare la rana
+                // La rana può seguire il coccodrillo tramite una logica di movimento
+                frog.base.x += evento.data;  // La rana segue il coccodrillo sulla X
+            } else if (evento.tipo == 0) {
+                // Tipo 0: La rana si sta muovendo in modo normale
+                frog.base.x;  // Movimento normale
+            }
+        }
+
 	int input = getch();
 	//if(input == 'q'){
 	//endwin();
 	//exit(0);
 	//}
 	//ho dubbi su questa implementazione,non funziona ma penso sia dovuto al fatto che la pipe sia condivisa.
-
-    read(pipeEvent, &event, sizeof(Entity));
-    frog.base = event;
+    
     
     
 	switch (input) {
@@ -39,5 +54,6 @@ void processoRana(Frog frog,int pipe_fd,int pipeEvent){
             break;
 		}
      write(pipe_fd, &frog.base, sizeof(Entity));
+     
 	}  
 }

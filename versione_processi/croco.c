@@ -46,7 +46,7 @@ void stampCocco(WINDOW *gioco, int numCroco, Crocodile croco[]) {
     for (int i = 0; i < numCroco; i++) {
        
         stampaEntity(gioco, &(croco[i].base));
+     mvwprintw(gioco, croco[i].base.y+1, croco[i].base.x, "%d", croco[i].base.id);
     }          
-     //mvwprintw(gioco, croco[i].base.y+1, croco[i].base.x, "%d", croco[i].base.id);
    }
 

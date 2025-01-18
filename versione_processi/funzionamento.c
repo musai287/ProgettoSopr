@@ -54,36 +54,49 @@ void gestisci_vite(int vite, time_t start_time) {
 }
 void funzionamento_gioco(Frog frog, Crocodile croco[],int numCroco,int pipefd, int pipeEvent) {
 	Entity msg;
-	
+    Event evento;
+    
     time_t start_time = time(NULL);
 	
 	while(1){
         // Leggi i messaggi dalla pipe
-        read(pipefd, &msg, sizeof(Entity)); 
+        if (read(pipefd, &msg, sizeof(Entity)) > 0) {
             if (msg.id == 0) {
-                // Messaggio dalla rana
+                // Aggiorna la posizione della rana
                 frog.base.x = msg.x;
                 frog.base.y = msg.y;
-            } 
-            else{
+            } else {
+                // Aggiorna i coccodrilli
                 for (int i = 0; i < numCroco; i++) {
-                    if (croco[i].base.id == msg.id) { // Trova il coccodrillo corretto
+                    if (croco[i].base.id == msg.id) {
                         croco[i].base.x = msg.x;
-                        croco[i].base.y = msg.y;                    
+                        croco[i].base.y = msg.y;
                     }
                 }
             }
-		write(pipeEvent, &frog.base, sizeof(Entity));
-        ranaSuCroco(&frog, croco, numCroco);
+        }
+         int pipolo = ranaSuCroco(&frog, croco, numCroco, pipeEvent);
+        
+        if (pipolo) {
+            evento.tipo = 2;  // Evento che dice alla rana di seguire il coccodrillo
+            evento.data = 2 ;  // Passa la posizione X del coccodrillo
+            write(pipeEvent, &evento, sizeof(Event));
+        } else {
+            evento.tipo = 0;  // Tipo di evento che dice alla rana di fare un movimento
+            evento.data;  // Spostamento di default
+            write(pipeEvent, &evento, sizeof(Event));
+        }
 
         werase(gioco);  // Cancella il contenuto della finestra gioco
         box(gioco, 0, 0); // Crea il bordo della finestra gioco
-        mvwprintw(gioco, 15, 15, "Letto messaggio: id=%d, x=%d, y=%d event=%d\n",
-                                                  msg.id, msg.x, msg.y, msg.event);
+        if(pipolo){ mvwprintw(gioco, 15, 15, "sborrapipolo\n");}
+        mvwprintw(gioco, 18, 18, "Letto messaggio: id=%d, x=%d, y=%d \n",
+                                                  msg.id, msg.x, msg.y);
         stampCocco(gioco, numCroco, croco);
         stampaEntity(gioco, &frog.base);
 		wrefresh(gioco);
-		gestisci_vite(frog.lives, start_time);	
+		gestisci_vite(frog.lives, start_time);
+        
 	}		
 }
 

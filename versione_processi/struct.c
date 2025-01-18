@@ -46,7 +46,6 @@ Frog initFrog() {
     frog.base.y = 10;
     frog.base.sprite = spriteRana;
     frog.base.id = 0;
-    frog.base.event = 0;
     frog.base.entity_move = entity_move;
     frog.base.pid;
     frog.lives = 3;
@@ -60,7 +59,6 @@ Crocodile initCrocodile() {
     croco.base.y ;
     croco.base.sprite = spriteCrocodile;
     croco.base.id = 1;
-    croco.base.event = 0;
     croco.base.entity_move = entity_move;
     croco.base.pid;
     croco.direction;
@@ -74,31 +72,6 @@ void initFin() {
     fin1 = (Fin){3, COLS, 0, 0};
     fin2 = (Fin){LINES - 3, COLS, 3, 0};
 }
-
-
-//void initSprite(Sprite *sprite, int larghezza, int lunghezza, char **pixels){
-//    sprite->larghezza = larghezza;
-//    sprite->lunghezza = lunghezza;
-//
-//    sprite->pixels = malloc(lunghezza * sizeof(char *pattern));
-//    for(int i =0; i < lunghezza; i++){
-//        sprite->pixels[i] = malloc(larghezza * sizeof(char));
-//    }
-//    
-//    for(int j = 0; j < larghezza; j++){
-//        memcpy(sprite->pixels[i],&pattern[i* larghezza], larghezza);
-//        }
-//    }
-//
-//void FreeSprite(Sprite *sprite){
-//    for(int i = 0; i < sprite->lunghezza; i++){
-//        free(sprite->pixels[i]);
-//    }
-//    free(sprite->pixels);
-//}
-
-
-
 /*vecchia versione*/
 //WINDOW *vita, *gioco;
 //Fin fin1;

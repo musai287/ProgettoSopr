@@ -13,13 +13,16 @@ in funzionamento ho sia rana che coccodrilli.
 */
 #include "collisioni.h"
 
-void ranaSuCroco(Frog *frog, Crocodile *croco, int numCroco){
-    for( int i=0; i < numCroco; i++){
-        if(frog->base.x == croco[i].base.x && frog->base.y == croco[i].base.y){
-            frog->base.event = 2;
-            croco[i].base.event = 2;
-            frog->base.x = croco[i].base.x;
-            frog->base.y = croco[i].base.y;
+int ranaSuCroco(Frog *frog, Crocodile *croco, int numCroco, int pipeEvent) {
+    for (int i = 0; i < numCroco; i++) {
+        if (frog->base.x == croco[i].base.x && frog->base.y == croco[i].base.y) {
+            // La rana è su un coccodrillo, invia un evento per segnalarlo
+            Event evento;
+            evento.tipo = 2;  // Tipo di evento per indicare che la rana è su un coccodrillo
+             // Puoi memorizzare l'indice del coccodrillo o altre informazioni
+            write(pipeEvent, &evento, sizeof(Event));
+            return  croco[i].base.x;  // Restituisci l'indice del coccodrillo
         }
     }
+    return 0;  // Nessun coccodrillo trovato
 }

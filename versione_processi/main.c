@@ -35,17 +35,17 @@ int main(){
     finestre(&fin1, &fin2); // Creazione delle finestre
     
     Frog frog = initFrog(); // Inizializza la rana
+    creaRano(frog, pipefd, pipeEvent); // Crea il processo rana
     Crocodile croco[numCroco]; // Inizializza il coccodrillo
     for(int ciao=0; ciao < numCroco; ciao++){
         croco[ciao] = initCrocodile();
         croco[ciao].base.id++; // Inizializza il coccodrillo
     }
-    creaRano(frog, pipefd, pipeEvent); // Crea il processo rana
     creaCroco(croco, numCroco,pipefd);
     // Crea il primo e il secondo processo
     close(pipefd[1]); 	
-    //close(pipeEvent[0]);
-    //int *positions =malloc(numCroco*sizeof(int)); // Posizioni dei coccodrilli
+    close(pipeEvent[0]);
+    
 
     funzionamento_gioco(frog, croco, numCroco, pipefd[0], pipeEvent[1]); //richiamo la funzione padre 
 	
