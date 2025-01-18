@@ -78,6 +78,7 @@ void funzionamento_gioco(Frog frog, Crocodile croco[],int numCroco,int pipefd, i
          int collisionFlag = ranaSuCroco(&frog, croco, numCroco);
 
         if (collisionFlag) {
+            
             evento.tipo = 2;
             evento.data = collisionFlag;  // Evento che dice alla rana di seguire il coccodrillo
             write(pipeEvent, &evento, sizeof(Event));

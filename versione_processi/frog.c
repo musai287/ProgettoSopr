@@ -43,17 +43,17 @@ void processoRana(Frog frog,int pipe_fd,int pipeEvent){
         }
         write(pipe_fd, &frog.base, sizeof(Entity)); 
 
-        
+
         if (read(pipeEvent, &evento, sizeof(Event)) <= 0){continue;}
         if (read(pipeEvent, &evento, sizeof(Event)) > 0) {
             if (evento.tipo == 2) {
                 if(evento.data == 1){
                 frog.base.entity_move(&frog.base, 1, 0);  
-                    usleep(100);
+                    usleep(1);
                 }
                 if(evento.data == 2){
                 frog.base.entity_move(&frog.base, -1, 0);
-                    usleep(100);
+                    usleep(1);
                 }
             } 
             else if (evento.tipo == 0) {   
