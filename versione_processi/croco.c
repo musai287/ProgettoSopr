@@ -11,7 +11,7 @@
 
 void processoCroco(Crocodile *croco,int pipefd) {
 
-    srand(time(NULL)); // Random seed unico per ogni processo
+    srand(time(NULL)+croco->base.id); // Random seed unico per ogni processo
     sleep(rand() % 3 + 1);
     while (1) {
        

@@ -37,23 +37,30 @@ void processoRana(Frog frog,int pipe_fd,int pipeEvent){
         }
 
         // Verifica che la nuova posizione sia entro i limiti dello schermo
-        if (new_x >= 0 && new_x + frog.base.sprite.larghezza <= COLS &&
-            new_y >= 0 && new_y + frog.base.sprite.lunghezza <= LINES-4) {
+        if (new_x >= 0 &&
+            new_x + frog.base.sprite.larghezza <= COLS &&
+            new_y >= 0 &&
+            new_y + frog.base.sprite.lunghezza <= LINES-4) {
             frog.base.entity_move(&frog.base, new_x - frog.base.x, new_y - frog.base.y);
         }
         write(pipe_fd, &frog.base, sizeof(Entity));
 
 
+        
         if (read(pipeEvent, &evento, sizeof(Event)) <= 0){continue;}
         if (read(pipeEvent, &evento, sizeof(Event)) > 0) {
             if (evento.tipo == 2) {
                 frog.base.x = evento.data;
-
             }
+
             else if (evento.tipo == 3) {
                 frog.base.x = (COLS /2) - 3;
                 frog.base.y = LINES - 5;
-
+            }
+            
+            else if (evento.tipo == 4) {
+                frog.base.x = (COLS /2) - 3;
+                frog.base.y = LINES - 5;
             }
         }
     }

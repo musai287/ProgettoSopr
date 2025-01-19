@@ -56,6 +56,7 @@ void funzionamento_gioco(Frog frog, Crocodile croco[],int numCroco,int pipefd, i
 	Entity msg;
     Event evento;
     Map tana[5];
+    int manche = 1;
     for (int i = 0; i < 5; i++) {
         tana[i] = initTana();
         tana[i].x = 12 + i * 10;
@@ -82,7 +83,7 @@ void funzionamento_gioco(Frog frog, Crocodile croco[],int numCroco,int pipefd, i
                 } 
             }
         }
-         int collisionFlag = ranaSuCroco(&frog, croco, numCroco);
+        int collisionFlag = ranaSuCroco(&frog, croco, numCroco);
 
         if (collisionFlag) {
             
@@ -102,21 +103,40 @@ void funzionamento_gioco(Frog frog, Crocodile croco[],int numCroco,int pipefd, i
                  evento.data = fiumeFlag; 
                  write(pipeEvent, &evento, sizeof(Event)); // Evento che dice alla rana di morire    
                  frog.lives--;
-                 evento.tipo = 0;
-            }else {
+            }else{
                  evento.tipo = 0;
                  evento.data = fiumeFlag;  // Tipo di evento che dice alla rana di fare un movimento
                  write(pipeEvent, &evento, sizeof(Event));
             }
+
+        
+        int tanaFlag = ranaInTana(&frog, tana);
+        if (tanaFlag) {
+            evento.tipo = 4;
+            evento.data = tanaFlag;  // Tipo di evento che dice alla rana di fare un movimento
+            write(pipeEvent, &evento, sizeof(Event));
+            manche++;           
+        }else {
+                 evento.tipo = 0;
+                 evento.data = tanaFlag;  // Tipo di evento che dice alla rana di fare un movimento
+                 write(pipeEvent, &evento, sizeof(Event));
+            }
+
+        if (manche == 5) {
+            mvprintw(LINES / 2, COLS / 2 - 5, "HAI VINTO");
+            refresh();
+            usleep(DELAYCLOSED);
+            endwin();
+            exit(0);
+        }
         if (frog.lives == 0) {
             mvprintw(LINES / 2, COLS / 2 -5, "HAI PERSO");
 					refresh();
 					usleep(DELAYCLOSED);
 					endwin();
 					exit(0);
-				 //win condition
+				 
         }
-
         /* semplicemente le stampe. */
         werase(gioco);  // Cancella il contenuto della finestra gioco
         box(gioco, 0, 0); // Crea il bordo della finestra gioco
@@ -138,8 +158,8 @@ void funzionamento_gioco(Frog frog, Crocodile croco[],int numCroco,int pipefd, i
         wattroff(gioco, COLOR_PAIR(4));
         mvwprintw(gioco, 18, 1, "Letto messaggio: id=%2d, x=%2d, y=%2d \n",
                                                   msg.id, msg.x, msg.y);
-        mvwprintw(gioco, 17, 1, "evento tipo =%d evento data = %d",
-                                        evento.tipo, evento.data);
+        mvwprintw(gioco, 17, 1, "evento tipo =%d evento data = %d manche = %d",
+                                        evento.tipo, evento.data, manche);
 
         wattron(gioco, COLOR_PAIR(1));
         stampCocco(gioco, numCroco, croco);

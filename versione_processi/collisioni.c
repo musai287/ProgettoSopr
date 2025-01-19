@@ -43,11 +43,9 @@ int ranaSuCroco(Frog *frog, Crocodile *croco, int numCroco) {
 
     if (frog->base.y > 7 && frog->base.y <= 15) {
         for (int i = 0; i < numCroco; i++){
-    // Verifica se la rana è nel fiume
-        // La rana è nel fiume, vediamo se è sopra un coccodrillo
             int sopraCoccodrillo = ranaSuCrocoCheck(frog, croco, numCroco);
 
-            if (sopraCoccodrillo != 0) {
+            if (sopraCoccodrillo > 0) {
             // La rana è sopra un coccodrillo, invia l'evento per seguirlo
                 evento.tipo = 2;
                 evento.data = croco[sopraCoccodrillo].base.x;  // Puoi usare la posizione del coccodrillo specifico
@@ -70,9 +68,13 @@ int ranaInFiume(Frog *frog, Crocodile *croco, int numCroco) {
 }
 int ranaInTana(Frog *frog, Map *tana) {
     // Verifica se la rana è nella tana
-    if (frog->base.x >= tana->x && frog->base.x + frog->base.sprite.larghezza <= tana->x + tana->sprite.larghezza &&
-        frog->base.y >= tana->y && frog->base.y + frog->base.sprite.lunghezza <= tana->y + tana->sprite.lunghezza) {
-        return 1;  // La rana è nella tana
+    for (int i = 0; i < 5; i++) {
+        if (frog->base.x >= tana[i].x && 
+            frog->base.x + frog->base.sprite.larghezza <= tana[i].x + tana[i].sprite.larghezza &&
+            frog->base.y >= tana[i].y && 
+            frog->base.y + frog->base.sprite.lunghezza <= tana[i].y + tana[i].sprite.lunghezza) {
+            return 1;  // La rana è nella tana
+        }
     }
     return 0;  // La rana non è nella tana
 }
