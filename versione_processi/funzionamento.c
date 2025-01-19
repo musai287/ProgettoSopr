@@ -106,7 +106,7 @@ void funzionamento_gioco(Frog frog, Crocodile croco[],int numCroco,int pipefd, i
             }else{
                  evento.tipo = 0;
                  evento.data = fiumeFlag;  // Tipo di evento che dice alla rana di fare un movimento
-                 write(pipeEvent, &evento, sizeof(Event));
+                // write(pipeEvent, &evento, sizeof(Event));
             }
 
         
@@ -117,9 +117,9 @@ void funzionamento_gioco(Frog frog, Crocodile croco[],int numCroco,int pipefd, i
             write(pipeEvent, &evento, sizeof(Event));
             manche++;           
         }else {
-                 evento.tipo = 0;
-                 evento.data = tanaFlag;  // Tipo di evento che dice alla rana di fare un movimento
-                 write(pipeEvent, &evento, sizeof(Event));
+             evento.tipo = 0;
+             evento.data = tanaFlag;  // Tipo di evento che dice alla rana di fare un movimento
+             //write(pipeEvent, &evento, sizeof(Event));
             }
 
         if (manche == 5) {
