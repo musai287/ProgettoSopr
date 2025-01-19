@@ -97,17 +97,17 @@ void funzionamento_gioco(Frog frog, Crocodile croco[],int numCroco,int pipefd, i
 
         }
         int fiumeFlag = ranaInFiume(&frog, croco, numCroco);
-        // if(fiumeFlag){
-            // evento.tipo = 3;
-            // evento.data = fiumeFlag; 
-            // write(pipeEvent, &evento, sizeof(Event)); // Evento che dice alla rana di morire    
-            // frog.lives--;
-            // evento.tipo = 0;
-        // }else {
-            // evento.tipo = 0;
-            // evento.data = collisionFlag;  // Tipo di evento che dice alla rana di fare un movimento
-            // write(pipeEvent, &evento, sizeof(Event));
-        // }
+            if(fiumeFlag){
+                 evento.tipo = 3;
+                 evento.data = fiumeFlag; 
+                 write(pipeEvent, &evento, sizeof(Event)); // Evento che dice alla rana di morire    
+                 frog.lives--;
+                 evento.tipo = 0;
+            }else {
+                 evento.tipo = 0;
+                 evento.data = fiumeFlag;  // Tipo di evento che dice alla rana di fare un movimento
+                 write(pipeEvent, &evento, sizeof(Event));
+            }
         if (frog.lives == 0) {
             mvprintw(LINES / 2, COLS / 2 -5, "HAI PERSO");
 					refresh();

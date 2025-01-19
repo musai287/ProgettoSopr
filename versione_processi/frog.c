@@ -50,11 +50,11 @@ void processoRana(Frog frog,int pipe_fd,int pipeEvent){
                 frog.base.x = evento.data;
 
             }
-            // else if (evento.tipo == 3) {
-            //     frog.base.x = (COLS /2) - 3;
-            //     frog.base.y = LINES - 5;
+            else if (evento.tipo == 3) {
+                frog.base.x = (COLS /2) - 3;
+                frog.base.y = LINES - 5;
 
-            // }
+            }
         }
     }
 }
