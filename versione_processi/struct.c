@@ -12,9 +12,9 @@ void entity_move(Entity *self, short int dx, short int dy) {
 
 void antiStampaEntity(WINDOW *win, Entity *entity) {
     for (int i = 0; i < entity->sprite.larghezza; i++) {
-        for (int j = entity->sprite.lunghezza -1; j > 0; j--) {
+        for (int j = entity->sprite.lunghezza -1; j >= 0; j--) {
             // Accedi ai pixel invertendo l'ordine lungo la dimensione orizzontale
-            mvwprintw(win, entity->y + j, entity->x + i,
+            mvwprintw(win, entity->y , entity->x+2-i,
                       "%c", entity->sprite.pixels[i][j]);
         }
     }
@@ -23,7 +23,8 @@ void antiStampaEntity(WINDOW *win, Entity *entity) {
 void stampaEntity(WINDOW *win, Entity *entity){
     for(int i = 0; i < entity->sprite.larghezza; i++){
         for(int j = 0; j < entity->sprite.lunghezza; j++){
-            mvwprintw(win, entity->y + j, entity->x + i, "%c", entity->sprite.pixels[i][j]);
+            mvwprintw(win, entity->y + j, entity->x-3 + i,
+                     "%c", entity->sprite.pixels[i][j]);
         }
     }
 }
@@ -55,7 +56,7 @@ Sprite spriteRana ={
 Sprite spriteCrocodile = {
     6,
     1,
-    {"[","=","=","=","]","="}
+    {"|","=","=","=","|","="}
     };
 
 Map initTana () {

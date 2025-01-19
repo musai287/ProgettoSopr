@@ -41,13 +41,13 @@ void creaCroco(Crocodile croco[], int numCroco,int pipefd[2]) {
         croco[i].base.id = i+1;
         int riga = (i / 3) + 8;
         int col;
-
+        int spazio = COLS / 3;
         if (riga % 2 == 1) {
-            col = (i % 3) * 10;
+            col = (i % 3) * spazio;
             croco[i].direction = 1;
 
         } else {
-            col = COLS - (i % 3) * 10 - 10;
+            col = COLS - (i % 3) * spazio - spazio;
             croco[i].direction = 2;
 
         }

@@ -22,7 +22,7 @@ int main(){
     setNonBlocking(pipefd[0]);
     setNonBlocking(pipeEvent[1]);
 	initscr();
-    resize_term(23, 80);
+    resize_term(23, 50);
 	noecho();
 	curs_set(FALSE);
     keypad(stdscr, TRUE);
