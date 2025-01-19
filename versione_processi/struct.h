@@ -42,17 +42,6 @@ typedef struct Crocodile{
     short int direction;
 }Crocodile;
 
-void antiStampaEntity(WINDOW *win, Entity *entity);
-void entity_move(Entity *self, short int x, short int y);
-void stampaEntity(WINDOW *win, Entity *entity);
-void stampaMap(WINDOW *win, Map *map);
-extern Sprite spriteTana;
-extern Sprite spriteRana;
-extern Sprite spriteCrocodile;
-extern Frog initFrog();
-extern Crocodile initCrocodile();
-extern Map initTana();
-
 typedef struct Fin {
     short int height;
     short int width;
@@ -60,33 +49,23 @@ typedef struct Fin {
     short int startx;
 } Fin;
 
+void antiStampaEntity(WINDOW *win, Entity *entity);
+void entity_move(Entity *self, short int x, short int y);
+void stampaEntity(WINDOW *win, Entity *entity);
+void stampaMap(WINDOW *win, Map *map);
+extern Sprite spriteGranata;
+extern Sprite spriteProiettile;
+extern Sprite spriteTana;
+extern Sprite spriteRana;
+extern Sprite spriteCrocodile;
+extern Map initTana();
+extern Frog initFrog();
+extern Entity initGranata();
+extern Entity initProiettile();
+extern Crocodile initCrocodile();
+void initFin();
+
+
 extern WINDOW *vita, *gioco;
 extern Fin fin1; 
 extern Fin fin2;
-
-void initFin();
-
-/*vecchia versione*/
-
-//typedef struct MesPos{
-//    short int id;
-//    short int event; 
-//    short int x, y;
-//} MesPos;  //la struttura serve sia per la posizione dei "personaggi" e per la comunicazione nella pipe
-//
-//typedef struct Fin {
-//    short int height;
-//    short int width;
-//    short int starty;
-//    short int startx;
-//} Fin;
-//
-//extern WINDOW *vita, *gioco;
-//extern Fin fin1; 
-//extern Fin fin2;
-//extern MesPos croco;
-//extern MesPos rana;
-//
-//void initFin();
-//void initSCroco();
-//void initSRana();

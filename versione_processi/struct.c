@@ -36,6 +36,17 @@ void stampaMap(WINDOW *win, Map *map){
         }
     }
 }
+Sprite spriteGranata = {
+    1,
+    1,
+    {"*"}
+};
+Sprite spriteProiettile = {
+    1,
+    1,
+    {"+"}
+};
+
 Sprite spriteTana = {
     5,
     5,
@@ -75,21 +86,26 @@ Frog initFrog() {
     frog.base.sprite = spriteRana;
     frog.base.id = 0;
     frog.base.entity_move = entity_move;
-    // frog.base.pid;
     frog.lives = 3;
-
     return frog;
 }
-
+Entity initGranata() {
+    Entity granata;
+    granata.sprite = spriteRana;
+    granata.entity_move = entity_move;
+    return granata;
+}
+Entity initProiettile() {
+    Entity proiettile;
+    proiettile.sprite = spriteRana;
+    proiettile.entity_move = entity_move;
+    return proiettile;
+}
 Crocodile initCrocodile() {
     Crocodile croco;
-    // croco.base.x ;
-    // croco.base.y ;
     croco.base.sprite = spriteCrocodile;
     croco.base.id = 1;
     croco.base.entity_move = entity_move;
-    // croco.base.pid;
-    // croco.direction;
     return croco;
 }
 WINDOW *vita, *gioco;
@@ -100,25 +116,3 @@ void initFin() {
     fin1 = (Fin){3, COLS, 0, 0};
     fin2 = (Fin){LINES-3, COLS, 3, 0};
 }
-/*vecchia versione*/
-//WINDOW *vita, *gioco;
-//Fin fin1;
-//Fin fin2;
-//MesPos croco;
-//MesPos rana;
-//
-//void initFin() {
-//    // Inizializza le variabili globali dopo aver chiamato initscr()
-//    fin1 = (Fin){3, COLS, 0, 0};
-//    fin2 = (Fin){LINES - 3, COLS, 3, 0};
-//}
-//
-//void initSCroco(){
-//    // Inizializza le variabili globali per croco
-//    croco = (MesPos){1, 0, 1, 1};
-//}
-//
-//void initSRana(){
-//    // Inizializza le variabili globali per rana
-//    rana = (MesPos){0, 0, LINES - 6, COLS - 2};
-//}

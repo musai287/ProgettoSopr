@@ -27,7 +27,22 @@ int ranaSuCroco(Frog *frog, Crocodile *croco, int numCroco) {
     return 0;  // Nessuna collisione trovata
 }
 
+void creaProiettile(Entity proiettile,int pipefd[2], int pipeEvent[2]) {
+    proiettile.pid = fork();
+    if granata.pid == -1) {
+        perror("Errore nella creazione della prima fork");
+        _exit(1);
+    }
 
+    if granata.pid == 0) {  // Processo figlio granata)
+        close(pipefd[0]);  // Chiudi il lato di lettura della pipe
+        // Esegui altre operazioni nel processo figlio proiettile
+        processoProiettilegranata, pipefd[1], pipeEvent[0]);  // Esempio di scrittura nella pipe
+        close(pipeEvent[1]);  // Chiudi il lato di scrittura della pipe
+        close(pipefd[1]);
+        _exit(0);  // Esci dal processo figlio
+    }
+}
 
 
 int ranaSuCrocoCheck(Frog *frog, Map *tana) {

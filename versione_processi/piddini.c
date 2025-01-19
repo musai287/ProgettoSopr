@@ -7,9 +7,10 @@
 #include <signal.h>
 
 #include "piddini.h"
-#include "frog.h"
-#include "croco.h"
-#include "struct.h"
+// #include "frog.h"
+// #include "croco.h"
+// #include "struct.h"
+// #include "proiettili.h"
 
 void creaPipe(int pipe_fd[2]) {
     if (pipe(pipe_fd) == -1) {
@@ -61,5 +62,39 @@ void creaCroco(Crocodile croco[], int numCroco,int pipefd[2]) {
             processoCroco(&croco[i], pipefd[1]);
             _exit(0);
         }
+    }
+}
+
+void creaProiettile(Entity proiettile,int pipefd[2], int pipeEvent[2]) {
+    proiettile.pid = fork();
+    if (proiettile.pid == -1) {
+        perror("Errore nella creazione della prima fork");
+        _exit(1);
+    }
+
+    if (proiettile.pid == 0) {  // Processo figlio (proiettile)
+        close(pipefd[0]);  // Chiudi il lato di lettura della pipe
+        // Esegui altre operazioni nel processo figlio proiettile
+        processoProiettile(proiettile, pipefd[1], pipeEvent[0]);  // Esempio di scrittura nella pipe
+        close(pipeEvent[1]);  // Chiudi il lato di scrittura della pipe
+        close(pipefd[1]);
+        _exit(0);  // Esci dal processo figlio
+    }
+}
+
+void creaGranata(Entity granata,int pipefd[2], int pipeEvent[2]) {
+    granata.pid = fork();
+    if (granata.pid == -1) {
+        perror("Errore nella creazione della prima fork");
+        _exit(1);
+    }
+
+    if (granata.pid == 0) {  // Processo figlio granata)
+        close(pipefd[0]);  // Chiudi il lato di lettura della pipe
+        // Esegui altre operazioni nel processo figlio proiettile
+        processoGranata(granata, pipefd[1], pipeEvent[0]);  // Esempio di scrittura nella pipe
+        close(pipeEvent[1]);  // Chiudi il lato di scrittura della pipe
+        close(pipefd[1]);
+        _exit(0);  // Esci dal processo figlio
     }
 }
