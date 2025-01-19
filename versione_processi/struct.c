@@ -27,6 +27,25 @@ void stampaEntity(WINDOW *win, Entity *entity){
         }
     }
 }
+/*questa stampa è super giusta per le matrici finalmente le so fare*/
+void stampaMap(WINDOW *win, Map *map){
+    for(int j = 0; j < map->sprite.lunghezza; j++){
+        for(int i = 0; i < map->sprite.larghezza; i++){
+            mvwprintw(win, map->y + i, map->x + j, "%c", map->sprite.pixels[i][j]);
+        }
+    }
+}
+Sprite spriteTana = {
+    5,
+    5,
+    {
+    {'_', '_', '_', '_', '_'},
+    {'|', ' ', ' ', ' ', '|'},
+    {'|', ' ', ' ', ' ', '|'},
+    {'|', ' ', ' ', ' ', '|'},
+    {'_', '_', '_', '_', '_'}
+    }
+};
 Sprite spriteRana ={
     3,
     1,
@@ -39,11 +58,19 @@ Sprite spriteCrocodile = {
     {"[","=","=","=","]","="}
     };
 
+Map initTana () {
+    Map tana;
+    tana.sprite = spriteTana;
+
+
+    return tana;
+
+};
 
 Frog initFrog() {
     Frog frog;
     frog.base.x = (COLS /2) - 3;
-    frog.base.y = 10;
+    frog.base.y = LINES - 5;
     frog.base.sprite = spriteRana;
     frog.base.id = 0;
     frog.base.entity_move = entity_move;

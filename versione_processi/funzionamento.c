@@ -35,7 +35,7 @@ void finestre(Fin *fin1, Fin *fin2) {
     vita = newwin(fin1->height, fin1->width, fin1->starty, fin1->startx);
     gioco = newwin(fin2->height, fin2->width, fin2->starty, fin2->startx);
     wbkgd(vita, COLOR_PAIR(3)); // Imposta il colore di sfondo della finestra vita
-    wbkgd(gioco, COLOR_PAIR(4)); // Imposta il colore di sfondo della finestra gioco
+    wbkgd(gioco, COLOR_PAIR(2)); // Imposta il colore di sfondo della finestra gioco
     box(vita, 0, 0);    // Bordo della finestra vita
     box(gioco, 0, 0); // Bordo della finestra gioco
     	wrefresh(vita);  // Aggiorna la finestra vita
@@ -55,6 +55,13 @@ void gestisci_vite(int vite, time_t start_time) {
 void funzionamento_gioco(Frog frog, Crocodile croco[],int numCroco,int pipefd, int pipeEvent) {
 	Entity msg;
     Event evento;
+    Map tana[5];
+    for (int i = 0; i < 5; i++) {
+        tana[i] = initTana();
+        tana[i].x = 12 + i * 10;
+        tana[i].y = 1;    
+    }
+    
 
     time_t start_time = time(NULL);
 
@@ -72,7 +79,7 @@ void funzionamento_gioco(Frog frog, Crocodile croco[],int numCroco,int pipefd, i
                         croco[i].base.x = msg.x;
                         croco[i].base.y = msg.y;
                     }
-                }
+                } 
             }
         }
          int collisionFlag = ranaSuCroco(&frog, croco, numCroco);
@@ -89,18 +96,62 @@ void funzionamento_gioco(Frog frog, Crocodile croco[],int numCroco,int pipefd, i
             write(pipeEvent, &evento, sizeof(Event));
 
         }
+        int fiumeFlag = ranaInFiume(&frog, croco, numCroco);
+        // if(fiumeFlag){
+            // evento.tipo = 3;
+            // evento.data = fiumeFlag; 
+            // write(pipeEvent, &evento, sizeof(Event)); // Evento che dice alla rana di morire    
+            // frog.lives--;
+            // evento.tipo = 0;
+        // }else {
+            // evento.tipo = 0;
+            // evento.data = collisionFlag;  // Tipo di evento che dice alla rana di fare un movimento
+            // write(pipeEvent, &evento, sizeof(Event));
+        // }
+        if (frog.lives == 0) {
+            mvprintw(LINES / 2, COLS / 2 -5, "HAI PERSO");
+					refresh();
+					usleep(DELAYCLOSED);
+					endwin();
+					exit(0);
+				 //win condition
+        }
 
+        /* semplicemente le stampe. */
         werase(gioco);  // Cancella il contenuto della finestra gioco
         box(gioco, 0, 0); // Crea il bordo della finestra gioco
-        mvwprintw(gioco, 18, 1, "Letto messaggio: id=%d, x=%d, y=%d \n",
+        
+        for (int i = 0; i < 5; i++) {
+            stampaMap(gioco, &tana[i]);
+        }
+        wattron(gioco, COLOR_PAIR(4));
+        for(int i=0; i<2;i++){
+            for(int j=0; j <COLS-2; j++){
+                mvwprintw(gioco, 6+i,1+j, "/");
+            }
+        }
+        for(int i=0; i<3;i++){
+            for(int j=0; j <COLS-2; j++){
+                mvwprintw(gioco, 16+i,1+j, "/");
+            }
+        }
+        wattroff(gioco, COLOR_PAIR(4));
+        mvwprintw(gioco, 18, 1, "Letto messaggio: id=%2d, x=%2d, y=%2d \n",
                                                   msg.id, msg.x, msg.y);
         mvwprintw(gioco, 17, 1, "evento tipo =%d evento data = %d",
                                         evento.tipo, evento.data);
-        stampCocco(gioco, numCroco, croco);
-        stampaEntity(gioco, &frog.base);
-		wrefresh(gioco);
-		gestisci_vite(frog.lives, start_time);
 
+        wattron(gioco, COLOR_PAIR(1));
+        stampCocco(gioco, numCroco, croco);
+        wattroff(gioco, COLOR_PAIR(1));
+
+        wattron(gioco, COLOR_PAIR(5));
+        stampaEntity(gioco, &frog.base);
+		wattroff(gioco, COLOR_PAIR(5));
+        
+        wrefresh(gioco);
+		gestisci_vite(frog.lives, start_time);
 	}
 }
 
+//6 7  17 18    8 15

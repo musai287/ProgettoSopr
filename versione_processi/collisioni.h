@@ -11,4 +11,7 @@
 #include <ncurses.h>
 #include "struct.h"
 
+int ranaSuCrocoCheck(Frog *frog, Crocodile *croco, int numCroco);
 int ranaSuCroco(Frog *frog, Crocodile *croco, int numCroco);
+int ranaInFiume(Frog *frog, Crocodile *croco, int numCroco);
+int ranaInTana(Frog *frog, Map *tana);

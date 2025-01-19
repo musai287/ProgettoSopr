@@ -8,14 +8,14 @@
 /*Nuova versione delle strutture, paradigma OOP*/
 typedef struct Sprite{
     short int larghezza;  // e` la x è la riga
-    short int lunghezza; // e` la y è la colonna
+    short int lunghezza;  // e` la y è la colonna
     char pixels[10][10];
 }Sprite;
 
-typedef struct map{
+typedef struct Map{
     Sprite sprite;
     short int x, y;
-}map;
+}Map;
 
 typedef struct Event{
     short int tipo;
@@ -28,7 +28,6 @@ typedef struct Entity{
     short int x, y;
     Sprite sprite;
     short int id;
-    
     void (*entity_move)(struct Entity *self, short int x, short int y);
     pid_t pid;
 }Entity;
@@ -46,11 +45,13 @@ typedef struct Crocodile{
 void antiStampaEntity(WINDOW *win, Entity *entity);
 void entity_move(Entity *self, short int x, short int y);
 void stampaEntity(WINDOW *win, Entity *entity);
+void stampaMap(WINDOW *win, Map *map);
+extern Sprite spriteTana;
 extern Sprite spriteRana;
 extern Sprite spriteCrocodile;
 extern Frog initFrog();
 extern Crocodile initCrocodile();
-
+extern Map initTana();
 
 typedef struct Fin {
     short int height;

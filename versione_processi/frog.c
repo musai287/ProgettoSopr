@@ -10,11 +10,11 @@
 #include "frog.h"
 
 void processoRana(Frog frog,int pipe_fd,int pipeEvent){
-	
+
     Event evento;
 
-    
- while(1){           
+
+ while(1){
     int input = getch();
 
         // Calcola la posizione futura della rana
@@ -41,24 +41,20 @@ void processoRana(Frog frog,int pipe_fd,int pipeEvent){
             new_y >= 0 && new_y + frog.base.sprite.lunghezza <= LINES-4) {
             frog.base.entity_move(&frog.base, new_x - frog.base.x, new_y - frog.base.y);
         }
-        write(pipe_fd, &frog.base, sizeof(Entity)); 
+        write(pipe_fd, &frog.base, sizeof(Entity));
 
 
         if (read(pipeEvent, &evento, sizeof(Event)) <= 0){continue;}
         if (read(pipeEvent, &evento, sizeof(Event)) > 0) {
             if (evento.tipo == 2) {
-                if(evento.data == 1){
-                frog.base.entity_move(&frog.base, 1, 0);  
-                    usleep(1);
-                }
-                if(evento.data == 2){
-                frog.base.entity_move(&frog.base, -1, 0);
-                    usleep(1);
-                }
-            } 
-            else if (evento.tipo == 0) {   
-	  
+                frog.base.x = evento.data;
+
             }
+            // else if (evento.tipo == 3) {
+            //     frog.base.x = (COLS /2) - 3;
+            //     frog.base.y = LINES - 5;
+
+            // }
         }
-    }  
+    }
 }

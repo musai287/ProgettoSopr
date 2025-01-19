@@ -39,7 +39,7 @@ void creaCroco(Crocodile croco[], int numCroco,int pipefd[2]) {
 
     for(int i = 0; i <numCroco; i++) {
         croco[i].base.id = i+1;
-       int riga = i / 3 + 1;
+        int riga = (i / 3) + 8;
         int col;
 
         if (riga % 2 == 1) {
