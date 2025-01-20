@@ -40,20 +40,25 @@ int main(){
     Frog frog = initFrog(); // Inizializza la rana
     creaRano(frog, pipefd, pipeEvent); // Crea il processo rana
     Crocodile croco[numCroco]; // Inizializza il coccodrillo
+    Entity proiettile[numCroco]; // Inizializza il proiettile   
     for(int i=0; i < numCroco; i++){
         croco[i] = initCrocodile();
         croco[i].base.id++; // Inizializza il coccodrillo
     }
     creaCroco(croco, numCroco,pipefd);
     Entity granata = initGranata();
-    Entity proiettile = initProiettile();
-    creaGranata(granata, pipefd, pipeEvent);
-    creaProiettile(proiettile, pipefd, pipeEvent);
+    for(int i=0; i < numCroco; i++){
+        proiettile[i] = initProiettile();
+        proiettile[i].id++; 
+    }
+    creaGranata(granata, pipefd, pipeEvent, frog);
+
+    creaProiettile(proiettile, pipefd, pipeEvent, numCroco, croco);
     
     close(pipefd[1]); 	
     close(pipeEvent[0]);
     
-    funzionamento_gioco(frog, croco, numCroco, pipefd[0], pipeEvent[1]);
+    funzionamento_gioco(frog, croco, numCroco,proiettile, granata, pipefd[0], pipeEvent[1]);
 
 	kill(frog.base.pid,1);
     for (int i = 0; i < numCroco; i++) {

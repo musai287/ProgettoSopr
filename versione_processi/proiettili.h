@@ -9,5 +9,5 @@
 
 #include "struct.h"
 
-void processoGranata(Entity granata, int pipefd[2], int pipeEvent[2]);
-void processoProiettile(Entity proiettile, int pipefd[2], int pipeEvent[2]);
+void processoGranata(Entity granata, int pipefd, int pipeEvent, Frog frog);
+void processoProiettile(Entity proiettile, int pipefd, int pipeEvents, Crocodile crocodile);

@@ -42,7 +42,7 @@ void stampCocco(WINDOW *gioco, int numCroco, Crocodile croco[]) {
         if(croco[i].direction == 2){
             antiStampaEntity(gioco, &(croco[i].base));
         }
-        mvwprintw(gioco, croco[i].base.y+1, croco[i].base.x, "%d", croco[i].direction);
+        mvwprintw(gioco, croco[i].base.y+1, croco[i].base.x, "%d", croco[i].base.id);
     }          
    }
 

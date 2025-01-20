@@ -4,5 +4,30 @@
 
 #include "proiettili.h"
 
-void processoGranata(Entity granata, int pipefd[2], int pipeEvent[2]){}
-void processoProiettile(Entity proiettile, int pipefd[2], int pipeEvent[2]){}
+void processoGranata(Entity granata, int pipefd, int pipeEvent, Frog frog){
+    while(1){
+        entity_move(&granata, 1, 0);
+        write(pipefd, &granata, sizeof(Entity));
+        usleep(100000);
+        int input = getch();
+        if(input == ){
+            granata.x = frog.base.x;
+            granata.y = frog.base.y;
+    }
+        write(pipefd, &granata, sizeof(Entity));
+
+}
+}
+void processoProiettile(Entity proiettile, int pipefd, int pipeEvent, Crocodile crocodile){
+    while(1){
+        if(crocodile.direction == 1){
+            entity_move(&proiettile, 1, 0);
+            write(pipefd, &proiettile, sizeof(Entity));     
+            usleep(100000);
+        }else{
+            entity_move(&proiettile, -1, 0);
+            write(pipefd, &proiettile, sizeof(Entity));
+            usleep(100000);
+        }
+    }
+}

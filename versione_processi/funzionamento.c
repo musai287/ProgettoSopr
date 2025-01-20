@@ -39,9 +39,9 @@ void finestre(Fin *fin1, Fin *fin2) {
     wbkgd(vita, COLOR_PAIR(3)); // Imposta il colore di sfondo della finestra vita
     wbkgd(gioco, COLOR_PAIR(2)); // Imposta il colore di sfondo della finestra gioco
     box(vita, 0, 0);    // Bordo della finestra vita
-    box(gioco, 0, 0); // Bordo della finestra gioco
-    wrefresh(vita);  // Aggiorna la finestra vita
-    wrefresh(gioco); // Aggiorna la finestra gioco
+    box(gioco, 0, 0);   // Bordo della finestra gioco
+    wrefresh(vita);     // Aggiorna la finestra vita
+    wrefresh(gioco);    // Aggiorna la finestra gioco
 }
 
 void gestisci_vite(int vite, time_t start_time) {
@@ -64,7 +64,7 @@ void gestisci_vite(int vite, time_t start_time) {
         wrefresh(vita); // Aggiorna la finestra vita
     }
 }
-void funzionamento_gioco(Frog frog, Crocodile croco[],int numCroco,int pipefd, int pipeEvent) {
+void funzionamento_gioco(Frog frog, Crocodile croco[],int numCroco,Entity proiettile[],Entity granata,int pipefd, int pipeEvent) {
 	Entity msg;
     Event evento;
     int manche = 1;
@@ -83,7 +83,7 @@ void funzionamento_gioco(Frog frog, Crocodile croco[],int numCroco,int pipefd, i
                 // Aggiorna la posizione della rana
                 frog.base.x = msg.x;
                 frog.base.y = msg.y;
-            } else {
+            } else if (msg.id >=1 && msg.id < numCroco+1) {
                 // Aggiorna i coccodrilli
                 for (int i = 0; i < numCroco; i++) {
                     if (croco[i].base.id == msg.id) {
@@ -91,7 +91,19 @@ void funzionamento_gioco(Frog frog, Crocodile croco[],int numCroco,int pipefd, i
                         croco[i].base.y = msg.y;
                     }
                 } 
-            }
+            }else if(msg.id > 60 && msg.id < 70){
+                // Aggiorna la granata
+                granata.x = msg.x;
+                granata.y = msg.y;
+            }else if(msg.id >=30 && msg.id < numCroco+30){
+                // Aggiorna il proiettile
+                for (int i = 0; i < numCroco; i++) {
+                    if (proiettile[i].id == msg.id) {
+                        proiettile[i].x = msg.x;
+                        proiettile[i].y = msg.y;
+                    }
+                } 
+                }
         }
 
         int collisionFlag = ranaSuCroco(&frog, croco, numCroco);
@@ -180,6 +192,9 @@ void funzionamento_gioco(Frog frog, Crocodile croco[],int numCroco,int pipefd, i
         wattroff(gioco, COLOR_PAIR(1));
 
         wattron(gioco, COLOR_PAIR(5));
+        stampaEntity(gioco, &granata)
+        for (int i = 0; i < numCroco; i++) {
+        stampaEntity(gioco, &proiettile[i]);}
 		wattroff(gioco, COLOR_PAIR(5));
         
         mvwprintw(gioco, 18, 1, "Letto messaggio: id=%2d, x=%2d, y=%2d \n",

@@ -91,13 +91,13 @@ Frog initFrog() {
 }
 Entity initGranata() {
     Entity granata;
-    granata.sprite = spriteRana;
+    granata.sprite = spriteGranata;
     granata.entity_move = entity_move;
     return granata;
 }
 Entity initProiettile() {
     Entity proiettile;
-    proiettile.sprite = spriteRana;
+    proiettile.sprite = spriteProiettile;
     proiettile.entity_move = entity_move;
     return proiettile;
 }
