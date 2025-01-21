@@ -43,10 +43,10 @@ typedef struct Crocodile{
 }Crocodile;
 
 typedef struct Fin {
-    short int height;
-    short int width;
-    short int starty;
-    short int startx;
+    short int height; //altezza
+    short int width;  //larghezza
+    short int starty; //posizione iniziale y
+    short int startx; //posizione iniziale x
 } Fin;
 
 void antiStampaEntity(WINDOW *win, Entity *entity);
@@ -56,6 +56,7 @@ void stampaMap(WINDOW *win, Map *map);
 extern Sprite spriteGranata;
 extern Sprite spriteProiettile;
 extern Sprite spriteTana;
+extern Sprite spriteTanaChiusa;
 extern Sprite spriteRana;
 extern Sprite spriteCrocodile;
 extern Map initTana();
@@ -67,5 +68,4 @@ void initFin();
 
 
 extern WINDOW *vita, *gioco;
-extern Fin fin1; 
-extern Fin fin2;
+

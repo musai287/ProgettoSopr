@@ -14,7 +14,7 @@ void antiStampaEntity(WINDOW *win, Entity *entity) {
     for (int i = 0; i < entity->sprite.larghezza; i++) {
         for (int j = entity->sprite.lunghezza -1; j >= 0; j--) {
             // Accedi ai pixel invertendo l'ordine lungo la dimensione orizzontale
-            mvwprintw(win, entity->y , entity->x+2-i,
+            mvwprintw(win, entity->y , entity->x +2 - i,
                       "%c", entity->sprite.pixels[i][j]);
         }
     }
@@ -23,7 +23,7 @@ void antiStampaEntity(WINDOW *win, Entity *entity) {
 void stampaEntity(WINDOW *win, Entity *entity){
     for(int i = 0; i < entity->sprite.larghezza; i++){
         for(int j = 0; j < entity->sprite.lunghezza; j++){
-            mvwprintw(win, entity->y + j, entity->x-3 + i,
+            mvwprintw(win, entity->y + j, entity->x + i,
                      "%c", entity->sprite.pixels[i][j]);
         }
     }
@@ -39,7 +39,7 @@ void stampaMap(WINDOW *win, Map *map){
 Sprite spriteGranata = {
     1,
     1,
-    {"*"}
+    {"o"}
 };
 Sprite spriteProiettile = {
     1,
@@ -58,6 +58,19 @@ Sprite spriteTana = {
     {'_', '_', '_', '_', '_'}
     }
 };
+
+Sprite spriteTanaChiusa = {
+    5,
+    5,
+    {
+    {'_', '_', '_', '_', '_'},
+    {'|', '\\', ' ', '/', '|'},
+    {'|', ' ', 'X', ' ', '|'},
+    {'|', '/', ' ', '\\', '|'},
+    {'_', '_', '_', '_', '_'}
+    }
+};
+
 Sprite spriteRana ={
     3,
     1,
@@ -73,8 +86,6 @@ Sprite spriteCrocodile = {
 Map initTana () {
     Map tana;
     tana.sprite = spriteTana;
-
-
     return tana;
 
 };
@@ -109,10 +120,3 @@ Crocodile initCrocodile() {
     return croco;
 }
 WINDOW *vita, *gioco;
-Fin fin1;
-Fin fin2;
-void initFin() {
-    // Inizializza le variabili globali dopo aver chiamato initscr()
-    fin1 = (Fin){3, COLS, 0, 0};
-    fin2 = (Fin){LINES-3, COLS, 3, 0};
-}

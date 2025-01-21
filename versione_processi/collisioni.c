@@ -5,6 +5,10 @@ event 1 = coccodrillo fuori dallo schermo e ritorna alla posizione iniziale
 event 2 = la rana è sopra il coccodrillo e segue il movimento del coccodrillo
 event 3 = la rana è nel fiueme e muore
 event 4 = la rana arriva alla tana e vince
+event 5 = la rana spara
+event 6 = la rana viene colpita  da un proiettile
+event 7 = i proiettili si scontrano e si distruggono
+event 8 = tempo scaduto
 ho frog.base.event = 0; come valore di default
 ho croco.base.event = 0; come valore di default
 nel ciclo del gioco, posso inserire una funzione che mi permette di 
@@ -41,7 +45,7 @@ int ranaSuCrocoCheck(Frog *frog, Crocodile *croco, int numCroco) {
 int ranaSuCroco(Frog *frog, Crocodile *croco, int numCroco) {
     Event evento;
 
-    if (frog->base.y > 7 && frog->base.y <= 15) {
+    if (frog->base.y > 7 && frog->base.y <= 15) { //se è nel fiume, non serve neppure come controllo in realtà
         for (int i = 0; i < numCroco; i++){
             int sopraCoccodrillo = ranaSuCrocoCheck(frog, croco, numCroco);
 
@@ -83,7 +87,8 @@ int ranaInTanaCheck(Frog *frog, Map *tana) {
         // Controlla se la rana è sopra il coccodrillo
         if (ranaDestra > tanaSx && ranaSinistra < tanaDx &&
             ranaBasso > tanaUp && ranaAlto < tanaDw) {
-            return i;  // La rana è sopra un coccodrillo
+            tana[i].sprite = spriteTanaChiusa;
+            return i+1;  // La rana entra in una tana.
         }
     }
     return 0;  // La rana non è sopra alcun coccodrillo
@@ -93,13 +98,32 @@ int ranaInTana(Frog *frog, Map *tana) {
             int RanaBase = ranaInTanaCheck(frog, tana);
 
             if (RanaBase > 0) {
-            // La rana è sopra un coccodrillo, invia l'evento per seguirlo
-                  // Puoi usare la posizione del coccodrillo specifico
                 return 1;
             } else {
-                return 0;  // La rana è nel fiume ma non sopra un coccodrillo
+                return 0;  
             }
-        }
-    
+        }   
     return 0;  // La rana non è nel fiume
+}
+int ranaProiettileCheck(Frog *frog, Entity *proiettile, int numCroco) {
+    // Estremi della rana
+    int ranaSinistra = frog->base.x;
+    int ranaDestra = frog->base.x + frog->base.sprite.larghezza;
+    int ranaAlto = frog->base.y;
+    int ranaBasso = frog->base.y + frog->base.sprite.lunghezza;
+    // Controlla se la rana è colpita
+    for (int i = 0; i <numCroco; i++){
+        if (ranaDestra > proiettile[i].x && ranaSinistra < proiettile[i].x &&
+            ranaBasso >proiettile[i].y && ranaAlto < proiettile[i].y) {
+            return proiettile[i].id;  
+        }
+    }
+    return 0;  // La rana non è stata colpita
+}
+int ranaProiettile(Frog *frog, Entity *proiettile,int  numCroco) {
+    int sopraProiettile = ranaProiettileCheck(frog, proiettile,numCroco);
+    if (sopraProiettile) {
+        return proiettile[sopraProiettile].id;  // La rana è stata colpita
+    }
+    return 0;  
 }

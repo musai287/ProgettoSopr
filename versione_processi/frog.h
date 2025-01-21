@@ -1,6 +1,13 @@
 #pragma once
 
 #include <ncurses.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <time.h>
+#include <sys/wait.h>
+#include <sys/types.h>
+#include <signal.h>
+
 #include "struct.h"
 
 #define DELAY 1000000 //0.001

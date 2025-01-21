@@ -34,26 +34,32 @@ int main(){
     init_pair(3, COLOR_BLACK, COLOR_YELLOW);
     init_pair(4, COLOR_BLACK, COLOR_GREEN);
     init_pair(5, 2, -1);
-    initFin();
-    finestre(&fin1, &fin2); // Creazione delle finestre
+    finestre(); // Creazione delle finestre
 
     Frog frog = initFrog(); // Inizializza la rana
     creaRano(frog, pipefd, pipeEvent); // Crea il processo rana
+
     Crocodile croco[numCroco]; // Inizializza il coccodrillo
-    Entity proiettile[numCroco]; // Inizializza il proiettile   
     for(int i=0; i < numCroco; i++){
         croco[i] = initCrocodile();
         croco[i].base.id++; // Inizializza il coccodrillo
     }
     creaCroco(croco, numCroco,pipefd);
-    Entity granata = initGranata();
+
+    Entity granata[2]; // Inizializza la granata
+    for (int i=0; i <2; i++){
+        granata[i] = initGranata();
+        granata[i].id++;
+    }
+    creaGranata(granata, pipefd, pipeEvent, frog);
+
+    Entity proiettile[numCroco]; // Inizializza il proiettile   
     for(int i=0; i < numCroco; i++){
         proiettile[i] = initProiettile();
         proiettile[i].id++; 
     }
-    creaGranata(granata, pipefd, pipeEvent, frog);
-
     creaProiettile(proiettile, pipefd, pipeEvent, numCroco, croco);
+
     
     close(pipefd[1]); 	
     close(pipeEvent[0]);
@@ -61,8 +67,12 @@ int main(){
     funzionamento_gioco(frog, croco, numCroco,proiettile, granata, pipefd[0], pipeEvent[1]);
 
 	kill(frog.base.pid,1);
+    for (int i =0; i < 2;i++){
+        kill(granata[i].pid, SIGKILL);
+    }
     for (int i = 0; i < numCroco; i++) {
         kill(croco[i].base.pid, SIGKILL);  // Uccidi ogni processo
+        kill(proiettile[i].pid, SIGKILL);
     }
     endwin();
     return 0;

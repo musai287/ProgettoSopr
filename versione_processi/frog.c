@@ -12,7 +12,7 @@
 void processoRana(Frog frog,int pipe_fd,int pipeEvent){
 
     Event evento;
-
+    
 
  while(1){
     int input = getch();
@@ -24,20 +24,23 @@ void processoRana(Frog frog,int pipe_fd,int pipeEvent){
         switch (input) {
             case KEY_UP:
                 new_y -= 1;
-                break;
+            break;
             case KEY_DOWN:
                 new_y += 1;
-                break;
+            break;
             case KEY_LEFT:
                 new_x -= 1;
-                break;
+            break;
             case KEY_RIGHT:
                 new_x += 1;
-                break;
+            break;
+            case ' ': 
+                
+            break;
         }
 
         // Verifica che la nuova posizione sia entro i limiti dello schermo
-        if (new_x >= 0 &&
+        if (new_x >= 1 &&
             new_x + frog.base.sprite.larghezza <= COLS &&
             new_y >= 0 &&
             new_y + frog.base.sprite.lunghezza <= LINES-4) {
@@ -49,16 +52,18 @@ void processoRana(Frog frog,int pipe_fd,int pipeEvent){
         
         if (read(pipeEvent, &evento, sizeof(Event)) <= 0){continue;}
         if (read(pipeEvent, &evento, sizeof(Event)) > 0) {
-            if (evento.tipo == 2) {
-                frog.base.x = evento.data;
-            }
-
-            else if (evento.tipo == 3) {
-                frog.base.x = (COLS /2) - 3;
-                frog.base.y = LINES - 5;
-            }
-            
-            else if (evento.tipo == 4) {
+            // if (evento.tipo == 2) {
+            //     frog.base.x = evento.data;
+            // }
+            // else if (evento.tipo == 3) {
+            //     frog.base.x = (COLS /2) - 3;
+            //     frog.base.y = LINES - 5;
+            // } 
+            //else
+             if (evento.tipo == 4 ||
+                evento.tipo == 6||
+                evento.tipo == 8)
+                { 
                 frog.base.x = (COLS /2) - 3;
                 frog.base.y = LINES - 5;
             }
