@@ -64,7 +64,7 @@ int main(){
     close(pipefd[1]); 	
     close(pipeEvent[0]);
     
-    funzionamento_gioco(frog, croco, numCroco,proiettile, granata, pipefd[0], pipeEvent[1]);
+    funzionamento_gioco(frog, croco, numCroco,proiettile, granata, pipefd, pipeEvent);
 
 	kill(frog.base.pid,1);
     for (int i =0; i < 2;i++){

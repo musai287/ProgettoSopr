@@ -13,6 +13,7 @@
 #include "frog.h"
 #include "croco.h"
 #include "collisioni.h"
+#include "piddini.h"
 /*Magica funzione per rendere non
  *bloccante le pipe nella comunicazione tra di loro
  *(bisogna aggiungerla nel main richiamando le pipe)
@@ -60,7 +61,7 @@ void gestisci_vite(int vite, time_t start_time) {
         wrefresh(vita); // Aggiorna la finestra vita
     }
 }
-void funzionamento_gioco(Frog frog, Crocodile croco[],int numCroco,Entity proiettile[],Entity granata[],int pipefd, int pipeEvent) {
+void funzionamento_gioco(Frog frog, Crocodile croco[],int numCroco,Entity proiettile[],Entity granata[],int *pipefd, int *pipeEvent) {
 
     Entity msg;
     Event evento;
@@ -77,12 +78,12 @@ void funzionamento_gioco(Frog frog, Crocodile croco[],int numCroco,Entity proiet
 
 	gestisci_vite(frog.lives, start_time);
         // Leggi i messaggi dalla pipe
-        if (read(pipefd, &msg, sizeof(Entity)) > 0) {
+        if (read(pipefd[0], &msg, sizeof(Entity)) > 0) {
             if (msg.id == 0) {
                 // Aggiorna la posizione della rana
                 frog.base.x = msg.x;
                 frog.base.y = msg.y;
-            }
+            // }
             // else if (msg.id >=1 && msg.id < numCroco+1) {
             //     // Aggiorna i coccodrilli
             //     for (int i = 0; i < numCroco; i++) {
@@ -91,22 +92,22 @@ void funzionamento_gioco(Frog frog, Crocodile croco[],int numCroco,Entity proiet
             //             croco[i].base.y = msg.y;
             //         }
             //     }
-            // }else if(msg.id >=30 && msg.id < numCroco+30){
-            //     // Aggiorna il proiettile
-            //     for (int i = 0; i < numCroco; i++) {
-            //         if (proiettile[i].id == msg.id) {
-            //             proiettile[i].x = msg.x;
-            //             proiettile[i].y = msg.y;
-            //         }
-            //     }
-            // }else if(msg.id >= 60 && msg.id <= 70){
-            //     for (int i = 0; i < 2; i++) {
-            //         if (granata[i].id == msg.id) {
-            //             granata[i].x = msg.x;
-            //             granata[i].y = msg.y;
-            //         }
-            //     }
-            // }
+            }else if(msg.id >=30 && msg.id < numCroco+30){
+                //Aggiorna il proiettile
+                for (int i = 0; i < numCroco; i++) {
+                    if (proiettile[i].id == msg.id) {
+                        proiettile[i].x = msg.x;
+                        proiettile[i].y = msg.y;
+                    }
+                }
+            }else if(msg.id >= 60 && msg.id <= 70){
+                for (int i = 0; i < 2; i++) {
+                    if (granata[i].id == msg.id) {
+                        granata[i].x = msg.x;
+                        granata[i].y = msg.y;
+                    }
+                }
+            }
         }
         /*collisioni*/
 
@@ -114,30 +115,30 @@ void funzionamento_gioco(Frog frog, Crocodile croco[],int numCroco,Entity proiet
         if (collisionFlag) {
             evento.tipo = 2;
             evento.data = collisionFlag;  // Evento che dice alla rana di seguire il coccodrillo
-            write(pipeEvent, &evento, sizeof(Event));
+            write(pipeEvent[1], &evento, sizeof(Event));
         } else {
             evento.tipo = 0;
             evento.data = collisionFlag;  // Tipo di evento che dice alla rana di fare un movimento
-            write(pipeEvent, &evento, sizeof(Event));
+            write(pipeEvent[1], &evento, sizeof(Event));
         }
 
-        // int fiumeFlag = ranaInFiume(&frog, croco, numCroco);
-        //     if(fiumeFlag){
-        //          evento.tipo = 3;
-        //          evento.data = fiumeFlag;
-        //          write(pipeEvent, &evento, sizeof(Event)); // Evento che dice alla rana di morire
-        //          frog.lives--;
-        //          start_time = time(NULL);
-        //     }else{
-        //          evento.tipo = 0;
-        //          evento.data = fiumeFlag;  // Tipo di evento che dice alla rana di fare un movimento
-        //     }
+        int fiumeFlag = ranaInFiume(&frog, croco, numCroco);
+            if(fiumeFlag){
+                 evento.tipo = 3;
+                 evento.data = fiumeFlag;
+                 write(pipeEvent[1], &evento, sizeof(Event)); // Evento che dice alla rana di morire
+                //  frog.lives--;
+                 start_time = time(NULL);
+            }else{
+                 evento.tipo = 0;
+                 evento.data = fiumeFlag;  // Tipo di evento che dice alla rana di fare un movimento
+            }
 
         int tanaFlag = ranaInTana(&frog, tana);
         if (tanaFlag) {
             evento.tipo = 4;
             evento.data = tanaFlag;  // Tipo di evento che dice alla rana di fare un movimento
-            write(pipeEvent, &evento, sizeof(Event));
+            write(pipeEvent[1], &evento, sizeof(Event));
             manche++;
             int tempoImpiegato = (int)(time(NULL) - start_time);
             int tempoRimanente = tempoTotale - tempoImpiegato;
@@ -153,9 +154,15 @@ void funzionamento_gioco(Frog frog, Crocodile croco[],int numCroco,Entity proiet
         if (proiettileFlag) {
             evento.tipo = 6;
             evento.data = proiettileFlag;  // Evento che dice alla rana di morire
-            write(pipeEvent, &evento, sizeof(Event));
+            write(pipeEvent[1], &evento, sizeof(Event));
             frog.lives--;
+
+            // int indexColpito = evento.data - 30; // Calcola l'indice del proiettile dall'ID
+            creaProiettile(proiettile, pipefd, pipeEvent, numCroco, croco);
+
             start_time = time(NULL);
+
+
         } else {
             evento.tipo = 0;
             evento.data = proiettileFlag;  // Tipo di evento che dice alla rana di fare un movimento
@@ -163,11 +170,11 @@ void funzionamento_gioco(Frog frog, Crocodile croco[],int numCroco,Entity proiet
 
         int tempoRimanente = 30 - (int)(time(NULL) - start_time);
         if (tempoRimanente <= 0) {
-            frog.lives--;
-            start_time = time(NULL);
             evento.tipo = 8;
             evento.data = 0;
-            write(pipeEvent, &evento, sizeof(Event));
+            write(pipeEvent[1], &evento, sizeof(Event));
+            start_time = time(NULL);
+            frog.lives--;
         }
 
         /*win lose condition*/

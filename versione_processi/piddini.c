@@ -66,24 +66,32 @@ void creaCroco(Crocodile croco[], int numCroco,int pipefd[2]) {
 }
 
 void creaProiettile(Entity proiettile[],int pipefd[2], int pipeEvent[2],int numCroco, Crocodile croco[]) {
-    for (int i = 0; i < numCroco; i++) {
-        proiettile[i].id = 30+i;
-        proiettile[i].x = croco[i].base.x;
-        proiettile[i].y = croco[i].base.y;
-        proiettile[i].pid = fork();
-        if (proiettile[i].pid == -1) {
-            perror("Errore nella creazione della prima fork");
-            _exit(1);
-        }if (proiettile[i].pid == 0) {  // Processo figlio (proiettile)
-            close(pipefd[0]);  // Chiudi il lato di lettura della pipe
-            // Esegui altre operazioni nel processo figlio proiettile
-            processoProiettile(&proiettile[i], pipefd[1], pipeEvent[0], &croco[i]);  // Esempio di scrittura nella pipe
-            close(pipeEvent[1]);  // Chiudi il lato di scrittura della pipe
-            close(pipefd[1]);
-            _exit(0);  // Esci dal processo figlio
+    srand(time(NULL));
+
+    // Seleziona un coccodrillo casuale
+    int i = rand() % numCroco+1;
+
+    // Imposta i dati del proiettile
+    proiettile[i].id = 30;
+    proiettile[i].x = croco[i].base.x;
+    proiettile[i].y = croco[i].base.y;
+
+    // Crea un processo figlio per il proiettile
+    proiettile[i].pid = fork();
+    if (proiettile[i].pid == -1) {
+        perror("Errore nella creazione della fork");
+        _exit(1);
+    }
+    if (proiettile[i].pid == 0) {  // Processo figlio (proiettile)
+        close(pipefd[0]);  // Chiudi il lato di lettura della pipe
+        // Esegui altre operazioni nel processo figlio proiettile
+        processoProiettile(&proiettile[i], pipefd[1], pipeEvent[0], &croco[i]);
+        // close(pipeEvent[1]);  // Chiudi il lato di scrittura della pipe
+        // close(pipefd[1]);
+        _exit(0);  // Esci dal processo figlio
         }
     }
-}
+
 
 void creaGranata(Entity granata[],int pipefd[2], int pipeEvent[2],Frog frog) {
     for (int i=0; i <2; i++){
@@ -105,6 +113,7 @@ void creaGranata(Entity granata[],int pipefd[2], int pipeEvent[2],Frog frog) {
             processoGranata(&granata[i], pipefd[1], pipeEvent[0], frog);  // Esempio di scrittura nella pipe
             close(pipeEvent[1]);  // Chiudi il lato di scrittura della pipe
             close(pipefd[1]);
+            close(pipeEvent[0]);
             _exit(0);  // Esci dal processo figlio
     }
     }

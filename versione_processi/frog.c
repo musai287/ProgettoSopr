@@ -50,23 +50,20 @@ void processoRana(Frog frog,int pipe_fd,int pipeEvent){
 
 
         
-        if (read(pipeEvent, &evento, sizeof(Event)) <= 0){continue;}
-        if (read(pipeEvent, &evento, sizeof(Event)) > 0) {
-            // if (evento.tipo == 2) {
-            //     frog.base.x = evento.data;
-            // }
-            // else if (evento.tipo == 3) {
-            //     frog.base.x = (COLS /2) - 3;
-            //     frog.base.y = LINES - 5;
-            // } 
-            //else
-             if (evento.tipo == 4 ||
-                evento.tipo == 6||
-                evento.tipo == 8)
-                { 
-                frog.base.x = (COLS /2) - 3;
-                frog.base.y = LINES - 5;
-            }
-        }
+        // if (read(pipeEvent, &evento, sizeof(Event)) <= 0){continue;}
+        // if (read(pipeEvent, &evento, sizeof(Event)) > 0) {
+        //     if (evento.tipo == 2) {
+        //         frog.base.x = evento.data;
+        //     }
+        //     else 
+        //     if (evento.tipo == 3) {
+        //         frog.base.x = (COLS /2) - 3;
+        //         frog.base.y = LINES - 5;
+        //     } 
+        //     else if (evento.tipo == 4 || evento.tipo == 6 || evento.tipo == 8){ 
+        //         frog.base.x = (COLS /2) - 3;
+        //         frog.base.y = LINES - 5;
+        //     }
+        // }
     }
 }

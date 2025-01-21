@@ -11,4 +11,4 @@
 void setNonBlocking(int pipefd);
 void finestre();
 void gestisci_vite(int vite, time_t start_time);
-void funzionamento_gioco (Frog frog,Crocodile croco[],int numCroco,Entity proiettile[],Entity granata[], int pipefd, int pipeEvent);
+void funzionamento_gioco (Frog frog,Crocodile croco[],int numCroco,Entity proiettile[],Entity granata[], int *pipefd, int *pipeEvent);
