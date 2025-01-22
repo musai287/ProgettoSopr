@@ -69,10 +69,10 @@ void creaProiettile(Entity proiettile[],int pipefd[2], int pipeEvent[2],int numC
     srand(time(NULL));
 
     // Seleziona un coccodrillo casuale
-    int i = rand() % numCroco+1;
+    int i = rand() % numCroco;
 
     // Imposta i dati del proiettile
-    proiettile[i].id = 30;
+    
     proiettile[i].x = croco[i].base.x;
     proiettile[i].y = croco[i].base.y;
 
@@ -86,8 +86,9 @@ void creaProiettile(Entity proiettile[],int pipefd[2], int pipeEvent[2],int numC
         close(pipefd[0]);  // Chiudi il lato di lettura della pipe
         // Esegui altre operazioni nel processo figlio proiettile
         processoProiettile(&proiettile[i], pipefd[1], pipeEvent[0], &croco[i]);
-        // close(pipeEvent[1]);  // Chiudi il lato di scrittura della pipe
-        // close(pipefd[1]);
+        close(pipeEvent[1]);  // Chiudi il lato di scrittura della pipe
+        close(pipeEvent[0]);  // Chiudi il lato di scrittura della pipe
+        close(pipefd[1]);
         _exit(0);  // Esci dal processo figlio
         }
     }
@@ -105,7 +106,7 @@ void creaGranata(Entity granata[],int pipefd[2], int pipeEvent[2],Frog frog) {
         granata[1].sprite = spriteGranata;
         granata[i].pid = fork();
         if (granata[i].pid == -1) {
-            perror("Errore nella creazione della prima fork");
+            perror("Errore nella creazione della fork");
             _exit(1);
         }if (granata[i].pid == 0) {  // Processo figlio granata
             close(pipefd[0]);  // Chiudi il lato di lettura della pipe

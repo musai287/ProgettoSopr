@@ -54,15 +54,15 @@ void processoProiettile(Entity *proiettile, int pipefd, int pipeEvent, Crocodile
         
 
 
-        if (read(pipeEvent, &evento, sizeof(Event)) <= 0) {continue;}
-        if (read(pipeEvent, &evento, sizeof(Event)) > 0) {
-            if (evento.tipo == 6) {
-                if (proiettile->id == evento.data) {
-                    proiettile->x = -5;
-                }
-            }
-        }
-        write(pipefd, proiettile, sizeof(Entity));
-        usleep(100000);
+        // if (read(pipeEvent, &evento, sizeof(Event)) <= 0) {continue;}
+        // if (read(pipeEvent, &evento, sizeof(Event)) > 0) {
+        //     if (evento.tipo == 6) {
+        //         if (proiettile->id == evento.data) {
+        //             proiettile->x = -5;
+        //         }
+        //     }
+        // }
+        // write(pipefd, proiettile, sizeof(Entity));
+        // usleep(100000);
     }
 }
