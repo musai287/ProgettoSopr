@@ -69,7 +69,7 @@ void creaProiettile(Entity proiettile[],int pipefd[2], int pipeEvent[2],int numC
     srand(time(NULL));
 
     // Seleziona un coccodrillo casuale
-    int i = rand() % numCroco;
+   for (int i = 0; i < numCroco; i++) {
 
     // Imposta i dati del proiettile
     
@@ -92,7 +92,7 @@ void creaProiettile(Entity proiettile[],int pipefd[2], int pipeEvent[2],int numC
         _exit(0);  // Esci dal processo figlio
         }
     }
-
+}
 
 void creaGranata(Entity granata[],int pipefd[2], int pipeEvent[2],Frog frog) {
     for (int i=0; i <2; i++){

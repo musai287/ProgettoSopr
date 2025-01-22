@@ -116,7 +116,7 @@ int ranaProiettileCheck(Frog *frog, Entity *proiettile, int numCroco) {
     for (int i = 0; i <numCroco; i++){
         if (ranaDestra >= proiettile[i].x && ranaSinistra <= proiettile[i].x &&
             ranaBasso >= proiettile[i].y && ranaAlto == proiettile[i].y) {
-            kill(proiettile[i].pid, SIGKILL);
+            // kill(proiettile[i].pid, SIGKILL);
             proiettile[i].x = -5;
             proiettile[i].y = -5;
             proiettile[i].pid = 0;  

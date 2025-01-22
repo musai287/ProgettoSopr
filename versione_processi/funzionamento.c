@@ -78,29 +78,33 @@ void funzionamento_gioco(Frog frog, Crocodile croco[],int numCroco,Entity proiet
 
 	gestisci_vite(frog.lives, start_time);
         // Leggi i messaggi dalla pipe
+        
         if (read(pipefd[0], &msg, sizeof(Entity)) > 0) {
             if (msg.id == 0) {
                 // Aggiorna la posizione della rana
                 frog.base.x = msg.x;
                 frog.base.y = msg.y;
-            // }
-            // else if (msg.id >=1 && msg.id < numCroco+1) {
-            //     // Aggiorna i coccodrilli
-            //     for (int i = 0; i < numCroco; i++) {
-            //         if (croco[i].base.id == msg.id) {
-            //             croco[i].base.x = msg.x;
-            //             croco[i].base.y = msg.y;
-            //         }
-            //     }
-            }else if(msg.id >=30 && msg.id < numCroco+30){
-                //Aggiorna il proiettile
+            }
+            else if (msg.id >=1 && msg.id < numCroco+1) {
+                // Aggiorna i coccodrilli
+                for (int i = 0; i < numCroco; i++) {
+                    if (croco[i].base.id == msg.id) {
+                        croco[i].base.x = msg.x;
+                        croco[i].base.y = msg.y;
+                    }
+                }
+            }
+            else if(msg.id >=30){
+                // Aggiorna il proiettile
                 for (int i = 0; i < numCroco; i++) {
                     if (proiettile[i].id == msg.id) {
                         proiettile[i].x = msg.x;
                         proiettile[i].y = msg.y;
                     }
                 }
-            }else if(msg.id >= 60 && msg.id <= 70){
+                
+            }
+            else if(msg.id >= 60 && msg.id <= 70){
                 for (int i = 0; i < 2; i++) {
                     if (granata[i].id == msg.id) {
                         granata[i].x = msg.x;
@@ -158,7 +162,7 @@ void funzionamento_gioco(Frog frog, Crocodile croco[],int numCroco,Entity proiet
             frog.lives--;
 
             // int indexColpito = evento.data - 30; // Calcola l'indice del proiettile dall'ID
-            creaProiettile(proiettile, pipefd, pipeEvent, numCroco, croco);
+            //creaProiettile(proiettile, pipefd, pipeEvent, numCroco, croco);
 
             start_time = time(NULL);
 
@@ -230,10 +234,8 @@ void funzionamento_gioco(Frog frog, Crocodile croco[],int numCroco,Entity proiet
         stampaEntity(gioco, &proiettile[i]);}
 		wattroff(gioco, COLOR_PAIR(5));
 
-
         mvwprintw(gioco, 1, 1, "Letto messaggio: id=%2d, x=%2d, y=%2d \n",
                                                   msg.id, msg.x, msg.y);
-
 
          mvwprintw(gioco, 2, 1, "evento tipo =%d evento data = %d manche = %d",
                                               evento.tipo, evento.data, manche);
