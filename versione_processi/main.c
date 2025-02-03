@@ -51,7 +51,7 @@ int main(){
         granata[i] = initGranata();
         granata[i].id++;
     }
-    creaGranata(granata, pipefd, pipeEvent, frog);
+    // creaGranata(granata, pipefd, pipeEvent, frog);
 
     Entity proiettile[numCroco]; // Inizializza il proiettile   
     for(int i=0; i < numCroco; i++){

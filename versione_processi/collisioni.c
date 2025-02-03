@@ -119,7 +119,6 @@ int ranaProiettileCheck(Frog *frog, Entity *proiettile, int numCroco) {
             // kill(proiettile[i].pid, SIGKILL);
             proiettile[i].x = -5;
             proiettile[i].y = -5;
-            proiettile[i].pid = 0;  
             return i+1;  
         }
     }

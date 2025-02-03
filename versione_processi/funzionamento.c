@@ -51,7 +51,6 @@ void gestisci_vite(int vite, time_t start_time) {
     box(vita, 0, 0); // Crea il bordo della finestra vita
     int tempoRimanente = 30 - (int)(time(NULL) - start_time);
 
-
     /*stampe della finestra superiore*/
     mvwprintw(vita, 1, 1, "Vite: ");
     mvwprintw(vita, 1, COLS / 2, "Tempo: %d", tempoRimanente);
@@ -61,6 +60,7 @@ void gestisci_vite(int vite, time_t start_time) {
         wrefresh(vita); // Aggiorna la finestra vita
     }
 }
+
 void funzionamento_gioco(Frog frog, Crocodile croco[],int numCroco,Entity proiettile[],Entity granata[],int *pipefd, int *pipeEvent) {
 
     Entity msg;
@@ -75,10 +75,15 @@ void funzionamento_gioco(Frog frog, Crocodile croco[],int numCroco,Entity proiet
     }
 
 	while(1){
+        int input = getch();
+        if (input != ERR) {
+            if (input == ' ') {
+                creaGranata(granata, pipefd, pipeEvent, frog);
+            }
+        }
 
 	gestisci_vite(frog.lives, start_time);
         // Leggi i messaggi dalla pipe
-        
         if (read(pipefd[0], &msg, sizeof(Entity)) > 0) {
             if (msg.id == 0) {
                 // Aggiorna la posizione della rana
@@ -104,13 +109,12 @@ void funzionamento_gioco(Frog frog, Crocodile croco[],int numCroco,Entity proiet
                 }
                 
             }
-            else if(msg.id >= 60 && msg.id <= 70){
-                for (int i = 0; i < 2; i++) {
-                    if (granata[i].id == msg.id) {
-                        granata[i].x = msg.x;
-                        granata[i].y = msg.y;
-                    }
-                }
+            if (msg.id == 60 || msg.id == 61) {
+                int index = msg.id - 60;
+                if (index < 2) {  // Evita accessi fuori limite
+                    granata[index].x = msg.x;
+                    granata[index].y = msg.y;
+                 }
             }
         }
         /*collisioni*/

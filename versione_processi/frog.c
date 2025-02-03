@@ -12,7 +12,12 @@
 void processoRana(Frog frog,int pipe_fd,int pipeEvent){
 
     Event evento;
-    
+    Entity granata[2]; // Inizializza la granata
+    // for (int i=0; i <2; i++){
+    //     granata[i] = initGranata();
+    //     granata[i].id++;
+    // }
+    // creaGranata(granata, pipefd, pipeEvent, frog);
 
  while(1){
     int input = getch();
@@ -34,9 +39,7 @@ void processoRana(Frog frog,int pipe_fd,int pipeEvent){
             case KEY_RIGHT:
                 new_x += 1;
             break;
-            case ' ': 
-                
-            break;
+           
         }
 
         // Verifica che la nuova posizione sia entro i limiti dello schermo
@@ -50,20 +53,20 @@ void processoRana(Frog frog,int pipe_fd,int pipeEvent){
 
 
         
-        // if (read(pipeEvent, &evento, sizeof(Event)) <= 0){continue;}
-        // if (read(pipeEvent, &evento, sizeof(Event)) > 0) {
-        //     if (evento.tipo == 2) {
-        //         frog.base.x = evento.data;
-        //     }
-        //     else 
-        //     if (evento.tipo == 3) {
-        //         frog.base.x = (COLS /2) - 3;
-        //         frog.base.y = LINES - 5;
-        //     } 
-        //     else if (evento.tipo == 4 || evento.tipo == 6 || evento.tipo == 8){ 
-        //         frog.base.x = (COLS /2) - 3;
-        //         frog.base.y = LINES - 5;
-        //     }
-        // }
+        if (read(pipeEvent, &evento, sizeof(Event)) <= 0){continue;}
+        if (read(pipeEvent, &evento, sizeof(Event)) > 0) {
+            if (evento.tipo == 2) {
+                frog.base.x = evento.data;
+            }
+            else 
+            if (evento.tipo == 3) {
+                frog.base.x = (COLS /2) - 3;
+                frog.base.y = LINES - 5;
+            } 
+            else if (evento.tipo == 4 || evento.tipo == 6 || evento.tipo == 8){ 
+                frog.base.x = (COLS /2) - 3;
+                frog.base.y = LINES - 5;
+            }
+        }
     }
 }

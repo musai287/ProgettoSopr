@@ -9,6 +9,7 @@
 #include <signal.h>
 
 #include "struct.h"
+#include "proiettili.h"
 
 #define DELAY 1000000 //0.001
 #define DELAYCLOSED 2000000 //2 secondi
