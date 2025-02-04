@@ -102,6 +102,7 @@ Frog initFrog() {
 }
 Entity initGranata() {
     Entity granata;
+    granata.id = 60;
     granata.sprite = spriteGranata;
     granata.entity_move = entity_move;
     return granata;

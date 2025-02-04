@@ -6,16 +6,16 @@
 Event evento;
 void processoGranata(Entity *granata, int pipefd, int pipeEvent, Frog frog){
     while(1){
-        if(granata->id == 61){
+        if(granata->x == frog.base.x + 3){
                 entity_move(granata, 1, 0);
             
         }
-        else if(granata->id == 60){
+        else if(granata->x == frog.base.x -1){
                 entity_move(granata, -1, 0);
         }
-
         write(pipefd, granata, sizeof(Entity));
         usleep(10000);
+        
         if (read(pipeEvent, &evento, sizeof(Event)) <= 0){continue;}
         if (read(pipeEvent, &evento, sizeof(Event)) > 0) {
            if(evento.tipo == 5){

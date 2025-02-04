@@ -99,7 +99,7 @@ void funzionamento_gioco(Frog frog, Crocodile croco[],int numCroco,Entity proiet
                     }
                 }
             }
-            else if(msg.id >=30){
+            else if(msg.id >=30 && msg.id < 59) {
                 // Aggiorna il proiettile
                 for (int i = 0; i < numCroco; i++) {
                     if (proiettile[i].id == msg.id) {
@@ -109,12 +109,13 @@ void funzionamento_gioco(Frog frog, Crocodile croco[],int numCroco,Entity proiet
                 }
                 
             }
-            if (msg.id == 60 || msg.id == 61) {
-                int index = msg.id - 60;
-                if (index < 2) {  // Evita accessi fuori limite
-                    granata[index].x = msg.x;
-                    granata[index].y = msg.y;
-                 }
+            else if (msg.id >=59) {
+                for (int i = 0; i < 2; i++) {
+                    if (granata[i].id == msg.id) {
+                        granata[i].x = msg.x;
+                        granata[i].y = msg.y;
+                    }
+                }   
             }
         }
         /*collisioni*/
