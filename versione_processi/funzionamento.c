@@ -73,14 +73,27 @@ void funzionamento_gioco(Frog frog, Crocodile croco[],int numCroco,Entity proiet
         tana[i].x = 2 + i * 10;
         tana[i].y = 1;
     }
-
+    creaRano(frog, pipefd, pipeEvent);
+    creaCroco(croco, numCroco,pipefd);
+    creaGranata(granata, pipefd, pipeEvent, frog);
+    creaProiettile(proiettile, pipefd, pipeEvent, numCroco, croco);
 	while(1){
-        int input = getch();
-        if (input != ERR) {
-            if (input == ' ') {
-                creaGranata(granata, pipefd, pipeEvent, frog);
-            }
-        }
+        // int input = getch();
+        // if (input != ERR) {
+        //     if (input == ' ') {
+        //         for (int i=0; i <2; i++){
+        //             granata[0].id = 60;
+        //             granata[1].id = 61;
+        //             granata[0].x = frog.base.x - 1;
+        //             granata[0].y = frog.base.y;    
+        //             granata[1].x = frog.base.x + 3;
+        //             granata[1].y = frog.base.y;
+        //             granata[0].sprite = spriteGranata;
+        //             granata[1].sprite = spriteGranata;
+        //         }
+        //         creaGranata(granata, pipefd, pipeEvent, frog);
+        //     }
+        // }
 
 	gestisci_vite(frog.lives, start_time);
         // Leggi i messaggi dalla pipe
@@ -109,13 +122,13 @@ void funzionamento_gioco(Frog frog, Crocodile croco[],int numCroco,Entity proiet
                 }
                 
             }
-            else if (msg.id >=59) {
+            else if(msg.id >= 60 && msg.id <= 70){
                 for (int i = 0; i < 2; i++) {
                     if (granata[i].id == msg.id) {
                         granata[i].x = msg.x;
                         granata[i].y = msg.y;
                     }
-                }   
+                }
             }
         }
         /*collisioni*/

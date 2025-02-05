@@ -10,7 +10,7 @@
 #include "struct.h"
 #include "frog.h"
 #include "croco.h"
-#include "proiettili.h"
+
 
 //void pidd(int pi[],pid_t a, pid_t b);
 //void creaPipe(int pipe_fd[2]) ;

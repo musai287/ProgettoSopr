@@ -69,4 +69,60 @@ void processoRana(Frog frog,int pipe_fd,int pipeEvent){
             }
         }
     }
+    
 }
+
+void processoGranata(Entity *granata, int pipefd, int pipeEvent, Frog frog){
+    while(1){
+        if(granata->id == 61){
+                entity_move(granata, 1, 0);
+                if(granata->x > COLS-3){
+                    // kill(granata->pid, SIGKILL);
+                    // waitpid(granata->pid, NULL,0);
+                }
+            }
+            
+        else if(granata->id == 60){
+                entity_move(granata, -1, 0);
+                if(granata->x < 2){ 
+                    // kill(granata->pid, SIGKILL);
+                    // waitpid(granata->pid, NULL,0);
+                }
+            }
+        int input = getch();
+        if (input != ERR) {
+            if (input == ' ') {
+                if(granata->id == 60){
+                    granata->x = frog.base.x - 1;
+                    granata->y = frog.base.y;
+                }
+                else if(granata->id == 61){
+                    granata->x = frog.base.x + 3;
+                    granata->y = frog.base.y;
+                }
+                
+            }
+        }
+        
+        write(pipefd, granata, sizeof(Entity));
+        usleep(100000);
+        
+        // if (read(pipeEvent, &evento, sizeof(Event)) <= 0){continue;}
+        // if (read(pipeEvent, &evento, sizeof(Event)) > 0) {
+        //    if(evento.tipo == 5){
+        //         if(granata->id == 60){
+        //             granata->x = frog.base.x - 1;
+        //             granata->y = frog.base.y;
+        //         }
+        //         else if(granata->id == 61){
+        //             granata->x = frog.base.x + 3;
+        //             granata->y = frog.base.y;
+        //         }
+        //     }
+        // }
+        
+    }
+
+}
+
+

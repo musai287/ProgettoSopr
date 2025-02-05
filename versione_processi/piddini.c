@@ -95,7 +95,7 @@ void creaProiettile(Entity proiettile[],int pipefd[2], int pipeEvent[2],int numC
 }
 
 void creaGranata(Entity granata[],int pipefd[2], int pipeEvent[2],Frog frog) {
-    for (int i=0; i <2; i++){
+     for (int i=0; i <2; i++){
         granata[0].id = 60;
         granata[1].id = 61;
         granata[0].x = frog.base.x - 1;

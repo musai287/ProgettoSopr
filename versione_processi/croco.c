@@ -46,3 +46,25 @@ void stampCocco(WINDOW *gioco, int numCroco, Crocodile croco[]) {
     }          
    }
 
+void processoProiettile(Entity *proiettile, int pipefd, int pipeEvent, Crocodile *croco){
+    int delayMovimento = 2;
+    srand(time(NULL)+proiettile->id); // Random seed unico per ogni processo
+    sleep(rand() % delayMovimento);
+    while(1){
+        if(croco->direction == 1){
+            entity_move(proiettile, 1, 0);    
+        }else{
+            entity_move(proiettile, -1, 0);
+        }
+        if (proiettile->x > COLS) {
+            proiettile->x = croco->base.x;
+            usleep(rand() % delayMovimento); // Pausa randomica
+        }
+        if(proiettile->x <= -7){
+            proiettile->x = croco->base.x;
+            usleep(rand() % delayMovimento); // Pausa randomica
+            }
+        write(pipefd, proiettile, sizeof(Entity));
+        usleep(100000);
+    }
+}
