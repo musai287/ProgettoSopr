@@ -16,4 +16,4 @@
 void processoRana(Frog frog,int pipe_fd, int pipeEvent);
 //void stampRana(int pipefd);
 void processoGranata(Entity *granata, int pipefd, int pipeEvent, Frog frog);
-void player(int pipeEvent);
+int movimento();

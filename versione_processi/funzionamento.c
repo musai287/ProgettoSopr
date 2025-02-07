@@ -75,25 +75,21 @@ void funzionamento_gioco(Frog frog, Crocodile croco[],int numCroco,Entity proiet
     }
     creaRano(frog, pipefd, pipeEvent);
     creaCroco(croco, numCroco,pipefd);
-    creaGranata(granata, pipefd, pipeEvent, frog);
+    // creaGranata(granata, pipefd, pipeEvent, frog);
     creaProiettile(proiettile, pipefd, pipeEvent, numCroco, croco);
 	while(1){
-        // int input = getch();
-        // if (input != ERR) {
-        //     if (input == ' ') {
-        //         for (int i=0; i <2; i++){
-        //             granata[0].id = 60;
-        //             granata[1].id = 61;
-        //             granata[0].x = frog.base.x - 1;
-        //             granata[0].y = frog.base.y;    
-        //             granata[1].x = frog.base.x + 3;
-        //             granata[1].y = frog.base.y;
-        //             granata[0].sprite = spriteGranata;
-        //             granata[1].sprite = spriteGranata;
-        //         }
-        //         creaGranata(granata, pipefd, pipeEvent, frog);
-        //     }
-        // }
+        int input = movimento();
+        if (input != ERR){
+        if (input == ' ') {
+            for (int i=0; i <2; i++){
+                if (granata[i].pid > 0) {  // Se il processo esiste
+                    kill(granata[i].pid, SIGKILL); 
+                    waitpid(granata[i].pid, NULL, WNOHANG); // Aspetta la terminazione                        
+                    granata[i].pid = 0;  // Resetta il PID dopo la terminazione
+                }
+            creaGranata(granata, pipefd, pipeEvent, frog);}
+            }
+        }
 
 	gestisci_vite(frog.lives, start_time);
         // Leggi i messaggi dalla pipe
@@ -146,11 +142,11 @@ void funzionamento_gioco(Frog frog, Crocodile croco[],int numCroco,Entity proiet
 
         int fiumeFlag = ranaInFiume(&frog, croco, numCroco);
             if(fiumeFlag){
-                 evento.tipo = 3;
-                 evento.data = fiumeFlag;
-                 write(pipeEvent[1], &evento, sizeof(Event)); // Evento che dice alla rana di morire
-                //  frog.lives--;
-                 start_time = time(NULL);
+                evento.tipo = 3;
+                evento.data = fiumeFlag;
+                write(pipeEvent[1], &evento, sizeof(Event)); // Evento che dice alla rana di morire
+                frog.lives--;
+                start_time = time(NULL);
             }else{
                  evento.tipo = 0;
                  evento.data = fiumeFlag;  // Tipo di evento che dice alla rana di fare un movimento

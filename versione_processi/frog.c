@@ -11,16 +11,9 @@
 
 void processoRana(Frog frog,int pipe_fd,int pipeEvent){
 
-    Event evento;
-    Entity granata[2]; // Inizializza la granata
-    // for (int i=0; i <2; i++){
-    //     granata[i] = initGranata();
-    //     granata[i].id++;
-    // }
-    // creaGranata(granata, pipefd, pipeEvent, frog);
-
- while(1){
-    int input = getch();
+    Event evento;   
+    while(1){
+        int input = movimento();
 
         // Calcola la posizione futura della rana
         int new_x = frog.base.x;
@@ -41,7 +34,6 @@ void processoRana(Frog frog,int pipe_fd,int pipeEvent){
             break;
            
         }
-
         // Verifica che la nuova posizione sia entro i limiti dello schermo
         if (new_x >= 1 &&
             new_x + frog.base.sprite.larghezza <= COLS &&
@@ -50,9 +42,7 @@ void processoRana(Frog frog,int pipe_fd,int pipeEvent){
             frog.base.entity_move(&frog.base, new_x - frog.base.x, new_y - frog.base.y);
         }
         write(pipe_fd, &frog.base, sizeof(Entity));
-
-
-        
+   
         if (read(pipeEvent, &evento, sizeof(Event)) <= 0){continue;}
         if (read(pipeEvent, &evento, sizeof(Event)) > 0) {
             if (evento.tipo == 2) {
@@ -69,40 +59,28 @@ void processoRana(Frog frog,int pipe_fd,int pipeEvent){
             }
         }
     }
-    
 }
 
 void processoGranata(Entity *granata, int pipefd, int pipeEvent, Frog frog){
     while(1){
+        
         if(granata->id == 61){
                 entity_move(granata, 1, 0);
                 if(granata->x > COLS-3){
-                    // kill(granata->pid, SIGKILL);
-                    // waitpid(granata->pid, NULL,0);
+                    // kill(granata->pid, SIGTERM);
+                    waitpid(granata->pid, NULL,0);
+                    _exit(0);
                 }
             }
             
         else if(granata->id == 60){
                 entity_move(granata, -1, 0);
                 if(granata->x < 2){ 
-                    // kill(granata->pid, SIGKILL);
-                    // waitpid(granata->pid, NULL,0);
+                    // kill(granata->pid, SIGTERM);
+                    waitpid(granata->pid, NULL,0);
+                    _exit(0);
                 }
             }
-        int input = getch();
-        if (input != ERR) {
-            if (input == ' ') {
-                if(granata->id == 60){
-                    granata->x = frog.base.x - 1;
-                    granata->y = frog.base.y;
-                }
-                else if(granata->id == 61){
-                    granata->x = frog.base.x + 3;
-                    granata->y = frog.base.y;
-                }
-                
-            }
-        }
         
         write(pipefd, granata, sizeof(Entity));
         usleep(100000);
@@ -119,10 +97,11 @@ void processoGranata(Entity *granata, int pipefd, int pipeEvent, Frog frog){
         //             granata->y = frog.base.y;
         //         }
         //     }
-        // }
-        
+        // }   
     }
-
 }
 
-
+int movimento(){
+    int input = getch();
+    return input;
+}
