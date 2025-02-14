@@ -65,34 +65,33 @@ void creaCroco(Crocodile croco[], int numCroco,int pipefd[2]) {
     }
 }
 
-void creaProiettile(Entity proiettile[],int pipefd[2], int pipeEvent[2],int numCroco, Crocodile croco[]) {
+void creaProiettile(Entity proiettile[], int pipefd[2], int pipeEvent[2], int numCroco, Crocodile croco[]) {
     srand(time(NULL));
 
     // Seleziona un coccodrillo casuale
-   for (int i = 0; i < numCroco; i++) {
+    int index = rand() % numCroco;
 
     // Imposta i dati del proiettile
-    
-    proiettile[i].x = croco[i].base.x;
-    proiettile[i].y = croco[i].base.y;
+    proiettile[index].x = croco[index].base.x;
+    proiettile[index].y = croco[index].base.y;
 
     // Crea un processo figlio per il proiettile
-    proiettile[i].pid = fork();
-    if (proiettile[i].pid == -1) {
+    proiettile[index].pid = fork();
+    if (proiettile[index].pid == -1) {
         perror("Errore nella creazione della fork");
         _exit(1);
     }
-    if (proiettile[i].pid == 0) {  // Processo figlio (proiettile)
+
+    if (proiettile[index].pid == 0) {  // Processo figlio (proiettile)
         close(pipefd[0]);  // Chiudi il lato di lettura della pipe
-        // Esegui altre operazioni nel processo figlio proiettile
-        processoProiettile(&proiettile[i], pipefd[1], pipeEvent[0], &croco[i]);
+        processoProiettile(&proiettile[index], pipefd[1], pipeEvent[0], &croco[index], numCroco);  // Esempio di scrittura nella pipe
         close(pipeEvent[1]);  // Chiudi il lato di scrittura della pipe
-        close(pipeEvent[0]);  // Chiudi il lato di scrittura della pipe
         close(pipefd[1]);
+        close(pipeEvent[0]);  // Chiudi il lato di lettura della pipe
         _exit(0);  // Esci dal processo figlio
-        }
     }
 }
+
 
 void creaGranata(Entity granata[],int pipefd[2], int pipeEvent[2],Frog frog) {
      for (int i=0; i <2; i++){

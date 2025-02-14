@@ -75,23 +75,25 @@ void funzionamento_gioco(Frog frog, Crocodile croco[],int numCroco,Entity proiet
     }
     creaRano(frog, pipefd, pipeEvent);
     creaCroco(croco, numCroco,pipefd);
-    // creaGranata(granata, pipefd, pipeEvent, frog);
+    //creaGranata(granata, pipefd, pipeEvent, frog);
     creaProiettile(proiettile, pipefd, pipeEvent, numCroco, croco);
 	while(1){
         int input = movimento();
-        if (input != ERR){
+        
         if (input == ' ') {
-            for (int i=0; i <2; i++){
-                if (granata[i].pid > 0) {  // Se il processo esiste
-                    kill(granata[i].pid, SIGKILL); 
-                    waitpid(granata[i].pid, NULL, WNOHANG); // Aspetta la terminazione                        
-                    granata[i].pid = 0;  // Resetta il PID dopo la terminazione
-                }
-            creaGranata(granata, pipefd, pipeEvent, frog);}
-            }
+            creaGranata(granata, pipefd, pipeEvent, frog);
+            // for (int i=0; i <2; i++){
+                // if (granata[i].pid > 0) {  // Se il processo esiste
+                
+                //     kill(granata[i].pid, SIGKILL); 
+                //     waitpid(granata[i].pid, NULL,0); // Aspetta la terminazione                        
+                //     granata[i].pid = 0;  // Resetta il PID dopo la terminazione
+                // }
+            // }
         }
+        
 
-	gestisci_vite(frog.lives, start_time);
+	    gestisci_vite(frog.lives, start_time);
         // Leggi i messaggi dalla pipe
         if (read(pipefd[0], &msg, sizeof(Entity)) > 0) {
             if (msg.id == 0) {

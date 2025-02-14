@@ -66,16 +66,17 @@ void processoGranata(Entity *granata, int pipefd, int pipeEvent, Frog frog){
         
         if(granata->id == 61){
                 entity_move(granata, 1, 0);
-                if(granata->x > COLS-3){
+                if(granata->x > COLS-1){
                     // kill(granata->pid, SIGTERM);
                     waitpid(granata->pid, NULL,0);
+                    granata->pid = 0;
                     _exit(0);
                 }
             }
             
         else if(granata->id == 60){
                 entity_move(granata, -1, 0);
-                if(granata->x < 2){ 
+                if(granata->x < 0){ 
                     // kill(granata->pid, SIGTERM);
                     waitpid(granata->pid, NULL,0);
                     _exit(0);

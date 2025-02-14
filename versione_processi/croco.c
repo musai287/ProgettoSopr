@@ -46,24 +46,32 @@ void stampCocco(WINDOW *gioco, int numCroco, Crocodile croco[]) {
     }          
    }
 
-void processoProiettile(Entity *proiettile, int pipefd, int pipeEvent, Crocodile *croco){
+   void processoProiettile(Entity *proiettile, int pipefd, int pipeEvent, Crocodile croco[], int numCroco) {
     int delayMovimento = 2;
-    srand(time(NULL)+proiettile->id); // Random seed unico per ogni processo
+    srand(time(NULL) + proiettile->id); // Random seed unico per ogni processo
     sleep(rand() % delayMovimento);
-    while(1){
-        if(croco->direction == 1){
-            entity_move(proiettile, 1, 0);    
-        }else{
+
+    // Sceglie un coccodrillo iniziale casuale
+    int indexCroco = rand() % numCroco+1;
+    // proiettile->x = croco[indexCroco].base.x;
+    // proiettile->y = croco[indexCroco].base.y;
+
+    while (1) {
+        if (proiettile->x > COLS || proiettile->x <= -7) {
+            // Se il proiettile esce dallo schermo, cambia coccodrillo
+            indexCroco = rand() % numCroco;
+            proiettile->x = croco[indexCroco].base.x;
+            proiettile->y = croco[indexCroco].base.y;
+        }
+
+        // Muove il proiettile nella direzione del coccodrillo selezionato
+        if (croco[indexCroco].direction == 1) {
+            entity_move(proiettile, 1, 0);
+        } else {
             entity_move(proiettile, -1, 0);
         }
-        if (proiettile->x > COLS) {
-            proiettile->x = croco->base.x;
-            usleep(rand() % delayMovimento); // Pausa randomica
-        }
-        if(proiettile->x <= -7){
-            proiettile->x = croco->base.x;
-            usleep(rand() % delayMovimento); // Pausa randomica
-            }
+
+        // Scrive nella pipe lo stato aggiornato
         write(pipefd, proiettile, sizeof(Entity));
         usleep(100000);
     }
