@@ -77,9 +77,13 @@ void funzionamento_gioco(Frog frog, Crocodile croco[],int numCroco,Entity proiet
     creaCroco(croco, numCroco,pipefd);
     //creaGranata(granata, pipefd, pipeEvent, frog);
     creaProiettile(proiettile, pipefd, pipeEvent, numCroco, croco);
-	while(1){
+	int proiettileOn = 0;
+    while(1){
+        if(!proiettileOn){
+            creaProiettile(proiettile, pipefd, pipeEvent, numCroco, croco);
+            proiettileOn = 1;
+        }
         int input = movimento();
-        
         if (input == ' ') {
             creaGranata(granata, pipefd, pipeEvent, frog);
             // for (int i=0; i <2; i++){
@@ -195,6 +199,17 @@ void funzionamento_gioco(Frog frog, Crocodile croco[],int numCroco,Entity proiet
             write(pipeEvent[1], &evento, sizeof(Event));
             start_time = time(NULL);
             frog.lives--;
+        }
+        int proiettileFuoriFlag = proiettileFuori(proiettile);
+        if (proiettileFuoriFlag) {
+            evento.tipo = 10;
+            evento.data = proiettileFuoriFlag;  // Evento che dice al proiettile di tornare alla posizione iniziale
+            write(pipeEvent[1], &evento, sizeof(Event));
+            proiettileOn = 0;
+        } else {
+            evento.tipo = 0;
+            evento.data = proiettileFuoriFlag;
+             // Tipo di evento che dice al proiettile di fare un movimento
         }
 
         /*win lose condition*/

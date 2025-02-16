@@ -18,3 +18,4 @@ int ranaInTanaCheck(Frog *frog, Map *tana);
 int ranaInTana(Frog *frog, Map *tana);
 int ranaProiettileCheck(Frog *frog, Entity *proiettile, int numCroco);
 int ranaProiettile(Frog *frog, Entity *proiettile, int numCroco);
+int proiettileFuori(Entity *proiettile);
