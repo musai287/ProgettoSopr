@@ -58,14 +58,19 @@ void stampCocco(WINDOW *gioco, int numCroco, Crocodile croco[]) {
      proiettile->y = croco[indexCroco].base.y;
 
     while (1) {
-        if (proiettile->x > COLS || proiettile->x <= -7) {
-            // Se il proiettile esce dallo schermo, cambia coccodrillo
-            // indexCroco = rand() % numCroco;
-            // proiettile->x = croco[indexCroco].base.x;
-            // proiettile->y = croco[indexCroco].base.y;
-            waitpid(proiettile->pid, NULL, 0);
-            _exit(0);
-        }
+        if (read(pipeEvent, &evento, sizeof(Event)) > 0) {
+            if (evento.tipo == 10) {
+                waitpid(proiettile->pid, NULL, 0);
+                _exit(0);
+            }
+        // if (proiettile->x > COLS || proiettile->x <= -7) {
+        //     // Se il proiettile esce dallo schermo, cambia coccodrillo
+        //     // indexCroco = rand() % numCroco;
+        //     // proiettile->x = croco[indexCroco].base.x;
+        //     // proiettile->y = croco[indexCroco].base.y;
+        //     waitpid(proiettile->pid, NULL, 0);
+        //     _exit(0);
+        // }
 
         // Muove il proiettile nella direzione del coccodrillo selezionato
         if (croco[indexCroco].direction == 1) {
@@ -77,11 +82,6 @@ void stampCocco(WINDOW *gioco, int numCroco, Crocodile croco[]) {
         // Scrive nella pipe lo stato aggiornato
         write(pipefd, proiettile, sizeof(Entity));
         usleep(100000);
-        if (read(pipeEvent, &evento, sizeof(Event)) > 0) {
-            if (evento.tipo == 10) {
-                
-                _exit(0);
-            }
         }
     }
 }

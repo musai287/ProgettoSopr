@@ -69,7 +69,7 @@ void creaProiettile(Entity proiettile[], int pipefd[2], int pipeEvent[2], int nu
     srand(time(NULL));
 
     // Seleziona un coccodrillo casuale
-    int index = rand() % numCroco;
+    int index = rand() % numCroco+1;
 
     // Imposta i dati del proiettile
     proiettile[index].x = croco[index].base.x;

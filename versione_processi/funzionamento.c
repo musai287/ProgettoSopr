@@ -76,13 +76,14 @@ void funzionamento_gioco(Frog frog, Crocodile croco[],int numCroco,Entity proiet
     creaRano(frog, pipefd, pipeEvent);
     creaCroco(croco, numCroco,pipefd);
     //creaGranata(granata, pipefd, pipeEvent, frog);
-    creaProiettile(proiettile, pipefd, pipeEvent, numCroco, croco);
-	int proiettileOn = 0;
+    //creaProiettile(proiettile, pipefd, pipeEvent, numCroco, croco);
     while(1){
-        if(!proiettileOn){
-            creaProiettile(proiettile, pipefd, pipeEvent, numCroco, croco);
+        int proiettileOn = 0;
+        while(proiettileOn == 0){
             proiettileOn = 1;
+            creaProiettile(proiettile, pipefd, pipeEvent, numCroco, croco);
         }
+
         int input = movimento();
         if (input == ' ') {
             creaGranata(granata, pipefd, pipeEvent, frog);
@@ -209,8 +210,7 @@ void funzionamento_gioco(Frog frog, Crocodile croco[],int numCroco,Entity proiet
         } else {
             evento.tipo = 0;
             evento.data = proiettileFuoriFlag;
-             // Tipo di evento che dice al proiettile di fare un movimento
-        }
+            }
 
         /*win lose condition*/
 
