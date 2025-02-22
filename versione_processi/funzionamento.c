@@ -77,9 +77,9 @@ void funzionamento_gioco(Frog frog, Crocodile croco[],int numCroco,Entity proiet
     creaCroco(croco, numCroco,pipefd);
     //creaGranata(granata, pipefd, pipeEvent, frog);
     //creaProiettile(proiettile, pipefd, pipeEvent, numCroco, croco);
+    int proiettileOn = 0;
     while(1){
-        int proiettileOn = 0;
-        while(proiettileOn == 0){
+        if(proiettileOn == 0){
             proiettileOn = 1;
             creaProiettile(proiettile, pipefd, pipeEvent, numCroco, croco);
         }
