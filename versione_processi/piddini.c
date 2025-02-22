@@ -72,9 +72,9 @@ void creaProiettile(Entity proiettile[], int pipefd[2], int pipeEvent[2], int nu
     int index = rand() % numCroco+1;
 
     // Imposta i dati del proiettile
-    proiettile[index].x = croco[index].base.x;
-    proiettile[index].y = croco[index].base.y;
-
+    // proiettile[index].x = croco[index].base.x;
+    // proiettile[index].y = croco[index].base.y;
+   
     // Crea un processo figlio per il proiettile
     proiettile[index].pid = fork();
     if (proiettile[index].pid == -1) {

@@ -56,7 +56,9 @@ int main(){
     Entity proiettile[numCroco]; // Inizializza il proiettile   
     for(int i=0; i < numCroco; i++){
         proiettile[i] = initProiettile();
-        proiettile[i].id =30+i; 
+        proiettile[i].id =30+i;
+        proiettile[i].x = croco[i].base.x;
+        proiettile[i].y = croco[i].base.y;   
     }
     
     // creaProiettile(proiettile, pipefd, pipeEvent, numCroco, croco);

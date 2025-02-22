@@ -196,7 +196,7 @@ void funzionamento_gioco(Frog frog, Crocodile croco[],int numCroco,Entity proiet
             evento.tipo = 10;
             evento.data = proiettileFuoriFlag;  // Evento che dice al proiettile di tornare alla posizione iniziale
             write(pipeEvent[1], &evento, sizeof(Event));
-            proiettileOn = 0;
+            // proiettileOn = 0;
         }
 
         /*win lose condition*/
@@ -257,6 +257,10 @@ void funzionamento_gioco(Frog frog, Crocodile croco[],int numCroco,Entity proiet
 
          mvwprintw(gioco, 2, 1, "evento tipo =%d evento data = %d manche = %d",
                                               evento.tipo, evento.data, manche);
+
+        mvwprintw(gioco, 3, 1, "proiettile: id=%2d, pid=%2d, x=%2d,\n proiettile on = %2d \n",
+        proiettile->id, proiettile->pid, proiettile->x,proiettileOn);
+        
         stampaEntity(gioco, &frog.base);
         box(gioco, 0, 0);
         wrefresh(gioco);
