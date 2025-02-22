@@ -139,8 +139,5 @@ int ranaProiettile(Frog *frog, Entity *proiettile,int  numCroco) {
 }
 
 int proiettileFuori(Entity *proiettile) {
-    if (proiettile->x > COLS || proiettile->x <= -7) {
-        return 1;  // Il proiettile è fuori dallo schermo
-    }
-    return 0;  // Il proiettile è ancora sullo schermo
+    return (proiettile->x > COLS || proiettile->x <= -7);
 }

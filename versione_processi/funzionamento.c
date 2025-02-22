@@ -75,26 +75,16 @@ void funzionamento_gioco(Frog frog, Crocodile croco[],int numCroco,Entity proiet
     }
     creaRano(frog, pipefd, pipeEvent);
     creaCroco(croco, numCroco,pipefd);
-    //creaGranata(granata, pipefd, pipeEvent, frog);
-    //creaProiettile(proiettile, pipefd, pipeEvent, numCroco, croco);
     int proiettileOn = 0;
     while(1){
         if(proiettileOn == 0){
-            proiettileOn = 1;
             creaProiettile(proiettile, pipefd, pipeEvent, numCroco, croco);
+            proiettileOn = 1;
         }
 
         int input = movimento();
         if (input == ' ') {
             creaGranata(granata, pipefd, pipeEvent, frog);
-            // for (int i=0; i <2; i++){
-                // if (granata[i].pid > 0) {  // Se il processo esiste
-                
-                //     kill(granata[i].pid, SIGKILL); 
-                //     waitpid(granata[i].pid, NULL,0); // Aspetta la terminazione                        
-                //     granata[i].pid = 0;  // Resetta il PID dopo la terminazione
-                // }
-            // }
         }
         
 
@@ -207,10 +197,7 @@ void funzionamento_gioco(Frog frog, Crocodile croco[],int numCroco,Entity proiet
             evento.data = proiettileFuoriFlag;  // Evento che dice al proiettile di tornare alla posizione iniziale
             write(pipeEvent[1], &evento, sizeof(Event));
             proiettileOn = 0;
-        } else {
-            evento.tipo = 0;
-            evento.data = proiettileFuoriFlag;
-            }
+        }
 
         /*win lose condition*/
 
