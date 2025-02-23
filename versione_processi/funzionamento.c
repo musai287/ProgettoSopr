@@ -77,12 +77,12 @@ void funzionamento_gioco(Frog frog, Crocodile croco[],int numCroco,Entity proiet
     creaRano(frog, pipefd, pipeEvent);
     creaCroco(croco, numCroco,pipefd);
     int proiettileOn = 0;
-    creaProiettile(&proiettile, pipefd, pipeEvent, numCroco, croco);
     while(1){
         
-        // if(proiettileOn == 0){
-        //     proiettileOn = 1;
-        // }
+        if(proiettileOn == 0){
+            creaProiettile(&proiettile, pipefd, pipeEvent, numCroco, croco);
+            proiettileOn = 1;
+        }
 
         int input = movimento();
         if (input == ' ') {
