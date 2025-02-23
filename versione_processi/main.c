@@ -53,13 +53,10 @@ int main(){
     }
     // creaGranata(granata, pipefd, pipeEvent, frog);
 
-    Entity proiettile[numCroco]; // Inizializza il proiettile   
-    for(int i=0; i < numCroco; i++){
-        proiettile[i] = initProiettile();
-        proiettile[i].id =30+i;
-        proiettile[i].x = croco[i].base.x;
-        proiettile[i].y = croco[i].base.y;   
-    }
+    Entity proiettile; // Inizializza il proiettile   
+    proiettile = initProiettile();
+    proiettile.id =30;  
+    
     
     // creaProiettile(proiettile, pipefd, pipeEvent, numCroco, croco);
 
@@ -78,9 +75,10 @@ int main(){
     for (int i = 0; i < numCroco; i++) {
         kill(croco[i].base.pid, SIGKILL);  
         waitpid(croco[i].base.pid, NULL, 0);
-        kill(proiettile[i].pid, SIGKILL);
-        waitpid(proiettile[i].pid, NULL, 0);
+       
     }
+    kill(proiettile.pid, SIGKILL);
+    waitpid(proiettile.pid, NULL, 0);
     endwin();
     return 0;
 }

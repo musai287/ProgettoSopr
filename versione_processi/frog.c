@@ -53,7 +53,7 @@ void processoRana(Frog frog,int pipe_fd,int pipeEvent){
                 frog.base.x = (COLS /2) - 3;
                 frog.base.y = LINES - 5;
             } 
-            else if (evento.tipo == 4 || evento.tipo == 6 || evento.tipo == 8){ 
+            else if (evento.tipo == 4 || evento.tipo == 6 || evento.tipo == 8 || evento.tipo == 3){ 
                 frog.base.x = (COLS /2) - 3;
                 frog.base.y = LINES - 5;
             }

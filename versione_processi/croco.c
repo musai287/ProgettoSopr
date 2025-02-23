@@ -63,14 +63,14 @@ void stampCocco(WINDOW *gioco, int numCroco, Crocodile croco[]) {
                 waitpid(proiettile->pid, NULL, 0);
                 _exit(0);
             }
-        // if (proiettile->x > COLS || proiettile->x <= -7) {
-        //     // Se il proiettile esce dallo schermo, cambia coccodrillo
-        //     // indexCroco = rand() % numCroco;
-        //     // proiettile->x = croco[indexCroco].base.x;
-        //     // proiettile->y = croco[indexCroco].base.y;
-        //     waitpid(proiettile->pid, NULL, 0);
-        //     _exit(0);
-        // }
+        if (proiettile->x >= COLS-1 || proiettile->x <= -6) {
+            // Se il proiettile esce dallo schermo, cambia coccodrillo
+            indexCroco = rand() % numCroco;
+            proiettile->x = croco[indexCroco].base.x;
+            proiettile->y = croco[indexCroco].base.y;
+            // waitpid(proiettile->pid, NULL, 0);
+            // _exit(0);
+        }
 
         // Muove il proiettile nella direzione del coccodrillo selezionato
         if (croco[indexCroco].direction == 1) {

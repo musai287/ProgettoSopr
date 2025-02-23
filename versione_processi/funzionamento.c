@@ -61,8 +61,9 @@ void gestisci_vite(int vite, time_t start_time) {
     }
 }
 
-void funzionamento_gioco(Frog frog, Crocodile croco[],int numCroco,Entity proiettile[],Entity granata[],int *pipefd, int *pipeEvent) {
-
+void funzionamento_gioco(Frog frog, Crocodile croco[],int numCroco,Entity proiettile,Entity granata[],int *pipefd, int *pipeEvent) {
+    
+    srand(time(NULL));
     Entity msg;
     Event evento;
     int manche = 1;
@@ -76,11 +77,12 @@ void funzionamento_gioco(Frog frog, Crocodile croco[],int numCroco,Entity proiet
     creaRano(frog, pipefd, pipeEvent);
     creaCroco(croco, numCroco,pipefd);
     int proiettileOn = 0;
+    creaProiettile(&proiettile, pipefd, pipeEvent, numCroco, croco);
     while(1){
-        if(proiettileOn == 0){
-            creaProiettile(proiettile, pipefd, pipeEvent, numCroco, croco);
-            proiettileOn = 1;
-        }
+        
+        // if(proiettileOn == 0){
+        //     proiettileOn = 1;
+        // }
 
         int input = movimento();
         if (input == ' ') {
@@ -108,9 +110,9 @@ void funzionamento_gioco(Frog frog, Crocodile croco[],int numCroco,Entity proiet
             else if(msg.id >=30 && msg.id < 59) {
                 // Aggiorna il proiettile
                 for (int i = 0; i < numCroco; i++) {
-                    if (proiettile[i].id == msg.id) {
-                        proiettile[i].x = msg.x;
-                        proiettile[i].y = msg.y;
+                    if (proiettile.id == msg.id) {
+                        proiettile.x = msg.x;
+                        proiettile.y = msg.y;
                     }
                 }
                 
@@ -165,7 +167,7 @@ void funzionamento_gioco(Frog frog, Crocodile croco[],int numCroco,Entity proiet
             evento.data = tanaFlag;  // Tipo di evento che dice alla rana di fare un movimento
         }
 
-        int proiettileFlag = ranaProiettile(&frog, proiettile, numCroco);
+        int proiettileFlag = ranaProiettile(&frog, &proiettile, numCroco);
         if (proiettileFlag) {
             evento.tipo = 6;
             evento.data = proiettileFlag;  // Evento che dice alla rana di morire
@@ -191,13 +193,13 @@ void funzionamento_gioco(Frog frog, Crocodile croco[],int numCroco,Entity proiet
             start_time = time(NULL);
             frog.lives--;
         }
-        int proiettileFuoriFlag = proiettileFuori(proiettile);
-        if (proiettileFuoriFlag) {
-            evento.tipo = 10;
-            evento.data = proiettileFuoriFlag;  // Evento che dice al proiettile di tornare alla posizione iniziale
-            write(pipeEvent[1], &evento, sizeof(Event));
-            // proiettileOn = 0;
-        }
+        // int proiettileFuoriFlag = proiettileFuori(&proiettile);
+        // if (proiettileFuoriFlag) {
+        //     evento.tipo = 10;
+        //     evento.data = proiettileFuoriFlag;  // Evento che dice al proiettile di tornare alla posizione iniziale
+        //     write(pipeEvent[1], &evento, sizeof(Event));
+        //     // proiettileOn = 0;
+        // }
 
         /*win lose condition*/
 
@@ -248,8 +250,8 @@ void funzionamento_gioco(Frog frog, Crocodile croco[],int numCroco,Entity proiet
         for (int i = 0; i < 2; i++){
         stampaEntity(gioco, &granata[i]);}
 
-        for (int i = 0; i < numCroco; i++) {
-        stampaEntity(gioco, &proiettile[i]);}
+        
+        stampaEntity(gioco, &proiettile);
 		wattroff(gioco, COLOR_PAIR(5));
 
         mvwprintw(gioco, 1, 1, "Letto messaggio: id=%2d, x=%2d, y=%2d \n",
@@ -259,7 +261,7 @@ void funzionamento_gioco(Frog frog, Crocodile croco[],int numCroco,Entity proiet
                                               evento.tipo, evento.data, manche);
 
         mvwprintw(gioco, 3, 1, "proiettile: id=%2d, pid=%2d, x=%2d,\n proiettile on = %2d \n",
-        proiettile->id, proiettile->pid, proiettile->x,proiettileOn);
+        proiettile.id, proiettile.pid, proiettile.x,proiettileOn);
         
         stampaEntity(gioco, &frog.base);
         box(gioco, 0, 0);
