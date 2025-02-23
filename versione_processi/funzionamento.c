@@ -74,20 +74,21 @@ void funzionamento_gioco(Frog frog, Crocodile croco[],int numCroco,Entity proiet
         tana[i].x = 2 + i * 10;
         tana[i].y = 1;
     }
-    creaRano(frog, pipefd, pipeEvent);
+    creaRano(frog, pipefd, pipeEvent, granata);
     creaCroco(croco, numCroco,pipefd);
     int proiettileOn = 0;
     while(1){
         
         if(proiettileOn == 0){
+            
             creaProiettile(&proiettile, pipefd, pipeEvent, numCroco, croco);
             proiettileOn = 1;
         }
 
-        int input = movimento();
-        if (input == ' ') {
-            creaGranata(granata, pipefd, pipeEvent, frog);
-        }
+        // int input = movimento();
+        // if (input == ' ') {
+        //     creaGranata(granata, pipefd, pipeEvent, frog);
+        // }
         
 
 	    gestisci_vite(frog.lives, start_time);
@@ -260,8 +261,8 @@ void funzionamento_gioco(Frog frog, Crocodile croco[],int numCroco,Entity proiet
          mvwprintw(gioco, 2, 1, "evento tipo =%d evento data = %d manche = %d",
                                               evento.tipo, evento.data, manche);
 
-        mvwprintw(gioco, 3, 1, "proiettile: id=%2d, pid=%2d, x=%2d,\n proiettile on = %2d \n",
-        proiettile.id, proiettile.pid, proiettile.x,proiettileOn);
+        mvwprintw(gioco, 3, 1, "granata: id=%2d, pid=%2d, x=%2d,\n proiettile on = %2d \n",
+        granata->id, granata->pid, granata->x,proiettileOn);
         
         stampaEntity(gioco, &frog.base);
         box(gioco, 0, 0);

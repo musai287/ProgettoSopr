@@ -19,7 +19,7 @@ void creaPipe(int pipe_fd[2]) {
     }
 }
 
-void creaRano(Frog frog,int pipefd[2], int pipeEvent[2]) {
+void creaRano(Frog frog,int pipefd[2], int pipeEvent[2], Entity granata[]) {
     frog.base.pid = fork();
     if (frog.base.pid == -1) {
         perror("Errore nella creazione della prima fork");
@@ -29,7 +29,7 @@ void creaRano(Frog frog,int pipefd[2], int pipeEvent[2]) {
     if (frog.base.pid == 0) {  // Processo figlio (rana)
         close(pipefd[0]);  // Chiudi il lato di lettura della pipe
         // Esegui altre operazioni nel processo figlio 'rana'
-        processoRana(frog, pipefd[1], pipeEvent[0]);  // Esempio di scrittura nella pipe
+        processoRana(frog, pipefd[1], pipeEvent[0],granata);  // Esempio di scrittura nella pipe
         close(pipeEvent[1]);  // Chiudi il lato di scrittura della pipe
         close(pipefd[1]);
         close(pipeEvent[0]);
@@ -93,29 +93,21 @@ void creaProiettile(Entity *proiettile, int pipefd[2], int pipeEvent[2], int num
 }
 
 
-void creaGranata(Entity granata[],int pipefd[2], int pipeEvent[2],Frog frog) {
-     for (int i=0; i <2; i++){
-        granata[0].id = 60;
-        granata[1].id = 61;
-        granata[0].x = frog.base.x - 1;
-        granata[0].y = frog.base.y;    
-        granata[1].x = frog.base.x + 3;
-        granata[1].y = frog.base.y;
-        granata[0].sprite = spriteGranata;
-        granata[1].sprite = spriteGranata;
-        granata[i].pid = fork();
-        if (granata[i].pid == -1) {
-            perror("Errore nella creazione della fork");
-            _exit(1);
-        }if (granata[i].pid == 0) {  // Processo figlio granata
-            close(pipefd[0]);  // Chiudi il lato di lettura della pipe
-        // Esegui altre operazioni nel processo figlio proiettile
-            processoGranata(&granata[i], pipefd[1], pipeEvent[0], frog);  // Esempio di scrittura nella pipe
-            close(pipeEvent[1]);  // Chiudi il lato di scrittura della pipe
-            close(pipefd[1]);
-            close(pipeEvent[0]);
-            _exit(0);  // Esci dal processo figlio
+void creaGranata(Entity granata[],int pipefd, int pipeEvent,Frog frog) {
+    granata->x = frog.base.x + (granata->id == 60 ? -1 : 3);  // Posizione a sinistra o destra
+    granata->y = frog.base.y;
+    granata->sprite = spriteGranata;
+    granata->pid = fork();
+
+    if (granata->pid == -1) {
+        perror("Errore nella creazione della fork");
+        _exit(1);
     }
+
+    if (granata->pid == 0) {  // Processo figlio per la granata
+        processoGranata(granata, pipefd, pipeEvent, frog);  // Gestione movimento e scrittura nella pipe
+        _exit(0);  // Esci dal processo figlio
     }
 }
+
 

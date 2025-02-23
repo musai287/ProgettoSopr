@@ -9,8 +9,8 @@
 #include "struct.h"
 #include "frog.h"
 
-void processoRana(Frog frog,int pipe_fd,int pipeEvent){
-
+void processoRana(Frog frog,int pipe_fd,int pipeEvent, Entity granata[]){
+    
     Event evento;   
     while(1){
         int input = movimento();
@@ -31,6 +31,10 @@ void processoRana(Frog frog,int pipe_fd,int pipeEvent){
             break;
             case KEY_RIGHT:
                 new_x += 1;
+            break;
+            case ' ' :
+            for (int i = 0; i < 2; i++) {
+                creaGranata(&granata[i], pipe_fd, pipeEvent, frog);}
             break;
            
         }
@@ -53,7 +57,10 @@ void processoRana(Frog frog,int pipe_fd,int pipeEvent){
                 frog.base.x = (COLS /2) - 3;
                 frog.base.y = LINES - 5;
             } 
-            else if (evento.tipo == 4 || evento.tipo == 6 || evento.tipo == 8 || evento.tipo == 3){ 
+            else if (evento.tipo == 4 || 
+                     evento.tipo == 6 ||
+                     evento.tipo == 8 ||
+                     evento.tipo == 3){ 
                 frog.base.x = (COLS /2) - 3;
                 frog.base.y = LINES - 5;
             }
@@ -67,7 +74,7 @@ void processoGranata(Entity *granata, int pipefd, int pipeEvent, Frog frog){
         if(granata->id == 61){
                 entity_move(granata, 1, 0);
                 if(granata->x > COLS-1){
-                    // kill(granata->pid, SIGTERM);
+                    
                     waitpid(granata->pid, NULL,0);
                     granata->pid = 0;
                     _exit(0);
@@ -77,7 +84,7 @@ void processoGranata(Entity *granata, int pipefd, int pipeEvent, Frog frog){
         else if(granata->id == 60){
                 entity_move(granata, -1, 0);
                 if(granata->x < 0){ 
-                    // kill(granata->pid, SIGTERM);
+
                     waitpid(granata->pid, NULL,0);
                     _exit(0);
                 }
@@ -85,20 +92,6 @@ void processoGranata(Entity *granata, int pipefd, int pipeEvent, Frog frog){
         
         write(pipefd, granata, sizeof(Entity));
         usleep(100000);
-        
-        // if (read(pipeEvent, &evento, sizeof(Event)) <= 0){continue;}
-        // if (read(pipeEvent, &evento, sizeof(Event)) > 0) {
-        //    if(evento.tipo == 5){
-        //         if(granata->id == 60){
-        //             granata->x = frog.base.x - 1;
-        //             granata->y = frog.base.y;
-        //         }
-        //         else if(granata->id == 61){
-        //             granata->x = frog.base.x + 3;
-        //             granata->y = frog.base.y;
-        //         }
-        //     }
-        // }   
     }
 }
 

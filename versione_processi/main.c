@@ -49,7 +49,7 @@ int main(){
     Entity granata[2]; // Inizializza la granata
     for (int i=0; i <2; i++){
         granata[i] = initGranata();
-        //granata[i].id++;
+        granata[i].id = 60 + i;
     }
     // creaGranata(granata, pipefd, pipeEvent, frog);
 
