@@ -105,7 +105,7 @@ void creaGranata(Entity granata[],int pipefd,Frog frog, Entity *proiettile) {
     }
 
     if (granata->pid == 0) {  // Processo figlio per la granata
-        processoGranata(granata, pipefd, frog, proiettile);  // Gestione movimento e scrittura nella pipe
+        processoGranata(granata, pipefd, proiettile);  // Gestione movimento e scrittura nella pipe
         _exit(0);  // Esci dal processo figlio
     }
 }

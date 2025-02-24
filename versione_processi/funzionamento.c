@@ -143,7 +143,7 @@ void funzionamento_gioco(Frog frog, Crocodile croco[],int numCroco,Entity proiet
         int fiumeFlag = ranaInFiume(&frog, croco, numCroco);
             if(fiumeFlag){
                 evento.tipo = 3;
-                evento.data = fiumeFlag;
+                
                 write(pipeEvent[1], &evento, sizeof(Event)); // Evento che dice alla rana di morire
                 frog.lives--;
                 start_time = time(NULL);
@@ -154,8 +154,8 @@ void funzionamento_gioco(Frog frog, Crocodile croco[],int numCroco,Entity proiet
 
         int tanaFlag = ranaInTana(&frog, tana);
         if (tanaFlag) {
-            evento.tipo = 4;
-            evento.data = tanaFlag;  // Tipo di evento che dice alla rana di fare un movimento
+            evento.tipo = 3;
+            // evento.data = tanaFlag;  // Tipo di evento che dice alla rana di fare un movimento
             write(pipeEvent[1], &evento, sizeof(Event));
             manche++;
             int tempoImpiegato = (int)(time(NULL) - start_time);
@@ -170,11 +170,11 @@ void funzionamento_gioco(Frog frog, Crocodile croco[],int numCroco,Entity proiet
 
         int proiettileFlag = ranaProiettile(&frog, &proiettile);
         if (proiettileFlag) {
-            evento.tipo = 6;
-            evento.data = proiettileFlag;  // Evento che dice alla rana di morire
+            evento.tipo = 3;
+            // evento.data = proiettileFlag;  // Evento che dice alla rana di morire
             write(pipeEvent[1], &evento, sizeof(Event));
-            frog.lives--;
             start_time = time(NULL);
+            frog.lives--;
 
 
         } else {
@@ -242,20 +242,17 @@ void funzionamento_gioco(Frog frog, Crocodile croco[],int numCroco,Entity proiet
         
         stampaEntity(gioco, &proiettile);
 		wattroff(gioco, COLOR_PAIR(5));
-
-        // mvwprintw(gioco, 1, 1, "Letto messaggio: id=%2d, x=%2d, y=%2d \n",
-        //                                           msg.id, msg.x, msg.y);
-
-        //  mvwprintw(gioco, 2, 1, "evento tipo =%d evento data = %d manche = %d",
-        //                                       evento.tipo, evento.data, manche);
-
-        // mvwprintw(gioco, 3, 1, "granata: id=%2d, pid=%2d, x=%2d,\n proiettile on = %2d \n",
-        // granata->id, granata->pid, granata->x,proiettileOn);
-        
+/*----------stampe per il debug
+mvwprintw(gioco, 1, 1, "Letto messaggio: id=%2d, x=%2d, y=%2d \n",
+msg.id, msg.x, msg.y);
+mvwprintw(gioco, 2, 1, "evento tipo =%d evento data = %d manche = %d",
+evento.tipo, evento.data, manche);
+mvwprintw(gioco, 3, 1, "granata: id=%2d, pid=%2d, x=%2d,\n proiettile on = %2d \n",
+granata->id, granata->pid, granata->x,proiettileOn);
+*/ 
         stampaEntity(gioco, &frog.base);
         box(gioco, 0, 0);
         wrefresh(gioco);
-        /*richiamo la funzione delle vite.*/
 	}
 }
 

@@ -126,7 +126,7 @@ int ranaProiettile(Frog *frog, Entity *proiettile) {
     int sopraProiettile = ranaProiettileCheck(frog, proiettile);
     if (sopraProiettile > 0) {
         evento.tipo = 6;
-        evento.data = proiettile[sopraProiettile].id;  // Evento che dice alla rana di morire
+        evento.data = proiettile->id;  // Evento che dice alla rana di morire
         return evento.data;  // La rana è stata colpita
         }
     

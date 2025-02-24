@@ -57,18 +57,18 @@ void processoRana(Frog frog,int pipe_fd,int pipeEvent, Entity granata[], Entity 
                 frog.base.x = (COLS /2) - 3;
                 frog.base.y = LINES - 5;
             } 
-            else if (evento.tipo == 4 || 
-                     evento.tipo == 6 ||
-                     evento.tipo == 8 ||
-                     evento.tipo == 3){ 
-                frog.base.x = (COLS /2) - 3;
-                frog.base.y = LINES - 5;
-            }
+            // else if (evento.tipo == 4 || 
+            //          evento.tipo == 6 ||
+            //          evento.tipo == 8 ||
+            //          evento.tipo == 3){ 
+            //     frog.base.x = (COLS /2) - 3;
+            //     frog.base.y = LINES - 5;
+            // }
         }
     }
 }
 
-void processoGranata(Entity *granata, int pipefd, Frog frog, Entity *proiettile){
+void processoGranata(Entity *granata, int pipefd, Entity *proiettile){
     while(1){
         
         if(granata->id == 61){
