@@ -9,7 +9,7 @@
 #include "struct.h"
 #include "frog.h"
 
-void processoRana(Frog frog,int pipe_fd,int pipeEvent, Entity granata[]){
+void processoRana(Frog frog,int pipe_fd,int pipeEvent, Entity granata[], Entity *proiettile){
     
     Event evento;   
     while(1){
@@ -34,7 +34,7 @@ void processoRana(Frog frog,int pipe_fd,int pipeEvent, Entity granata[]){
             break;
             case ' ' :
             for (int i = 0; i < 2; i++) {
-                creaGranata(&granata[i], pipe_fd, pipeEvent, frog);}
+                creaGranata(&granata[i], pipe_fd, frog, proiettile);}
             break;
            
         }
@@ -68,7 +68,7 @@ void processoRana(Frog frog,int pipe_fd,int pipeEvent, Entity granata[]){
     }
 }
 
-void processoGranata(Entity *granata, int pipefd, int pipeEvent, Frog frog){
+void processoGranata(Entity *granata, int pipefd, Frog frog, Entity *proiettile){
     while(1){
         
         if(granata->id == 61){
@@ -89,6 +89,9 @@ void processoGranata(Entity *granata, int pipefd, int pipeEvent, Frog frog){
                     _exit(0);
                 }
             }
+        else if(granata ->x == proiettile->x && granata->y == proiettile->y){
+            granata ->x = COLS;
+        }
         
         write(pipefd, granata, sizeof(Entity));
         usleep(100000);

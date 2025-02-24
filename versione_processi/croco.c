@@ -46,7 +46,7 @@ void stampCocco(WINDOW *gioco, int numCroco, Crocodile croco[]) {
     }          
    }
 
-   void processoProiettile(Entity *proiettile, int pipefd, int pipeEvent, Crocodile croco[], int numCroco) {
+   void processoProiettile(Entity *proiettile, int pipefd, int pipeEvent, Crocodile croco[], int numCroco, Entity granata[]) {
     Event evento;
     int delayMovimento = 2;
     srand(time(NULL) + proiettile->id); // Random seed unico per ogni processo
@@ -77,6 +77,9 @@ void stampCocco(WINDOW *gioco, int numCroco, Crocodile croco[]) {
             entity_move(proiettile, 1, 0);
         } else {
             entity_move(proiettile, -1, 0);
+        }
+        if(proiettile->x == granata->x && proiettile->y == granata->y){
+            proiettile->x = COLS;
         }
 
         // Scrive nella pipe lo stato aggiornato

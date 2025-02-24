@@ -106,35 +106,30 @@ int ranaInTana(Frog *frog, Map *tana) {
     return 0;  // La rana non è nel fiume
 }
 
-int ranaProiettileCheck(Frog *frog, Entity *proiettile, int numCroco) {
+int ranaProiettileCheck(Frog *frog, Entity *proiettile) {
     // Estremi della rana
     int ranaSinistra = frog->base.x;
     int ranaDestra = frog->base.x + frog->base.sprite.larghezza;
     int ranaAlto = frog->base.y;
     int ranaBasso = frog->base.y + frog->base.sprite.lunghezza;
-    // Controlla se la rana è colpita
-    for (int i = 0; i <numCroco; i++){
-        if (ranaDestra >= proiettile[i].x && ranaSinistra <= proiettile[i].x &&
-            ranaBasso >= proiettile[i].y && ranaAlto == proiettile[i].y) {
-            // kill(proiettile[i].pid, SIGKILL);
-            proiettile[i].x = -5;
-            proiettile[i].y = -5;
-            return i+1;  
+    // Controlla se la rana è colpita da un proiettile
+        if (ranaDestra >= proiettile->x && ranaSinistra <= proiettile->x &&
+            ranaBasso >= proiettile->y && ranaAlto == proiettile->y) {
+            
+            return 1;  
         }
-    }
     return 0;  // La rana non è stata colpita
 }
 
-int ranaProiettile(Frog *frog, Entity *proiettile,int  numCroco) {
-   Event evento;
-    for (int i = 0; i < numCroco; i++){
-        int sopraProiettile = ranaProiettileCheck(frog, proiettile,numCroco);
-        if (sopraProiettile > 0) {
-            evento.tipo = 6;
-            evento.data = proiettile[sopraProiettile].id;  // Evento che dice alla rana di morire
-            return evento.data;  // La rana è stata colpita
+int ranaProiettile(Frog *frog, Entity *proiettile) {
+    Event evento;
+    int sopraProiettile = ranaProiettileCheck(frog, proiettile);
+    if (sopraProiettile > 0) {
+        evento.tipo = 6;
+        evento.data = proiettile[sopraProiettile].id;  // Evento che dice alla rana di morire
+        return evento.data;  // La rana è stata colpita
         }
-    }
+    
     return 0;  
 }
 

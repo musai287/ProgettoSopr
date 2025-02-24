@@ -18,7 +18,7 @@
 //void creaCroco(int pipe_fd[2]);
 
 void creaPipe(int pipe_fd[2]);
-void creaRano(Frog frog,int pipefd[2], int pipeEvent[2], Entity granata[]);
+void creaRano(Frog frog,int pipefd[2], int pipeEvent[2], Entity granata[], Entity *proiettile);
 void creaCroco(Crocodile croco[], int numCroco,int pipefd[2]);
-void creaProiettile(Entity *proiettile, int pipefd[2], int pipeEvent[2], int numCroco ,Crocodile crocodile[]);
-void creaGranata(Entity granata[], int pipefd, int pipeEvent, Frog frog);
+void creaProiettile(Entity *proiettile, int pipefd[2], int pipeEvent[2], int numCroco ,Crocodile crocodile[], Entity granata[]);
+void creaGranata(Entity granata[], int pipefd, Frog frog, Entity *proiettile);

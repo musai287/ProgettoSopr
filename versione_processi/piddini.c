@@ -19,7 +19,7 @@ void creaPipe(int pipe_fd[2]) {
     }
 }
 
-void creaRano(Frog frog,int pipefd[2], int pipeEvent[2], Entity granata[]) {
+void creaRano(Frog frog,int pipefd[2], int pipeEvent[2], Entity granata[],Entity *proiettile) {
     frog.base.pid = fork();
     if (frog.base.pid == -1) {
         perror("Errore nella creazione della prima fork");
@@ -29,7 +29,7 @@ void creaRano(Frog frog,int pipefd[2], int pipeEvent[2], Entity granata[]) {
     if (frog.base.pid == 0) {  // Processo figlio (rana)
         close(pipefd[0]);  // Chiudi il lato di lettura della pipe
         // Esegui altre operazioni nel processo figlio 'rana'
-        processoRana(frog, pipefd[1], pipeEvent[0],granata);  // Esempio di scrittura nella pipe
+        processoRana(frog, pipefd[1], pipeEvent[0],granata, proiettile);  // Esempio di scrittura nella pipe
         close(pipeEvent[1]);  // Chiudi il lato di scrittura della pipe
         close(pipefd[1]);
         close(pipeEvent[0]);
@@ -65,7 +65,7 @@ void creaCroco(Crocodile croco[], int numCroco,int pipefd[2]) {
     }
 }
 
-void creaProiettile(Entity *proiettile, int pipefd[2], int pipeEvent[2], int numCroco, Crocodile croco[]) {
+void creaProiettile(Entity *proiettile, int pipefd[2], int pipeEvent[2], int numCroco, Crocodile croco[], Entity granata[]) {
     srand(time(NULL));
 
     // Seleziona un coccodrillo casuale
@@ -84,7 +84,7 @@ void creaProiettile(Entity *proiettile, int pipefd[2], int pipeEvent[2], int num
 
     if (proiettile->pid == 0) {  // Processo figlio (proiettile)
         close(pipefd[0]);  // Chiudi il lato di lettura della pipe
-        processoProiettile(proiettile, pipefd[1], pipeEvent[0], &croco[index], numCroco);  // Esempio di scrittura nella pipe
+        processoProiettile(proiettile, pipefd[1], pipeEvent[0], &croco[index], numCroco, granata);  // Esempio di scrittura nella pipe
         close(pipeEvent[1]);  // Chiudi il lato di scrittura della pipe
         close(pipefd[1]);
         close(pipeEvent[0]);  // Chiudi il lato di lettura della pipe
@@ -93,7 +93,7 @@ void creaProiettile(Entity *proiettile, int pipefd[2], int pipeEvent[2], int num
 }
 
 
-void creaGranata(Entity granata[],int pipefd, int pipeEvent,Frog frog) {
+void creaGranata(Entity granata[],int pipefd,Frog frog, Entity *proiettile) {
     granata->x = frog.base.x + (granata->id == 60 ? -1 : 3);  // Posizione a sinistra o destra
     granata->y = frog.base.y;
     granata->sprite = spriteGranata;
@@ -105,7 +105,7 @@ void creaGranata(Entity granata[],int pipefd, int pipeEvent,Frog frog) {
     }
 
     if (granata->pid == 0) {  // Processo figlio per la granata
-        processoGranata(granata, pipefd, pipeEvent, frog);  // Gestione movimento e scrittura nella pipe
+        processoGranata(granata, pipefd, frog, proiettile);  // Gestione movimento e scrittura nella pipe
         _exit(0);  // Esci dal processo figlio
     }
 }

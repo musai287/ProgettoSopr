@@ -74,14 +74,14 @@ void funzionamento_gioco(Frog frog, Crocodile croco[],int numCroco,Entity proiet
         tana[i].x = 2 + i * 10;
         tana[i].y = 1;
     }
-    creaRano(frog, pipefd, pipeEvent, granata);
+    creaRano(frog, pipefd, pipeEvent, granata, &proiettile);
     creaCroco(croco, numCroco,pipefd);
     int proiettileOn = 0;
     while(1){
         
         if(proiettileOn == 0){
             
-            creaProiettile(&proiettile, pipefd, pipeEvent, numCroco, croco);
+            creaProiettile(&proiettile, pipefd, pipeEvent, numCroco, croco, granata);
             proiettileOn = 1;
         }
 
@@ -168,16 +168,12 @@ void funzionamento_gioco(Frog frog, Crocodile croco[],int numCroco,Entity proiet
             evento.data = tanaFlag;  // Tipo di evento che dice alla rana di fare un movimento
         }
 
-        int proiettileFlag = ranaProiettile(&frog, &proiettile, numCroco);
+        int proiettileFlag = ranaProiettile(&frog, &proiettile);
         if (proiettileFlag) {
             evento.tipo = 6;
             evento.data = proiettileFlag;  // Evento che dice alla rana di morire
             write(pipeEvent[1], &evento, sizeof(Event));
             frog.lives--;
-
-            // int indexColpito = evento.data - 30; // Calcola l'indice del proiettile dall'ID
-            //creaProiettile(proiettile, pipefd, pipeEvent, numCroco, croco);
-
             start_time = time(NULL);
 
 
@@ -194,14 +190,6 @@ void funzionamento_gioco(Frog frog, Crocodile croco[],int numCroco,Entity proiet
             start_time = time(NULL);
             frog.lives--;
         }
-        // int proiettileFuoriFlag = proiettileFuori(&proiettile);
-        // if (proiettileFuoriFlag) {
-        //     evento.tipo = 10;
-        //     evento.data = proiettileFuoriFlag;  // Evento che dice al proiettile di tornare alla posizione iniziale
-        //     write(pipeEvent[1], &evento, sizeof(Event));
-        //     // proiettileOn = 0;
-        // }
-
         /*win lose condition*/
 
         if (manche == 6) {
@@ -255,14 +243,14 @@ void funzionamento_gioco(Frog frog, Crocodile croco[],int numCroco,Entity proiet
         stampaEntity(gioco, &proiettile);
 		wattroff(gioco, COLOR_PAIR(5));
 
-        mvwprintw(gioco, 1, 1, "Letto messaggio: id=%2d, x=%2d, y=%2d \n",
-                                                  msg.id, msg.x, msg.y);
+        // mvwprintw(gioco, 1, 1, "Letto messaggio: id=%2d, x=%2d, y=%2d \n",
+        //                                           msg.id, msg.x, msg.y);
 
-         mvwprintw(gioco, 2, 1, "evento tipo =%d evento data = %d manche = %d",
-                                              evento.tipo, evento.data, manche);
+        //  mvwprintw(gioco, 2, 1, "evento tipo =%d evento data = %d manche = %d",
+        //                                       evento.tipo, evento.data, manche);
 
-        mvwprintw(gioco, 3, 1, "granata: id=%2d, pid=%2d, x=%2d,\n proiettile on = %2d \n",
-        granata->id, granata->pid, granata->x,proiettileOn);
+        // mvwprintw(gioco, 3, 1, "granata: id=%2d, pid=%2d, x=%2d,\n proiettile on = %2d \n",
+        // granata->id, granata->pid, granata->x,proiettileOn);
         
         stampaEntity(gioco, &frog.base);
         box(gioco, 0, 0);
