@@ -15,6 +15,7 @@
         "signal.h": "c",
         "ncurses.h": "c",
         "unistd.h": "c",
-        "cstdlib": "c"
+        "cstdlib": "c",
+        "pthread.h": "c"
     }
 }
