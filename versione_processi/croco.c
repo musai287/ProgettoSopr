@@ -42,7 +42,7 @@ void stampCocco(WINDOW *gioco, int numCroco, Crocodile croco[]) {
         if(croco[i].direction == 2){
             antiStampaEntity(gioco, &(croco[i].base));
         }
-        mvwprintw(gioco, croco[i].base.y+1, croco[i].base.x, "%d", croco[i].direction);
+        //mvwprintw(gioco, croco[i].base.y+1, croco[i].base.x, "%d", croco[i].direction);
     }          
    }
 
@@ -59,7 +59,7 @@ void stampCocco(WINDOW *gioco, int numCroco, Crocodile croco[]) {
 
     while (1) {
        
-        if (proiettile->x >= COLS-1 || proiettile->x <= -6||proiettile->x == granata->x && proiettile->y == granata->y) {
+        if (proiettile->x >= COLS-1 || proiettile->x <= -6) {
             // Se il proiettile esce dallo schermo, cambia coccodrillo
             indexCroco = rand() % numCroco;
             proiettile->x = croco[indexCroco].base.x;
@@ -67,9 +67,12 @@ void stampCocco(WINDOW *gioco, int numCroco, Crocodile croco[]) {
             // waitpid(proiettile->pid, NULL, 0);
             // _exit(0);
         }
-        if(proiettile->x == granata->x && proiettile->y == granata->y){
-            proiettile->x = COLS;
+        for(int i = 0; i < 2; i++){
+            if(proiettile->x == granata[i].x && proiettile->y == granata[i].y){
+                proiettile->x = COLS;
+            }
         }
+        
 
         // Muove il proiettile nella direzione del coccodrillo selezionato
         if (croco[indexCroco].direction == 1) {

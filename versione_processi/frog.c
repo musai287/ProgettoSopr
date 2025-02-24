@@ -45,9 +45,9 @@ void processoRana(Frog frog,int pipe_fd,int pipeEvent, Entity granata[], Entity 
             new_y + frog.base.sprite.lunghezza <= LINES-4) {
             frog.base.entity_move(&frog.base, new_x - frog.base.x, new_y - frog.base.y);
         }
-        write(pipe_fd, &frog.base, sizeof(Entity));
-   
+        
         if (read(pipeEvent, &evento, sizeof(Event)) <= 0){continue;}
+        
         if (read(pipeEvent, &evento, sizeof(Event)) > 0) {
             if (evento.tipo == 2) {
                 frog.base.x = evento.data;
@@ -57,14 +57,8 @@ void processoRana(Frog frog,int pipe_fd,int pipeEvent, Entity granata[], Entity 
                 frog.base.x = (COLS /2) - 3;
                 frog.base.y = LINES - 5;
             } 
-            // else if (evento.tipo == 4 || 
-            //          evento.tipo == 6 ||
-            //          evento.tipo == 8 ||
-            //          evento.tipo == 3){ 
-            //     frog.base.x = (COLS /2) - 3;
-            //     frog.base.y = LINES - 5;
-            // }
         }
+        write(pipe_fd, &frog.base, sizeof(Entity));
     }
 }
 
@@ -89,15 +83,15 @@ void processoGranata(Entity *granata, int pipefd, Entity *proiettile){
                     _exit(0);
                 }
             }
-        else if(granata ->x == proiettile->x && granata->y == proiettile->y){
-            granata ->x = COLS;
-        }
         
+        if(granata ->x == proiettile->x && granata->y == proiettile->y){
+        granata ->x = COLS;
+        
+        }
         write(pipefd, granata, sizeof(Entity));
-        usleep(100000);
+        usleep(75000);
     }
 }
-
 int movimento(){
     int input = getch();
     return input;
