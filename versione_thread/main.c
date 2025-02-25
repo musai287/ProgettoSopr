@@ -7,14 +7,14 @@
 #include "croco.h"
 #include "funzionamento.h"
 
-
-int main(){
+int main() {
     initscr();
     noecho();
     curs_set(FALSE);
     keypad(stdscr, TRUE);
     nodelay(stdscr, TRUE);
     resize_term(23, 50);
+
     start_color();
     use_default_colors();
     init_pair(1, COLOR_GREEN, COLOR_BLUE);
@@ -23,50 +23,59 @@ int main(){
     init_pair(4, COLOR_BLACK, COLOR_GREEN);
     init_pair(5, 2, -1);
 
-    finestre(); // Inizializza le due finestre vita e gioco
+    finestre();
 
-    // Creiamo la struttura condivisa
+    // Inizializziamo SharedData
     SharedData sd;
     pthread_mutex_init(&sd.lock, NULL);
+
+    // Inizializza il buffer circolare
+    pthread_mutex_init(&sd.buffer.mutex, NULL);
+    pthread_cond_init(&sd.buffer.cond_non_vuoto, NULL);
+    pthread_cond_init(&sd.buffer.cond_non_pieno, NULL);
+    sd.buffer.head = 0;
+    sd.buffer.tail = 0;
+    sd.buffer.count = 0;
 
     sd.numCroco = 24;
     sd.gameOver = 0;
     sd.manche = 1;
     sd.punteggio = 0;
 
-    // Inizializziamo la rana
+    // Inizializza la rana (id=1)
     sd.frog = initFrog();
 
-    // Inizializziamo i coccodrilli
-    for(int i = 0; i < sd.numCroco; i++){
+    // Inizializza i coccodrilli => ID = (i + 2)
+    for(int i = 0; i < sd.numCroco; i++) {
         sd.croco[i] = initCrocodile();
-        sd.croco[i].base.id = i + 1;
+        sd.croco[i].base.id = i + 2; 
     }
+
+    // Disposizione alternata
     srand(time(NULL));
     int alternanza = rand() % 2;
     for (int i = 0; i < sd.numCroco; i++) {
-        sd.croco[i].base.id = i + 1;
         int riga = (i / 3) + 8;
         int col;
         int spazio = COLS / 3;
-        
         if ((riga + alternanza) % 2 == 1) {
             col = (i % 3) * spazio;
-            sd.croco[i].direction = 1;
+            sd.croco[i].direction = 1;  // va a destra
         } else {
             col = COLS - (i % 3) * spazio - spazio;
-            sd.croco[i].direction = 2;
+            sd.croco[i].direction = 2;  // va a sinistra
         }
         sd.croco[i].base.x = col;
         sd.croco[i].base.y = riga;
     }
-    // Inizializziamo granate
-    for(int i = 0; i < 2; i++){
+
+    // Granate => id=60,61
+    for (int i = 0; i < 2; i++) {
         sd.granata[i] = initGranata();
-        sd.granata[i].id = 60 + i;
+        sd.granata[i].id = 60 + i; 
     }
 
-    // Inizializziamo il proiettile
+    // Proiettile => id=30
     sd.proiettile = initProiettile();
     sd.proiettile.id = 30;
 
@@ -74,34 +83,31 @@ int main(){
     pthread_t frogThread;
     pthread_create(&frogThread, NULL, threadRana, (void *)&sd);
 
-    // Creiamo i thread per le 2 granate (uno per granata[i], se vuoi)
     pthread_t granataThread[2];
     for (int i = 0; i < 2; i++) {
         pthread_create(&granataThread[i], NULL, threadGranata, (void *)&sd.granata[i]);
     }
 
-    // Creiamo i thread per i coccodrilli
     pthread_t crocoThread[sd.numCroco];
-    for(int i = 0; i < sd.numCroco; i++) {
+    for (int i = 0; i < sd.numCroco; i++) {
         pthread_create(&crocoThread[i], NULL, threadCroco, (void *)&sd.croco[i]);
     }
 
-    // Creiamo il thread del proiettile
     pthread_t bulletThread;
     pthread_create(&bulletThread, NULL, threadProiettile, (void *)&sd.proiettile);
 
-    // Nel main facciamo girare la logica di gioco
+    // Esegue la logica di gioco
     funzionamento_gioco(&sd);
 
-    // Quando esce dal ciclo, settiamo gameOver
+    // Se usciamo dalla funzione => gameOver=1 => i thread escono
     sd.gameOver = 1;
 
-    // Aspettiamo che i thread finiscano
+    // Join thread
     pthread_join(frogThread, NULL);
     for (int i = 0; i < 2; i++) {
         pthread_join(granataThread[i], NULL);
     }
-    for(int i = 0; i < sd.numCroco; i++) {
+    for (int i = 0; i < sd.numCroco; i++) {
         pthread_join(crocoThread[i], NULL);
     }
     pthread_join(bulletThread, NULL);

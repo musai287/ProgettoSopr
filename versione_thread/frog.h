@@ -2,12 +2,11 @@
 #include <ncurses.h>
 #include "struct.h"
 
+// Thread per la rana
+void *threadRana(void *arg);
 
-// Rimuoviamo processi, pipe, etc.
-// Definiamo le funzioni thread
+// Thread per una singola granata
+void *threadGranata(void *arg);
 
-void *threadRana(void *arg);       // Sostituisce processoRana()
-void *threadGranata(void *arg);    // Sostituisce processoGranata()
-
-// Rimane la funzione input, se vuoi
+// Funzione di input
 int movimento();

@@ -1,15 +1,18 @@
 #pragma once
 #include <ncurses.h>
+#include <pthread.h>  // per i thread e i mutex/cond
 #include <sys/wait.h>
 #include <sys/types.h>
 #include <signal.h>
+
+// Parametri generici
 #define DELAY 1000000
 #define DELAYCLOSED 2000000
 
 #define MAX_CROCO 24
 #define BUFFER_SIZE 10
 
-
+/* ---------- Sezione Sprite e Map ---------- */
 typedef struct Sprite {
     short int larghezza; 
     short int lunghezza; 
@@ -21,16 +24,11 @@ typedef struct Map {
     short int x, y;
 } Map;
 
-typedef struct Event {
-    short int tipo;
-    short int data;
-} Event;
-
+/* ---------- Sezione Entity e sottotipi ---------- */
 typedef struct Entity {
     short int x, y;
     Sprite sprite;
-    short int id;
-    // RIMOSSO pid_t pid;
+    short int id;  // 1 => frog, 2.. => coccodrilli, 60..61 => granate, 30 => proiettile
     void (*entity_move)(struct Entity *self, short int x, short int y);
 } Entity;
 
@@ -41,9 +39,10 @@ typedef struct Frog {
 
 typedef struct Crocodile {
     Entity base;
-    short int direction;
+    short int direction; // 1 => destra, 2 => sinistra
 } Crocodile;
 
+/* ---------- Finestre ncurses ---------- */
 typedef struct Fin {
     short int height;
     short int width;
@@ -51,13 +50,15 @@ typedef struct Fin {
     short int startx;
 } Fin;
 
-// Funzioni di disegno e spostamento
+extern WINDOW *vita, *gioco;
+
+/* ---------- Funzioni di disegno/spostamento ---------- */
 void antiStampaEntity(WINDOW *win, Entity *entity);
 void entity_move(Entity *self, short int x, short int y);
 void stampaEntity(WINDOW *win, Entity *entity);
 void stampaMap(WINDOW *win, Map *map);
 
-// Sprite globali
+/* ---------- Sprite (extern) ---------- */
 extern Sprite spriteGranata;
 extern Sprite spriteProiettile;
 extern Sprite spriteTana;
@@ -65,41 +66,23 @@ extern Sprite spriteTanaChiusa;
 extern Sprite spriteRana;
 extern Sprite spriteCrocodile;
 
-// Funzioni di inizializzazione
+/* ---------- Inizializzazione entità ---------- */
 Map initTana();
 Frog initFrog();
 Entity initGranata();
 Entity initProiettile();
 Crocodile initCrocodile();
 
-// Finestre globali
-extern WINDOW *vita, *gioco;
-
-typedef struct {
-    // Tutti i dati da condividere tra i thread
-    Frog frog;
-    Crocodile croco[MAX_CROCO];
-    Entity granata[2];
-    Entity proiettile;
-    int numCroco;
-    int punteggio;
-    int manche;
-    int gameOver;   // se 1, terminano i thread
-
-    // Esempio di mutex (se vorrai proteggere accessi)
-    pthread_mutex_t lock;
-} SharedData;
-
+/* ---------- Tipi di messaggio per il buffer circolare ---------- */
 typedef enum {
     MSG_MOVIMENTO,
     MSG_POSIZIONE,
-    MSG_EVENTO,   // per eventi generici, come collisioni
-    // altri tipi di aggiornamento
+    MSG_EVENTO
 } TipoMessaggio;
 
 typedef struct {
     TipoMessaggio tipo;
-    int id;         // ad es. ID dell'entità che ha prodotto il messaggio
+    int id;   // 1 => frog, 2.. => coccodrilli
     union {
         struct {
             int dx;
@@ -110,12 +93,12 @@ typedef struct {
             int y;
         } posizione;
         struct {
-            int info; // qualsiasi informazione extra
+            int info;
         } evento;
     } dati;
 } Messaggio;
 
-
+/* ---------- Buffer circolare ---------- */
 typedef struct {
     Messaggio buffer[BUFFER_SIZE];
     int head;
@@ -125,3 +108,24 @@ typedef struct {
     pthread_cond_t cond_non_vuoto;
     pthread_cond_t cond_non_pieno;
 } BufferCircolare;
+
+/* ---------- Struttura condivisa ---------- */
+typedef struct {
+    Frog frog;                  // ID=1
+    Crocodile croco[MAX_CROCO]; // ID=2..(1+numCroco)
+    Entity granata[2];          // ID=60..61
+    Entity proiettile;          // ID=30
+    int numCroco;
+    int punteggio;
+    int manche;
+    int gameOver;  // Se 1 => i thread e il loop principale terminano
+
+    pthread_mutex_t lock;  // Esempio di mutex su SharedData
+
+    // Il buffer circolare che i thread useranno per inviare messaggi
+    BufferCircolare buffer;
+} SharedData;
+
+/* Buffer circolare: prototipi delle funzioni */
+void produceMessaggio(BufferCircolare *bc, Messaggio msg);
+Messaggio consumeMessaggio(BufferCircolare *bc);
