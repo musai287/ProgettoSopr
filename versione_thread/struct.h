@@ -12,6 +12,8 @@
 #define MAX_CROCO 24
 #define BUFFER_SIZE 10
 
+
+
 /* ---------- Sezione Sprite e Map ---------- */
 typedef struct Sprite {
     short int larghezza; 
@@ -24,12 +26,16 @@ typedef struct Map {
     short int x, y;
 } Map;
 
+
+struct SharedData;  // Dichiari che esiste una struct SharedData
+
 /* ---------- Sezione Entity e sottotipi ---------- */
 typedef struct Entity {
     short int x, y;
     Sprite sprite;
     short int id;  // 1 => frog, 2.. => coccodrilli, 60..61 => granate, 30 => proiettile
     void (*entity_move)(struct Entity *self, short int x, short int y);
+    struct SharedData *sd;
 } Entity;
 
 typedef struct Frog {

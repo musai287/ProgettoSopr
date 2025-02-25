@@ -44,7 +44,7 @@ int main() {
 
     // Inizializza la rana (id=1)
     sd.frog = initFrog();
-
+    sd.frog.base.sd = &sd;
     // Inizializza i coccodrilli => ID = (i + 2)
     for(int i = 0; i < sd.numCroco; i++) {
         sd.croco[i] = initCrocodile();
@@ -67,17 +67,25 @@ int main() {
         }
         sd.croco[i].base.x = col;
         sd.croco[i].base.y = riga;
+        sd.croco[i].base.sd = &sd;
     }
 
     // Granate => id=60,61
     for (int i = 0; i < 2; i++) {
         sd.granata[i] = initGranata();
-        sd.granata[i].id = 60 + i; 
+        sd.granata[i].id = 60 + i;
+        sd.granata[i].sd = &sd; 
     }
 
     // Proiettile => id=30
+    int index = rand() % sd.numCroco;
+
+    // Imposta i dati del proiettile
     sd.proiettile = initProiettile();
+    sd.proiettile.x = sd.croco[index].base.x;
+    sd.proiettile.y = sd.croco[index].base.y;
     sd.proiettile.id = 30;
+    sd.proiettile.sd = &sd;
 
     // Creiamo i thread
     pthread_t frogThread;

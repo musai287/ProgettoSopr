@@ -60,7 +60,7 @@ void *threadRana(void *arg) {
             produceMessaggio(&sd->buffer, msg);
         }
 
-        usleep(50000);
+        //usleep(50000);
     }
 
     pthread_exit(NULL);
@@ -68,6 +68,7 @@ void *threadRana(void *arg) {
 
 void *threadGranata(void *arg) {
     Entity *granata = (Entity *)arg;
+    SharedData *sd = granata->sd;
 
     while (1) {
         // Se la granata ha id=60 => si muove a sinistra
@@ -83,6 +84,13 @@ void *threadGranata(void *arg) {
                 granata->x = COLS + 100; 
             }
         }
+        Messaggio msg;
+        msg.tipo = MSG_MOVIMENTO;
+        msg.id   = granata->id;    // 60 o 61
+        msg.dati.movimento.dx = granata->x;
+        msg.dati.movimento.dy = 0;
+        produceMessaggio(&sd->buffer, msg);
+
         usleep(75000);
     }
 

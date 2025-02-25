@@ -18,7 +18,7 @@ int ranaSuCrocoCheck(Frog *frog, Crocodile *croco, int numCroco) {
 
         if (ranaDestra > cSinistra && ranaSinistra < cDestra &&
             ranaBasso > cAlto     && ranaAlto     < cBasso) {
-            return i+1;  // Indice coccodrillo +1
+            return croco[i].base.x;  // Indice coccodrillo +1
         }
     }
     return 0;
