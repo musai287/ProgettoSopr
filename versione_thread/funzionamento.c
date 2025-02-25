@@ -41,14 +41,11 @@ void gestisci_vite(int vite, time_t start_time) {
     }
 }
 
-void funzionamento_gioco(SharedData *sd) {
+void funzionamento_gioco(SharedData *sd, BufferCircolare *buffer) {
     srand(time(NULL));
-
-    // Inizializziamo alcune variabili di supporto
-    int proiettileOn = 0;      // Se il proiettile è “attivo” o meno
+    int proiettileOn = 0;      
     time_t start_time = time(NULL);
 
-    // Inizializziamo 5 tane, come facevi tu
     Map tana[5];
     for (int i = 0; i < 5; i++) {
         tana[i] = initTana();
@@ -56,84 +53,51 @@ void funzionamento_gioco(SharedData *sd) {
         tana[i].y = 1;
     }
 
-    // Imposta la manche iniziale
     sd->manche = 1;
 
     while (!sd->gameOver) {
-        // =========== GESTIONE VITE E TEMPO =============
-        // Stampa delle vite e del tempo rimanente
-        gestisci_vite(sd->frog.lives, start_time);
+        // =========== LEGGI MESSAGGI DAL BUFFER =============
+        Messaggio msg = consumeMessaggio(buffer);
+        pthread_mutex_lock(&sd->lock);
 
-        // =========== CONTROLLI SU PROIETTILE ============
-        // Nel tuo codice originale, creavi un processo per il proiettile quando proiettileOn era 0
-        // Ora, invece, il proiettile è gestito da un thread (se vuoi), oppure puoi muoverlo qui.
-        // Se usi un thread separato (threadProiettile), puoi lasciare qui solo un controllo logico.
-        if (!proiettileOn) {
-            // Attiva il proiettile
-            // Se hai un threadProiettile, potresti fare la logica di “reset” qui,
-            //   es: sd->proiettile.x = ...  e così via
-            proiettileOn = 1;
+        switch (msg.tipo) {
+            case MSG_MOVIMENTO:
+                if (msg.id == 1) { // Rana
+                    sd->frog.base.x += msg.dati.movimento.dx;
+                    sd->frog.base.y += msg.dati.movimento.dy;
+                } else { // Altra entità
+                    for (int i = 0; i < sd->numCroco; i++) {
+                        if (msg.id == i + 2) {
+                            sd->croco[i].x += msg.dati.movimento.dx;
+                            sd->croco[i].y += msg.dati.movimento.dy;
+                        }
+                    }
+                }
+                break;
+
+            case MSG_POSIZIONE:
+                if (msg.id == 1) {
+                    sd->frog.base.x = msg.dati.posizione.x;
+                    sd->frog.base.y = msg.dati.posizione.y;
+                }
+                break;
+
+            case MSG_EVENTO:
+                if (msg.dati.evento.info == 1) { // Collisione rana-coccodrillo
+                    sd->frog.lives--;
+                    sd->frog.base.x = (COLS /2) - 3;
+                    sd->frog.base.y = LINES - 5;
+                    start_time = time(NULL);
+                }
+                break;
         }
 
-        // =========== LETTURA POSIZIONI / COLLISIONI ============
-        // Ora non leggiamo più pipe, ma usiamo i campi di sd->frog, sd->croco[], sd->proiettile, ecc.
-
-        // 1) Collisione rana-coccodrillo
-        int collisionFlag = ranaSuCroco(&sd->frog, sd->croco, sd->numCroco);
-        if (collisionFlag) {
-            // L’originale inviava un evento. Ora puoi gestirlo direttamente.
-            // Esempio: la rana si sposta dove si sposta il coccodrillo
-            // Oppure riduci vite, come preferivi
-            // Nel tuo codice, facevi: evento.tipo = 2 => “la rana è sopra il coccodrillo”
-            // Ora:
-            // sd->frog.base.x = ...
-        } else {
-            // Nessuna collisione con coccodrillo
-        }
-
-        // 2) Collisione rana-fiume
-        int fiumeFlag = ranaInFiume(&sd->frog, sd->croco, sd->numCroco);
-        if (fiumeFlag) {
-            // Nel codice originale, la rana moriva (vite--) e tornava a inizio
-            sd->frog.lives--;
-            sd->frog.base.x = (COLS /2) - 3;
-            sd->frog.base.y = LINES - 5;
-            start_time = time(NULL);  // Resetta il timer per la nuova vita
-        }
-
-        // 3) Collisione rana-tana
-        int tanaFlag = ranaInTana(&sd->frog, tana);
-        if (tanaFlag) {
-            // Aumenta manche e calcola punteggio
-            sd->manche++;
-            int tempoImpiegato = (int)(time(NULL) - start_time);
-            int tempoRimanente = tempoTotale - tempoImpiegato;
-            float moltiplicatore = 1.0 + sd->manche * 0.5 + (float)tempoRimanente / tempoTotale;
-            sd->punteggio += (int)(moltiplicatore * 100);
-            // Reset rana
-            sd->frog.base.x = (COLS /2) - 3;
-            sd->frog.base.y = LINES - 5;
-            start_time = time(NULL);
-        }
-
-        // 4) Collisione rana-proiettile
-        int proiettileFlag = ranaProiettile(&sd->frog, &sd->proiettile);
-        if (proiettileFlag) {
-            // La rana muore
-            sd->frog.lives--;
-            // Resetta posizione
-            sd->frog.base.x = (COLS /2) - 3;
-            sd->frog.base.y = LINES - 5;
-            // Resetta timer
-            start_time = time(NULL);
-        }
+        pthread_mutex_unlock(&sd->lock);
 
         // =========== GESTIONE TEMPO ============
         int tempoRimanente = tempoTotale - (int)(time(NULL) - start_time);
         if (tempoRimanente <= 0) {
-            // Tempo scaduto => la rana perde una vita
             sd->frog.lives--;
-            // Reset
             sd->frog.base.x = (COLS /2) - 3;
             sd->frog.base.y = LINES - 5;
             start_time = time(NULL);
@@ -141,35 +105,30 @@ void funzionamento_gioco(SharedData *sd) {
 
         // =========== CONTROLLO VITTORIA/SCONFITTA ============
         if (sd->manche == 6) {
-            // HAI VINTO
             mvprintw(LINES / 2, COLS / 2 - 5, "HAI VINTO");
             refresh();
             usleep(DELAYCLOSED);
             endwin();
-            // Imposta un flag di terminazione, se vuoi
             sd->gameOver = 1;
-            return;  // o break
+            return;
         }
         if (sd->frog.lives <= 0) {
-            // HAI PERSO
             mvprintw(LINES / 2, COLS / 2 - 5, "HAI PERSO");
             refresh();
             usleep(DELAYCLOSED);
             endwin();
             sd->gameOver = 1;
-            return;  // o break
+            return;
         }
 
         // =========== DISEGNO A SCHERMO ============
         werase(gioco);  
         box(gioco, 0, 0);
 
-        // Stampa delle 5 tane
         for (int i = 0; i < 5; i++) {
             stampaMap(gioco, &tana[i]);
         }
 
-        // Fiume colorato
         wattron(gioco, COLOR_PAIR(4));
         for(int i=0; i<2; i++){
             for(int j=0; j <COLS-2; j++){
@@ -183,31 +142,24 @@ void funzionamento_gioco(SharedData *sd) {
         }
         wattroff(gioco, COLOR_PAIR(4));
 
-        // Stampa coccodrilli
         wattron(gioco, COLOR_PAIR(1));
-        stampCocco(gioco, sd->numCroco, sd->croco);
+        stampCocco(gioco, sd->croco);
         wattroff(gioco, COLOR_PAIR(1));
 
-        // Stampa granate
         wattron(gioco, COLOR_PAIR(5));
         for (int i = 0; i < 2; i++) {
             stampaEntity(gioco, &sd->granata[i]);
         }
-        // Stampa proiettile
         stampaEntity(gioco, &sd->proiettile);
         wattroff(gioco, COLOR_PAIR(5));
 
-        // Stampa la rana
         stampaEntity(gioco, &sd->frog.base);
 
         box(gioco, 0, 0);
         wrefresh(gioco);
 
-        // Piccola pausa prima del prossimo ciclo
         usleep(50000);
     }
 
-    // Se usciamo dal while => gameOver = 1
-    // Eventualmente stampi un messaggio finale
     endwin();
 }

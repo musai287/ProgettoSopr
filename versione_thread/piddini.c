@@ -59,10 +59,7 @@ void creaRano(Frog *frog, int pipefd[2], int pipeEvent[2], Entity granata[], Ent
         exit(1);
     }
     args->frog = frog;
-    args->pipefd[0] = pipefd[0];
-    args->pipefd[1] = pipefd[1];
-    args->pipeEvent[0] = pipeEvent[0];
-    args->pipeEvent[1] = pipeEvent[1];
+    
     args->granata = granata;
     args->proiettile = proiettile;
     

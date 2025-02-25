@@ -8,34 +8,38 @@
 
 
 void *threadCroco(void *arg) {
-    // Qui arg potrebbe essere un Crocodile* o un struct con { SharedData *sd; int indexCroco; }
-    // Esempio: passiamo un array di coccodrilli e un index
-    // Per semplicità ipotizziamo di passare (Crocodile *):
-
+    // arg è un puntatore a un singolo Crocodile
     Crocodile *croco = (Crocodile *) arg;
+    
+    // (Opzionale) Inizializza il seme per i numeri casuali
+    // Se ogni thread ne ha bisogno, ad esempio:
     srand(time(NULL) + croco->base.id);
 
+    // Ciclo infinito per aggiornare il movimento del coccodrillo
     while (1) {
         if (croco->direction == 1) {
             croco->base.entity_move(&croco->base, 1, 0);
             if (croco->base.x > COLS + 4) {
                 croco->base.x = 1;
             }
-        } else {
+        } else { // supponiamo che direction == 2
             croco->base.entity_move(&croco->base, -1, 0);
             if (croco->base.x <= -7) {
                 croco->base.x = COLS;
             }
         }
-
-        usleep(200000); // regolazione velocità
+        usleep(200000); // Regolazione della velocità
     }
-
+    
+    // Non raggiunto, ma per completezza:
     pthread_exit(NULL);
+    return NULL;
 }
 
-void stampCocco(WINDOW *gioco, int numCroco, Crocodile croco[]) {
-    for (int i = 0; i < numCroco; i++) {
+
+
+void stampCocco(WINDOW *gioco, Crocodile croco[]) {
+    for (int i = 0; i < MAX_CROCO; i++) {
         if (croco[i].direction == 1) {
             stampaEntity(gioco, &(croco[i].base));
         } else {

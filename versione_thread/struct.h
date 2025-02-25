@@ -7,6 +7,7 @@
 #define DELAYCLOSED 2000000
 
 #define MAX_CROCO 24
+#define BUFFER_SIZE 10
 
 
 typedef struct Sprite {
@@ -78,10 +79,8 @@ typedef struct {
     // Tutti i dati da condividere tra i thread
     Frog frog;
     Crocodile croco[MAX_CROCO];
-
     Entity granata[2];
     Entity proiettile;
-
     int numCroco;
     int punteggio;
     int manche;
@@ -90,3 +89,39 @@ typedef struct {
     // Esempio di mutex (se vorrai proteggere accessi)
     pthread_mutex_t lock;
 } SharedData;
+
+typedef enum {
+    MSG_MOVIMENTO,
+    MSG_POSIZIONE,
+    MSG_EVENTO,   // per eventi generici, come collisioni
+    // altri tipi di aggiornamento
+} TipoMessaggio;
+
+typedef struct {
+    TipoMessaggio tipo;
+    int id;         // ad es. ID dell'entità che ha prodotto il messaggio
+    union {
+        struct {
+            int dx;
+            int dy;
+        } movimento;
+        struct {
+            int x;
+            int y;
+        } posizione;
+        struct {
+            int info; // qualsiasi informazione extra
+        } evento;
+    } dati;
+} Messaggio;
+
+
+typedef struct {
+    Messaggio buffer[BUFFER_SIZE];
+    int head;
+    int tail;
+    int count;
+    pthread_mutex_t mutex;
+    pthread_cond_t cond_non_vuoto;
+    pthread_cond_t cond_non_pieno;
+} BufferCircolare;

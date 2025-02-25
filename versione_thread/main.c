@@ -14,7 +14,7 @@ int main(){
     curs_set(FALSE);
     keypad(stdscr, TRUE);
     nodelay(stdscr, TRUE);
-
+    resize_term(23, 50);
     start_color();
     use_default_colors();
     init_pair(1, COLOR_GREEN, COLOR_BLUE);
@@ -42,7 +42,24 @@ int main(){
         sd.croco[i] = initCrocodile();
         sd.croco[i].base.id = i + 1;
     }
-
+    srand(time(NULL));
+    int alternanza = rand() % 2;
+    for (int i = 0; i < sd.numCroco; i++) {
+        sd.croco[i].base.id = i + 1;
+        int riga = (i / 3) + 8;
+        int col;
+        int spazio = COLS / 3;
+        
+        if ((riga + alternanza) % 2 == 1) {
+            col = (i % 3) * spazio;
+            sd.croco[i].direction = 1;
+        } else {
+            col = COLS - (i % 3) * spazio - spazio;
+            sd.croco[i].direction = 2;
+        }
+        sd.croco[i].base.x = col;
+        sd.croco[i].base.y = riga;
+    }
     // Inizializziamo granate
     for(int i = 0; i < 2; i++){
         sd.granata[i] = initGranata();
