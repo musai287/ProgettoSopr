@@ -130,26 +130,41 @@ Crocodile initCrocodile() {
 
 /* ---------- Implementazione buffer circolare ---------- */
 void produceMessaggio(BufferCircolare *bc, Messaggio msg) {
-    pthread_mutex_lock(&bc->mutex);
-    while (bc->count == BUFFER_SIZE) {
-        pthread_cond_wait(&bc->cond_non_pieno, &bc->mutex);
+    while (true) {
+        pthread_mutex_lock(&bc->mutex);
+
+        // Se c'è spazio, inseriamo il messaggio e usciamo
+        if (bc->count < BUFFER_SIZE) {
+            bc->buffer[bc->head] = msg;
+            bc->head = (bc->head + 1) % BUFFER_SIZE;
+            bc->count++;
+            pthread_mutex_unlock(&bc->mutex);
+            return; // Uscita
+        }
+
+        // Altrimenti sblocchiamo il mutex, dormiamo un po', e riproviamo
+        pthread_mutex_unlock(&bc->mutex);
+        // microsecondi
     }
-    bc->buffer[bc->head] = msg;
-    bc->head = (bc->head + 1) % BUFFER_SIZE;
-    bc->count++;
-    pthread_cond_signal(&bc->cond_non_vuoto);
-    pthread_mutex_unlock(&bc->mutex);
 }
 
 Messaggio consumeMessaggio(BufferCircolare *bc) {
-    pthread_mutex_lock(&bc->mutex);
-    while (bc->count == 0) {
-        pthread_cond_wait(&bc->cond_non_vuoto, &bc->mutex);
+    Messaggio msg;
+
+    while (true) {
+        pthread_mutex_lock(&bc->mutex);
+
+        // Se c'è almeno un messaggio, lo consumiamo e usciamo
+        if (bc->count > 0) {
+            msg = bc->buffer[bc->tail];
+            bc->tail = (bc->tail + 1) % BUFFER_SIZE;
+            bc->count--;
+            pthread_mutex_unlock(&bc->mutex);
+            return msg;
+        }
+
+        // Altrimenti sblocchiamo il mutex, dormiamo un po', e riproviamo
+        pthread_mutex_unlock(&bc->mutex);
+        
     }
-    Messaggio msg = bc->buffer[bc->tail];
-    bc->tail = (bc->tail + 1) % BUFFER_SIZE;
-    bc->count--;
-    pthread_cond_signal(&bc->cond_non_pieno);
-    pthread_mutex_unlock(&bc->mutex);
-    return msg;
 }
