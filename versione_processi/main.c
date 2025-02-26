@@ -35,31 +35,27 @@ int main(){
     init_pair(4, COLOR_BLACK, COLOR_GREEN);
     init_pair(5, 2, -1);
     finestre(); // Creazione delle finestre
-
-    Frog frog = initFrog(); // Inizializza la rana
-    //creaRano(frog, pipefd, pipeEvent); // Crea il processo rana
-
-    Crocodile croco[numCroco]; // Inizializza il coccodrillo
-    for(int i=0; i < numCroco; i++){
+    /*Inizializzo tutte cose*/
+    Frog frog = initFrog(); 
+    
+    Crocodile croco[numCroco]; 
+        for(int i=0; i < numCroco; i++){
         croco[i] = initCrocodile();
-        croco[i].base.id++; // Inizializza il coccodrillo
-    }
-    //  creaCroco(croco, numCroco,pipefd);
-
-    Entity granata[2]; // Inizializza la granata
+        croco[i].base.id++; 
+        }
+    
+    Entity granata[2]; 
     for (int i=0; i <2; i++){
         granata[i] = initGranata();
         granata[i].id = 60 + i;
     }
-    // creaGranata(granata, pipefd, pipeEvent, frog);
-
-    Entity proiettile; // Inizializza il proiettile   
+    
+    Entity proiettile;   
     proiettile = initProiettile();
     proiettile.id =30;  
     
     
-    // creaProiettile(proiettile, pipefd, pipeEvent, numCroco, croco);
-
+    
     funzionamento_gioco(frog, croco, numCroco,proiettile, granata, pipefd, pipeEvent);
     
     close(pipefd[1]); 	

@@ -60,7 +60,6 @@ void *threadRana(void *arg) {
             produceMessaggio(&sd->buffer, msg);
         }
 
-        //usleep(50000);
     }
 
     pthread_exit(NULL);

@@ -118,7 +118,7 @@ int ranaProiettileCheck(Frog *frog, Entity *proiettile) {
             
             return 1;  
         }
-    return 0;  // La rana non è stata colpita
+    return 0;  
 }
 
 int ranaProiettile(Frog *frog, Entity *proiettile) {
@@ -126,8 +126,8 @@ int ranaProiettile(Frog *frog, Entity *proiettile) {
     int sopraProiettile = ranaProiettileCheck(frog, proiettile);
     if (sopraProiettile > 0) {
         evento.tipo = 6;
-        evento.data = proiettile->id;  // Evento che dice alla rana di morire
-        return evento.data;  // La rana è stata colpita
+        evento.data = proiettile->id;  
+        return evento.data;  
         }
     
     return 0;  

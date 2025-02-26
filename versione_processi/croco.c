@@ -11,6 +11,8 @@
 
 void processoCroco(Crocodile *croco,int pipefd) {
     int delayMovimento = 2;
+    int velocita = croco->base.y *10000;
+
     srand(time(NULL)+croco->base.id); // Random seed unico per ogni processo
     sleep(rand() % delayMovimento); // Pausa randomica
     while (1) {
@@ -31,7 +33,7 @@ void processoCroco(Crocodile *croco,int pipefd) {
             usleep(rand() % delayMovimento); // Pausa randomica
             }
         write(pipefd, &croco->base, sizeof(Entity));
-        usleep(200000); // Velocità del movimento
+        usleep(200000+velocita); // Velocità del movimento
     }
 }
 void stampCocco(WINDOW *gioco, int numCroco, Crocodile croco[]) {
@@ -42,7 +44,7 @@ void stampCocco(WINDOW *gioco, int numCroco, Crocodile croco[]) {
         if(croco[i].direction == 2){
             antiStampaEntity(gioco, &(croco[i].base));
         }
-        //mvwprintw(gioco, croco[i].base.y+1, croco[i].base.x, "%d", croco[i].direction);
+        //mvwprintw(gioco, croco[i].base.y+1, croco[i].base.x, "%d", croco[i].direction);  //debug
     }          
    }
 

@@ -121,7 +121,7 @@ Crocodile initCrocodile() {
     Crocodile croco;
     croco.base.x = 0;
     croco.base.y = 0;
-    croco.base.id = 2; // di default, poi lo sovrascrivi con i+2 in main
+    croco.base.id = 2; // di default, i+2 in main
     croco.base.sprite = spriteCrocodile;
     croco.base.entity_move = entity_move;
     croco.direction = 1;
@@ -142,9 +142,8 @@ void produceMessaggio(BufferCircolare *bc, Messaggio msg) {
             return; // Uscita
         }
 
-        // Altrimenti sblocchiamo il mutex, dormiamo un po', e riproviamo
         pthread_mutex_unlock(&bc->mutex);
-        // microsecondi
+    
     }
 }
 
@@ -154,7 +153,6 @@ Messaggio consumeMessaggio(BufferCircolare *bc) {
     while (true) {
         pthread_mutex_lock(&bc->mutex);
 
-        // Se c'è almeno un messaggio, lo consumiamo e usciamo
         if (bc->count > 0) {
             msg = bc->buffer[bc->tail];
             bc->tail = (bc->tail + 1) % BUFFER_SIZE;
@@ -163,7 +161,6 @@ Messaggio consumeMessaggio(BufferCircolare *bc) {
             return msg;
         }
 
-        // Altrimenti sblocchiamo il mutex, dormiamo un po', e riproviamo
         pthread_mutex_unlock(&bc->mutex);
         
     }

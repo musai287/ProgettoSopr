@@ -7,10 +7,6 @@
 #include <signal.h>
 
 #include "piddini.h"
-// #include "frog.h"
-// #include "croco.h"
-// #include "struct.h"
-// #include "proiettili.h"
 
 void creaPipe(int pipe_fd[2]) {
     if (pipe(pipe_fd) == -1) {

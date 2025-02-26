@@ -27,7 +27,7 @@ typedef struct Map {
 } Map;
 
 
-struct SharedData;  // Dichiari che esiste una struct SharedData
+struct SharedData;  // Dichiari che esiste una struct SharedData per fare un trick di pigrizia
 
 /* ---------- Sezione Entity e sottotipi ---------- */
 typedef struct Entity {
@@ -124,14 +124,11 @@ typedef struct {
     int numCroco;
     int punteggio;
     int manche;
-    int gameOver;  // Se 1 => i thread e il loop principale terminano
-
-    pthread_mutex_t lock;  // Esempio di mutex su SharedData
-
-    // Il buffer circolare che i thread useranno per inviare messaggi
-    BufferCircolare buffer;
+    int gameOver;               // Se 1 => i thread e il loop principale terminano
+    pthread_mutex_t lock;       // Esempio di mutex su SharedData
+    BufferCircolare buffer;     // Il buffer circolare che i thread useranno per inviare messaggi
+    
 } SharedData;
 
-/* Buffer circolare: prototipi delle funzioni */
 void produceMessaggio(BufferCircolare *bc, Messaggio msg);
 Messaggio consumeMessaggio(BufferCircolare *bc);

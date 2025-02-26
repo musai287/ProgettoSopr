@@ -12,10 +12,6 @@
 #include "croco.h"
 
 
-//void pidd(int pi[],pid_t a, pid_t b);
-//void creaPipe(int pipe_fd[2]) ;
-//void creaRano(int pipe_fd[2]) ; 
-//void creaCroco(int pipe_fd[2]);
 
 void creaPipe(int pipe_fd[2]);
 void creaRano(Frog frog,int pipefd[2], int pipeEvent[2], Entity granata[], Entity *proiettile);

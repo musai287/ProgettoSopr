@@ -54,14 +54,15 @@ void funzionamento_gioco(SharedData *sd) {
     sd->manche = 1;
 
     while (!sd->gameOver) {
-         // Gestione tempo
-         int tempoRimanente = tempoTotale - (int)(time(NULL) - start_time);
-         if (tempoRimanente <= 0) {
-             sd->frog.lives--;
-             sd->frog.base.x = (COLS/2) - 3;
-             sd->frog.base.y = LINES - 5;
-             start_time = time(NULL);
-         }
+        // Gestione tempo
+        int tempoRimanente = tempoTotale - (int)(time(NULL) - start_time);
+        if (tempoRimanente <= 0) {
+            sd->frog.lives--;
+            sd->frog.base.x = (COLS/2) - 3;
+            sd->frog.base.y = LINES - 5;
+            start_time = time(NULL);
+        }
+        //collisioni
          int suCroco = ranaSuCroco(&sd->frog, sd->croco, sd->numCroco);
          if(suCroco){
              sd->frog.base.x = suCroco;
@@ -79,7 +80,7 @@ void funzionamento_gioco(SharedData *sd) {
             sd->granata[1].y = -1;
             
          }
-         // collisioni: per esempio, se la rana è nel fiume e non su un croco => muore
+
          if (ranaInFiume(&sd->frog, sd->croco, sd->numCroco)) {
              sd->frog.lives--;
              sd->frog.base.x = (COLS/2)-3;
@@ -98,7 +99,6 @@ void funzionamento_gioco(SharedData *sd) {
              start_time = time(NULL);
          }
  
-         // Se la rana è colpita dal proiettile
          int colpita = ranaProiettile(&sd->frog, &sd->proiettile);
          if (colpita) {
              sd->frog.lives--;
@@ -106,15 +106,12 @@ void funzionamento_gioco(SharedData *sd) {
              sd->frog.base.y = LINES-5;
              start_time = time(NULL);
          }
-        // Consumo un messaggio dal buffer
         Messaggio msg = consumeMessaggio(&sd->buffer);
 
-        // Proteggo l'accesso a sd con un mutex se voglio
         pthread_mutex_lock(&sd->lock);
 
         switch (msg.tipo) {
             case MSG_MOVIMENTO:
-                // Se id=1 => frog
                 if (msg.id == 1) {
                     sd->frog.base.x += msg.dati.movimento.dx;
                     sd->frog.base.y += msg.dati.movimento.dy;
@@ -122,7 +119,6 @@ void funzionamento_gioco(SharedData *sd) {
                     sd->proiettile.x = msg.dati.movimento.dx;
                     sd->proiettile.y = msg.dati.movimento.dy;
                 } else {
-                    // coccodrilli => id = 2..(1+numCroco)
                     for (int i = 0; i < sd->numCroco; i++) {
                         if (msg.id == i + 2) {
                             sd->croco[i].base.x += msg.dati.movimento.dx;
@@ -134,7 +130,6 @@ void funzionamento_gioco(SharedData *sd) {
                 break;
 
             case MSG_POSIZIONE:
-                // Se id=1 => frog
                 if (msg.id == 1) {
                     sd->frog.base.x = msg.dati.posizione.x;
                     sd->frog.base.y = msg.dati.posizione.y;
@@ -151,19 +146,7 @@ void funzionamento_gioco(SharedData *sd) {
                 }
                 break;
 
-            // case MSG_EVENTO:
-            //     // Esempio: collisione
-            //     if (msg.id == 1) {
-            //         // frog ha generato un evento
-            //         if (msg.dati.evento.info == 1) {
-            //             // collisione con coccodrillo?
-            //             sd->frog.lives--;
-            //             sd->frog.base.x = (COLS/2)-3;
-            //             sd->frog.base.y = LINES-5;
-            //             start_time = time(NULL);
-            //         }
-            //     }
-            //     break;
+            
         }
         pthread_mutex_unlock(&sd->lock);
 
@@ -226,8 +209,8 @@ void funzionamento_gioco(SharedData *sd) {
         box(gioco, 0, 0);
         wrefresh(gioco);
 
-        // usleep(5000);
-    } // while
+      
+    } 
 
     endwin();
 }

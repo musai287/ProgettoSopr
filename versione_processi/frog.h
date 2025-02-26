@@ -15,6 +15,5 @@
 #define DELAYCLOSED 2000000 //2 secondi
 
 void processoRana(Frog frog,int pipe_fd, int pipeEvent, Entity granata[], Entity *proiettile);
-//void stampRana(int pipefd);
 void processoGranata(Entity *granata, int pipefd, Entity *proiettile);
 int movimento();

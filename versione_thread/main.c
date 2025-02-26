@@ -27,20 +27,15 @@ int main() {
 
     // Inizializziamo SharedData
     SharedData sd;
-    pthread_mutex_init(&sd.lock, NULL);
-
-    // Inizializza il buffer circolare
     pthread_mutex_init(&sd.buffer.mutex, NULL);
-    // pthread_cond_init(&sd.buffer.cond_non_vuoto, NULL);
-    // pthread_cond_init(&sd.buffer.cond_non_pieno, NULL);
-    sd.buffer.head = 0;
-    sd.buffer.tail = 0;
-    sd.buffer.count = 0;
+        sd.buffer.head = 0;
+        sd.buffer.tail = 0;
+        sd.buffer.count = 0;
 
-    sd.numCroco = 24;
-    sd.gameOver = 0;
-    sd.manche = 1;
-    sd.punteggio = 0;
+        sd.numCroco = 24;
+        sd.gameOver = 0;
+        sd.manche = 1;
+        sd.punteggio = 0;
 
     // Inizializza la rana (id=1)
     sd.frog = initFrog();
@@ -79,15 +74,13 @@ int main() {
 
     // Proiettile => id=30
     int index = rand() % sd.numCroco;
+        sd.proiettile = initProiettile();
+        sd.proiettile.x = sd.croco[index].base.x;
+        sd.proiettile.y = sd.croco[index].base.y;
+        sd.proiettile.id = 30;
+        sd.proiettile.sd = &sd;
 
-    // Imposta i dati del proiettile
-    sd.proiettile = initProiettile();
-    sd.proiettile.x = sd.croco[index].base.x;
-    sd.proiettile.y = sd.croco[index].base.y;
-    sd.proiettile.id = 30;
-    sd.proiettile.sd = &sd;
-
-    // Creiamo i thread
+    // thread
     pthread_t frogThread;
     pthread_create(&frogThread, NULL, threadRana, (void *)&sd);
 
@@ -104,10 +97,8 @@ int main() {
     pthread_t bulletThread;
     pthread_create(&bulletThread, NULL, threadProiettile, (void *)&sd.proiettile);
 
-    // Esegue la logica di gioco
     funzionamento_gioco(&sd);
 
-    // Se usciamo dalla funzione => gameOver=1 => i thread escono
     sd.gameOver = 1;
 
     // Join thread

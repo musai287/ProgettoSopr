@@ -1,6 +1,6 @@
 # Compilatore e flag
 CC = gcc
-CFLAGS = -Wall -Wextra -g
+CFLAGS = -Wall -Wextra -g -w
 LDFLAGS = -lncurses
 
 # File sorgenti e oggetti
