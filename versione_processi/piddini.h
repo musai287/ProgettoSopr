@@ -7,13 +7,14 @@
 #include <sys/types.h>
 #include <signal.h>
 
+#include "struct.h"
+#include "frog.h"
+#include "croco.h"
 
 
-//void pidd(int pi[],pid_t a, pid_t b);
-//void creaPipe(int pipe_fd[2]) ;
-//void creaRano(int pipe_fd[2]) ; 
-//void creaCroco(int pipe_fd[2]);
 
 void creaPipe(int pipe_fd[2]);
-void creaRano(int pipe_fd[2], pid_t *pid_rana);
-void creaCroco(int pipe_fd[2], pid_t *pid_croco);
+void creaRano(Frog frog,int pipefd[2], int pipeEvent[2], Entity granata[], Entity *proiettile);
+void creaCroco(Crocodile croco[], int numCroco,int pipefd[2]);
+void creaProiettile(Entity *proiettile, int pipefd[2], int pipeEvent[2], int numCroco ,Crocodile crocodile[], Entity granata[]);
+void creaGranata(Entity granata[], int pipefd, Frog frog, Entity *proiettile);

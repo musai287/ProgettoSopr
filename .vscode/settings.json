@@ -1,8 +1,21 @@
 {
     "makefile.configureOnOpen": false,
     "files.associations": {
+        "*.sqlbook": "sql",
+        "*.ndjson": "jsonl",
+        "*.dbclient-js": "javascript",
         "wait.h": "c",
         "curses.h": "c",
-        "types.h": "c"
+        "types.h": "c",
+        "piddini.h": "c",
+        "string.h": "c",
+        "stdlib.h": "c",
+        "time.h": "c",
+        "frog.h": "c",
+        "signal.h": "c",
+        "ncurses.h": "c",
+        "unistd.h": "c",
+        "cstdlib": "c",
+        "pthread.h": "c"
     }
 }

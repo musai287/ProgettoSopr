@@ -1,10 +1,10 @@
 # Compilatore e flag
 CC = gcc
-CFLAGS = -Wall -Wextra -g -w
+CFLAGS = -Wall -Wextra -g -w 
 LDFLAGS = -lncurses
 
 # File sorgenti e oggetti
-SRC = main.c croco.c frog.c funzionamento.c piddini.c struct.c collisioni.c
+SRC = main.c croco.c frog.c funzionamento.c struct.c collisioni.c
 OBJ = $(SRC:.c=.o)
 
 # Nome del file eseguibile

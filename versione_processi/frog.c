@@ -9,31 +9,90 @@
 #include "struct.h"
 #include "frog.h"
 
-void rano(int pipe_fd){
-	initSRana();
-	while(1) {
+void processoRana(Frog frog,int pipe_fd,int pipeEvent, Entity granata[], Entity *proiettile){
+    
+    Event evento;   
+    while(1){
+        int input = movimento();
 
-	int input = getch();
-	//if(input == 'q'){
-	//endwin();
-	//exit(0);
-	//}
-//ho dubbi su questa implementazione,non funziona ma penso sia dovuto al fatto che la pipe sia condivisa.
+        // Calcola la posizione futura della rana
+        int new_x = frog.base.x;
+        int new_y = frog.base.y;
 
-	switch (input) {
-		case KEY_UP:
-		rana.x = (rana.x > 1) ? rana.x -1: rana.x;
-		break;
-		case KEY_DOWN:
-		rana.x = (rana.x < LINES-5) ? rana.x +1 : rana.x ;
-		break;
-		case KEY_LEFT:
-		rana.y = (rana.y > 1 ) ? rana.y -1: rana.y;
-		break;
-		case KEY_RIGHT:
-		rana.y = (rana.y < COLS -2 ) ? rana.y +1 : rana.y;
-		break;
-		}//frecce direzionali per muovere
-		write(pipe_fd, &rana, sizeof(MesPos));
-	}  
+        switch (input) {
+            case KEY_UP:
+                new_y -= 1;
+            break;
+            case KEY_DOWN:
+                new_y += 1;
+            break;
+            case KEY_LEFT:
+                new_x -= 1;
+            break;
+            case KEY_RIGHT:
+                new_x += 1;
+            break;
+            case ' ' :
+            for (int i = 0; i < 2; i++) {
+                creaGranata(&granata[i], pipe_fd, frog, proiettile);}
+            break;
+           
+        }
+        // Verifica che la nuova posizione sia entro i limiti dello schermo
+        if (new_x >= 1 &&
+            new_x + frog.base.sprite.larghezza <= COLS &&
+            new_y >= 0 &&
+            new_y + frog.base.sprite.lunghezza <= LINES-4) {
+            frog.base.entity_move(&frog.base, new_x - frog.base.x, new_y - frog.base.y);
+        }
+        
+        if (read(pipeEvent, &evento, sizeof(Event)) <= 0){continue;}
+        
+        if (read(pipeEvent, &evento, sizeof(Event)) > 0) {
+            if (evento.tipo == 2) {
+                frog.base.x = evento.data;
+            }
+            else 
+            if (evento.tipo == 3) {
+                frog.base.x = (COLS /2) - 3;
+                frog.base.y = LINES - 5;
+            } 
+        }
+        write(pipe_fd, &frog.base, sizeof(Entity));
+    }
+}
+
+void processoGranata(Entity *granata, int pipefd, Entity *proiettile){
+    while(1){
+        
+        if(granata->id == 61){
+                entity_move(granata, 1, 0);
+                if(granata->x > COLS-1){
+                    
+                    waitpid(granata->pid, NULL,0);
+                    granata->pid = 0;
+                    _exit(0);
+                }
+            }
+            
+        else if(granata->id == 60){
+                entity_move(granata, -1, 0);
+                if(granata->x < 0){ 
+
+                    waitpid(granata->pid, NULL,0);
+                    _exit(0);
+                }
+            }
+        
+        if(granata ->x == proiettile->x && granata->y == proiettile->y){
+        granata ->x = COLS;
+        
+        }
+        write(pipefd, granata, sizeof(Entity));
+        usleep(75000);
+    }
+}
+int movimento(){
+    int input = getch();
+    return input;
 }

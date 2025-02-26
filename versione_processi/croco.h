@@ -1,7 +1,7 @@
 #pragma once
 #include <ncurses.h>
+#include "struct.h"
 
-#define DELAY 1000000 //0.001
-#define DELAYCLOSED 2000000 //2 secondi
-
-void cocco(int pipe_fd);
+void processoCroco(Crocodile *croco,int pipefd);
+void stampCocco(WINDOW *gioco, int numCroco, Crocodile croco[]);
+void processoProiettile(Entity *proiettile, int pipefd, int pipeEvents, Crocodile *croco, int numCroco, Entity granata[]);
