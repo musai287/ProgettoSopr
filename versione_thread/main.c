@@ -31,8 +31,8 @@ int main() {
 
     // Inizializza il buffer circolare
     pthread_mutex_init(&sd.buffer.mutex, NULL);
-    pthread_cond_init(&sd.buffer.cond_non_vuoto, NULL);
-    pthread_cond_init(&sd.buffer.cond_non_pieno, NULL);
+    // pthread_cond_init(&sd.buffer.cond_non_vuoto, NULL);
+    // pthread_cond_init(&sd.buffer.cond_non_pieno, NULL);
     sd.buffer.head = 0;
     sd.buffer.tail = 0;
     sd.buffer.count = 0;
